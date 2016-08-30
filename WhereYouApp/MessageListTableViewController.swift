@@ -13,9 +13,48 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        guard let user = UserController.sharedController.user else {
+            presentLoginScreen({ (user) in
+                
+            })
+            return
+        }
+        
+        
         
     
+        
+    }
+    
+    
+    func presentLoginScreen(completion: (user: User)->Void) {
+        var phoneTextField: UITextField?
+        var nameTextField: UITextField?
+        
+        let loginScreen = UIAlertController(title: "Create Your Account", message: nil, preferredStyle: .ActionSheet)
+        loginScreen.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "enter your name"
+            nameTextField = textField
+        }
+        loginScreen.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "enter your phone number"
+            phoneTextField = textField
+        }
+        let submitButton = UIAlertAction(title: "Submit", style: .Default) { (_) in
+            guard let name = nameTextField?.text,
+                phoneNumber = phoneTextField?.text else {
+                    return
+            }
+            
+            UserController.sharedController.createUser(name, phoneNumber: phoneNumber)
+            completion(user: <#T##User#>)
+        }
+        
+        loginScreen.addAction(submitButton)
+        
+        self.presentViewController(loginScreen, animated: true, completion: nil)
+        
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

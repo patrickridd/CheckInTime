@@ -13,7 +13,7 @@ import CoreData
 class Message: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
-    convenience init(text: String, latitude: Double, longitude: Double, timeSent: NSDate, timeDue: NSDate?, hasResponded: Bool, timeResponded: NSDate?, receiver: User, sender: User, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
+    convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, receiver: User, sender: User, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
         let entity = NSEntityDescription.entityForName("Message", inManagedObjectContext: context)
         

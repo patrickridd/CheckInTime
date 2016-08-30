@@ -20,12 +20,13 @@ class UserController {
     
     
     
-    func createUser(name: String, phoneNumber: String) {
+    func createUser(name: String, phoneNumber: String, completion: (user: User)->Void) {
         
         let user = User(name: name, phoneNumber: phoneNumber)
         
         self.user = user
         saveContext()
+        completion(user: user)
     }
     
     init() {
