@@ -11,6 +11,24 @@
 		21AEA8811D736770005EF030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA87F1D736770005EF030 /* Main.storyboard */; };
 		21AEA8831D736770005EF030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA8821D736770005EF030 /* Assets.xcassets */; };
 		21AEA8861D736770005EF030 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA8841D736770005EF030 /* LaunchScreen.storyboard */; };
+		21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */; };
+		21D476AB1D74CDE10094FCBC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */; };
+		21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */; };
+		21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476B01D74CF230094FCBC /* ContactDetailViewController.swift */; };
+		21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476B21D74CFC70094FCBC /* MessageDetailViewController.swift */; };
+		21D476B61D74D0DD0094FCBC /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476B51D74D0DD0094FCBC /* MessageTableViewCell.swift */; };
+		21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 21D476B71D74D1010094FCBC /* Model.xcdatamodeld */; };
+		21D477031D75FC580094FCBC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476FD1D75FC580094FCBC /* User.swift */; };
+		21D477051D75FC580094FCBC /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476FF1D75FC580094FCBC /* Contact.swift */; };
+		21D477071D75FC580094FCBC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477011D75FC580094FCBC /* Message.swift */; };
+		21D4770A1D75FD390094FCBC /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477091D75FD390094FCBC /* Stack.swift */; };
+		21D4770E1D7601FA0094FCBC /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4770B1D7601FA0094FCBC /* User+CoreDataProperties.swift */; };
+		21D4770F1D7601FA0094FCBC /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4770C1D7601FA0094FCBC /* Message+CoreDataProperties.swift */; };
+		21D477101D7601FA0094FCBC /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4770D1D7601FA0094FCBC /* Contact+CoreDataProperties.swift */; };
+		21D477121D7603520094FCBC /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477111D7603520094FCBC /* UserController.swift */; };
+		21D477141D76035D0094FCBC /* ContactController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477131D76035D0094FCBC /* ContactController.swift */; };
+		21D477161D7603650094FCBC /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477151D7603650094FCBC /* MessageController.swift */; };
+		21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477181D7603850094FCBC /* CloudKitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +38,24 @@
 		21AEA8821D736770005EF030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21AEA8851D736770005EF030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21AEA8871D736770005EF030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageListTableViewController.swift; sourceTree = "<group>"; };
+		21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = ../ProfileViewController.swift; sourceTree = "<group>"; };
+		21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactsTableViewController.swift; path = ../ContactsTableViewController.swift; sourceTree = "<group>"; };
+		21D476B01D74CF230094FCBC /* ContactDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDetailViewController.swift; sourceTree = "<group>"; };
+		21D476B21D74CFC70094FCBC /* MessageDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageDetailViewController.swift; sourceTree = "<group>"; };
+		21D476B51D74D0DD0094FCBC /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
+		21D476B81D74D1010094FCBC /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		21D476FD1D75FC580094FCBC /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = ../User.swift; sourceTree = "<group>"; };
+		21D476FF1D75FC580094FCBC /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Contact.swift; path = ../Contact.swift; sourceTree = "<group>"; };
+		21D477011D75FC580094FCBC /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Message.swift; path = ../Message.swift; sourceTree = "<group>"; };
+		21D477091D75FD390094FCBC /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		21D4770B1D7601FA0094FCBC /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21D4770C1D7601FA0094FCBC /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21D4770D1D7601FA0094FCBC /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Contact+CoreDataProperties.swift"; path = "../Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21D477111D7603520094FCBC /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
+		21D477131D76035D0094FCBC /* ContactController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactController.swift; sourceTree = "<group>"; };
+		21D477151D7603650094FCBC /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageController.swift; sourceTree = "<group>"; };
+		21D477181D7603850094FCBC /* CloudKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitManager.swift; path = ../CloudKitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,12 +89,62 @@
 			isa = PBXGroup;
 			children = (
 				21AEA87B1D736770005EF030 /* AppDelegate.swift */,
-				21AEA87F1D736770005EF030 /* Main.storyboard */,
+				21D476BA1D74D1070094FCBC /* CoreData Model */,
+				21D477081D75FCB30094FCBC /* Model */,
+				21D477171D76036B0094FCBC /* Model Controller */,
+				21D476B41D74D0BC0094FCBC /* View Controller */,
 				21AEA8821D736770005EF030 /* Assets.xcassets */,
 				21AEA8841D736770005EF030 /* LaunchScreen.storyboard */,
 				21AEA8871D736770005EF030 /* Info.plist */,
 			);
 			path = WhereYouApp;
+			sourceTree = "<group>";
+		};
+		21D476B41D74D0BC0094FCBC /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				21D476B21D74CFC70094FCBC /* MessageDetailViewController.swift */,
+				21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */,
+				21D476B01D74CF230094FCBC /* ContactDetailViewController.swift */,
+				21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */,
+				21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */,
+				21D476B51D74D0DD0094FCBC /* MessageTableViewCell.swift */,
+				21AEA87F1D736770005EF030 /* Main.storyboard */,
+			);
+			name = "View Controller";
+			sourceTree = "<group>";
+		};
+		21D476BA1D74D1070094FCBC /* CoreData Model */ = {
+			isa = PBXGroup;
+			children = (
+				21D4770B1D7601FA0094FCBC /* User+CoreDataProperties.swift */,
+				21D4770C1D7601FA0094FCBC /* Message+CoreDataProperties.swift */,
+				21D4770D1D7601FA0094FCBC /* Contact+CoreDataProperties.swift */,
+				21D477091D75FD390094FCBC /* Stack.swift */,
+				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,
+			);
+			name = "CoreData Model";
+			sourceTree = "<group>";
+		};
+		21D477081D75FCB30094FCBC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				21D476FD1D75FC580094FCBC /* User.swift */,
+				21D476FF1D75FC580094FCBC /* Contact.swift */,
+				21D477011D75FC580094FCBC /* Message.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		21D477171D76036B0094FCBC /* Model Controller */ = {
+			isa = PBXGroup;
+			children = (
+				21D477111D7603520094FCBC /* UserController.swift */,
+				21D477131D76035D0094FCBC /* ContactController.swift */,
+				21D477151D7603650094FCBC /* MessageController.swift */,
+				21D477181D7603850094FCBC /* CloudKitManager.swift */,
+			);
+			name = "Model Controller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,7 +219,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21D477051D75FC580094FCBC /* Contact.swift in Sources */,
+				21D477161D7603650094FCBC /* MessageController.swift in Sources */,
+				21D4770A1D75FD390094FCBC /* Stack.swift in Sources */,
+				21D477121D7603520094FCBC /* UserController.swift in Sources */,
+				21D476B61D74D0DD0094FCBC /* MessageTableViewCell.swift in Sources */,
+				21D477101D7601FA0094FCBC /* Contact+CoreDataProperties.swift in Sources */,
+				21D476AB1D74CDE10094FCBC /* ProfileViewController.swift in Sources */,
+				21D4770F1D7601FA0094FCBC /* Message+CoreDataProperties.swift in Sources */,
+				21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */,
+				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
+				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
 				21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */,
+				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,
+				21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */,
+				21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */,
+				21D477141D76035D0094FCBC /* ContactController.swift in Sources */,
+				21D4770E1D7601FA0094FCBC /* User+CoreDataProperties.swift in Sources */,
+				21D477031D75FC580094FCBC /* User.swift in Sources */,
+				21D477071D75FC580094FCBC /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,8 +389,22 @@
 				21AEA88C1D736770005EF030 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		21D476B71D74D1010094FCBC /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				21D476B81D74D1010094FCBC /* Model.xcdatamodel */,
+			);
+			currentVersion = 21D476B81D74D1010094FCBC /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 21AEA8701D736770005EF030 /* Project object */;
 }
