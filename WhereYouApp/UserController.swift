@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 class UserController {
     
@@ -20,13 +21,17 @@ class UserController {
     
     
     
-    func createUser(name: String, phoneNumber: String, completion: (user: User)->Void) {
+    func createUser(name: String, phoneNumber: String, image: UIImage) {
         
-        let user = User(name: name, phoneNumber: phoneNumber)
+        guard let imageData = UIImagePNGRepresentation(image) else {
+            print("Cant get NSData from Image")
+            return
+        }
+        
+        let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData)
         
         self.user = user
         saveContext()
-        completion(user: user)
     }
     
     init() {

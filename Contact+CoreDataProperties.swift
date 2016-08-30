@@ -16,7 +16,7 @@ extension Contact {
 
     @NSManaged var name: String?
     @NSManaged var phoneNumber: String?
-    @NSManaged var image: NSData?
+    @NSManaged var imageData: NSData
     @NSManaged var sharedMessages: NSOrderedSet?
 
 }

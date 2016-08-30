@@ -16,7 +16,7 @@ extension User {
 
     @NSManaged var phoneNumber: String?
     @NSManaged var name: String?
-    @NSManaged var image: NSData?
+    @NSManaged var imageData: NSData
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var contacts: NSOrderedSet?
 

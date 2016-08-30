@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 class MessageController {
     
@@ -15,10 +16,19 @@ class MessageController {
     
     var messages = [Message]()
     
+    let fetchedResultsController: NSFetchedResultsController
     
     init() {
         
+        let request = NSFetchRequest(entityName: "Message")
+        let sortDescriptor = NSSortDescriptor(key: "timeSent", ascending: false)
         
+        request.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeSent", cacheName: nil)
+        
+        _ = try? fetchedResultsController.performFetch()
+        self.messages = (fetchedResultsController.fetchedObjects as? [Message]) ?? []
         
         
         
@@ -32,7 +42,8 @@ class MessageController {
     }
     
     func deleteMessage(message: Message) {
-        
+        moc.deleteObject(message)
+        saveContext()
     }
     
     func saveContext() {

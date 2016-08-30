@@ -24,6 +24,7 @@ class MessageDetailViewController: UIViewController {
     }
 
     @IBAction func sendButtonTapped(sender: AnyObject) {
+    
     }
   
     

@@ -29,6 +29,7 @@
 		21D477141D76035D0094FCBC /* ContactController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477131D76035D0094FCBC /* ContactController.swift */; };
 		21D477161D7603650094FCBC /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477151D7603650094FCBC /* MessageController.swift */; };
 		21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477181D7603850094FCBC /* CloudKitManager.swift */; };
+		21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4773C1D7638AB0094FCBC /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		21D477131D76035D0094FCBC /* ContactController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactController.swift; sourceTree = "<group>"; };
 		21D477151D7603650094FCBC /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageController.swift; sourceTree = "<group>"; };
 		21D477181D7603850094FCBC /* CloudKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitManager.swift; path = ../CloudKitManager.swift; sourceTree = "<group>"; };
+		21D4773C1D7638AB0094FCBC /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,12 +105,13 @@
 		21D476B41D74D0BC0094FCBC /* View Controller */ = {
 			isa = PBXGroup;
 			children = (
+				21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */,
 				21D476B21D74CFC70094FCBC /* MessageDetailViewController.swift */,
+				21D476B51D74D0DD0094FCBC /* MessageTableViewCell.swift */,
+				21D4773C1D7638AB0094FCBC /* LoginViewController.swift */,
 				21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */,
 				21D476B01D74CF230094FCBC /* ContactDetailViewController.swift */,
 				21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */,
-				21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */,
-				21D476B51D74D0DD0094FCBC /* MessageTableViewCell.swift */,
 				21AEA87F1D736770005EF030 /* Main.storyboard */,
 			);
 			name = "View Controller";
@@ -227,6 +230,7 @@
 				21D477101D7601FA0094FCBC /* Contact+CoreDataProperties.swift in Sources */,
 				21D476AB1D74CDE10094FCBC /* ProfileViewController.swift in Sources */,
 				21D4770F1D7601FA0094FCBC /* Message+CoreDataProperties.swift in Sources */,
+				21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */,
 				21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */,
 				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,

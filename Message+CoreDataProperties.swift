@@ -17,9 +17,9 @@ extension Message {
     @NSManaged var text: String?
     @NSManaged var latitude: NSNumber?
     @NSManaged var longitude: NSNumber?
-    @NSManaged var timeSent: NSDate?
-    @NSManaged var timeDue: NSDate?
-    @NSManaged var hasResponded: NSNumber?
+    @NSManaged var timeSent: NSDate
+    @NSManaged var timeDue: NSDate
+    @NSManaged var hasResponded: NSNumber
     @NSManaged var timeResponded: NSDate?
     @NSManaged var receiver: User?
     @NSManaged var sender: User?
