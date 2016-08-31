@@ -31,7 +31,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 return
         }
         
-        UserController.sharedController.createUser(name, phoneNumber: phoneNumber, image: image)
+        UserController.sharedController.createUser(name, phoneNumber: phoneNumber, image: image) { 
+            
+            self.dismissViewControllerAnimated(true, completion: nil)
+ 
+        }
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
@@ -55,6 +59,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let alert = UIAlertController(title: nil, message: "Name needs one character or more", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
+        self.presentViewController(alert, animated: true, completion: nil)
         
     }
     
@@ -62,6 +67,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let alert = UIAlertController(title: nil, message: "Phone Number needs 10 digits or more", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
+        self.presentViewController(alert, animated: true, completion: nil)
         
 
     }

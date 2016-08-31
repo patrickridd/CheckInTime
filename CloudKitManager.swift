@@ -29,7 +29,21 @@ class CloudKitManager {
         checkCloudKitAvailability()
     }
     
+    
+    
     // MARK: - User Info Discovery
+    
+    func checkIfUserIsLoggedIn(completion: (signedIn: Bool) -> Void){
+        self.fetchLoggedInUserRecord { (record, error) in
+            guard let _ = record else {
+                completion(signedIn: false)
+                return
+            }
+            completion(signedIn: true)
+        }
+        
+    }
+    
     
     func fetchLoggedInUserRecord(completion: ((record: CKRecord?, error: NSError? ) -> Void)?) {
         

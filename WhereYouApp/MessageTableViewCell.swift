@@ -36,19 +36,20 @@ class MessageTableViewCell: UITableViewCell {
     }()
     
     func updateWith(message: Message) {
-        guard let sender = message.sender,
-            receiver = message.receiver,
-                user = UserController.sharedController.user else {
+//        guard let sender = message.sender,
+//            receiver = message.receiver,
+                guard let user = UserController.sharedController.user else {
                 return
         }
+    
         
         
-        if sender.phoneNumber == user.phoneNumber {
-            contactName.text = receiver.name
-            self.profileImage.image = receiver.photo
+        if message.sender.phoneNumber == user.phoneNumber {
+            contactName.text = message.receiver.name
+            self.profileImage.image = message.receiver.photo
         } else {
-            contactName.text = sender.name
-            self.profileImage.image = sender.photo
+            contactName.text = message.sender.name
+            self.profileImage.image = message.sender.photo
         }
         
         // If message hasn't been responded to...

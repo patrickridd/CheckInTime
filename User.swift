@@ -90,6 +90,7 @@ class User: NSManagedObject {
         self.phoneNumber = phoneNumber
         self.contactReferences = contacts
         self.messageReferences = messages
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {
             self.imageData = NSData()

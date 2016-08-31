@@ -22,10 +22,11 @@ class UserController {
     
     
     
-    func createUser(name: String, phoneNumber: String, image: UIImage) {
+    func createUser(name: String, phoneNumber: String, image: UIImage, completion: () -> Void) {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
             guard let record = record else {
+                print("Not signed in to cloudkit")
                 return
             
             }
@@ -55,7 +56,7 @@ class UserController {
             CloudKitManager.cloudKitController.saveRecord(customUserRecord, completion: { (record, error) in
                 
                 self.saveContext()
-
+                completion()
             })
 
         }
@@ -65,12 +66,15 @@ class UserController {
     init() {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
-            guard let record = record else { return }
+            guard let record = record else {
+                return
+            }
             let reference = CKReference(recordID: record.recordID, action: .None)
             let predicate = NSPredicate(format: "identifier == %@", argumentArray: [reference])
             CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
                 guard let user = User(record: record)  else {
                     print("User was nil")
+
                     return
                 }
                 
