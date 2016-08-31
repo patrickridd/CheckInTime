@@ -2,7 +2,7 @@
 //  Message+CoreDataProperties.swift
 //  WhereYouApp
 //
-//  Created by Patrick Ridd on 8/30/16.
+//  Created by Patrick Ridd on 8/31/16.
 //  Copyright © 2016 PatrickRidd. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -21,8 +21,8 @@ extension Message {
     @NSManaged var timeDue: NSDate
     @NSManaged var timeResponded: NSDate?
     @NSManaged var timeSent: NSDate
-    @NSManaged var senderID: String
-    @NSManaged var receiverID: String
-    @NSManaged var users: NSOrderedSet?
+    @NSManaged var ckRecordID: NSData
+    @NSManaged var receiver: User
+    @NSManaged var sender: User
 
 }

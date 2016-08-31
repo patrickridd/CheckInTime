@@ -22,6 +22,8 @@ class User: NSManagedObject {
     
     var contactReferences: [CKReference] = []
     var messageReferences: [CKReference] = []
+    var contacts = [User]()
+   
     
 // Insert code here to add functionality to your managed object subclass
     convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {

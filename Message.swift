@@ -23,9 +23,9 @@ class Message: NSManagedObject {
     static let senderIDKey = "senderID"
 
     
-    var initializedUsers = [User]()
+    
 // Insert code here to add functionality to your managed object subclass
-    convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, initializedUsers: [User], receiverID: String, senderID: String, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
+    convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, sender: User, receiver : User, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
         let entity = NSEntityDescription.entityForName("Message", inManagedObjectContext: context)!
         
@@ -38,11 +38,10 @@ class Message: NSManagedObject {
         self.timeSent = timeSent
         self.hasResponded = hasResponded
         self.timeResponded = timeResponded
-        self.receiverID = receiverID
-        self.senderID = senderID
-        self.initializedUsers = initializedUsers
+        self.sender = sender
+        self.receiver = receiver
+               
         
-    
     }
     
     
@@ -54,8 +53,8 @@ class Message: NSManagedObject {
             timeSent = record[Message.timeSentKey] as? NSDate,
             hasResponded = record[Message.hasRespondedKey] as? Int,
             timeResponded = record[Message.timeRespondedKey] as? NSDate,
-            receiverID = record[Message.receiverIDKey] as? String,
-            senderID = record[Message.senderIDKey] as? String else {
+            senderID = record[Message.senderIDKey] as? String,
+            receiverID = record[Message.receiverIDKey] as? String else {
                 return nil
         }
         let context = Stack.sharedStack.managedObjectContext
@@ -70,9 +69,13 @@ class Message: NSManagedObject {
         self.timeSent = timeSent
         self.hasResponded = hasResponded
         self.timeResponded = timeResponded
-        self.receiverID = receiverID
-        self.senderID = senderID
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
+        guard let fetchedSender = UserController.sharedController.fetchCoreDataUserWithNumber(senderID), fetchedReceiver = UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) else {
+            return nil
+        }
+        self.sender = fetchedSender
+        self.receiver = fetchedReceiver
         
         
     }
