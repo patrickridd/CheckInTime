@@ -8,16 +8,28 @@
 
 import Foundation
 import CoreData
-
+import CloudKit
 
 class Message: NSManagedObject {
+    
+    static let textKey = "text"
+    static let latitudeKey = "latitude"
+    static let longitudeKey = "longitude"
+    static let timeDueKey = "timeDue"
+    static let timeSentKey = "timeSent"
+    static let hasRespondedKey = "hasResponded"
+    static let timeRespondedKey = "timeResponded"
+    static let receiverIDKey = "receiverID"
+    static let senderIDKey = "senderID"
 
+    
+    var initializedUsers = [User]()
 // Insert code here to add functionality to your managed object subclass
-    convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, receiver: User, sender: User, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
+    convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, initializedUsers: [User], receiverID: String, senderID: String, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
-        let entity = NSEntityDescription.entityForName("Message", inManagedObjectContext: context)
+        let entity = NSEntityDescription.entityForName("Message", inManagedObjectContext: context)!
         
-        self.init(entity: entity!, insertIntoManagedObjectContext: context)
+        self.init(entity: entity, insertIntoManagedObjectContext: context)
         
         self.text = text
         self.latitude = latitude
@@ -26,11 +38,43 @@ class Message: NSManagedObject {
         self.timeSent = timeSent
         self.hasResponded = hasResponded
         self.timeResponded = timeResponded
-        self.receiver = receiver
-        self.sender = sender
-    
+        self.receiverID = receiverID
+        self.senderID = senderID
+        self.initializedUsers = initializedUsers
         
     
+    }
+    
+    
+    convenience init?(record: CKRecord) {
+        guard let text = record[Message.textKey] as? String,
+            latitude = record[Message.latitudeKey] as? Double,
+            longitude = record[Message.longitudeKey] as? Double,
+            timeDue = record[Message.timeDueKey] as? NSDate,
+            timeSent = record[Message.timeSentKey] as? NSDate,
+            hasResponded = record[Message.hasRespondedKey] as? Int,
+            timeResponded = record[Message.timeRespondedKey] as? NSDate,
+            receiverID = record[Message.receiverIDKey] as? String,
+            senderID = record[Message.senderIDKey] as? String else {
+                return nil
+        }
+        let context = Stack.sharedStack.managedObjectContext
+        let entity = NSEntityDescription.entityForName("Message", inManagedObjectContext: context)!
+        
+        self.init(entity: entity, insertIntoManagedObjectContext: context)
+
+        self.text = text
+        self.longitude = longitude
+        self.latitude = latitude
+        self.timeDue = timeDue
+        self.timeSent = timeSent
+        self.hasResponded = hasResponded
+        self.timeResponded = timeResponded
+        self.receiverID = receiverID
+        self.senderID = senderID
+        
+        
+        
     }
     
     

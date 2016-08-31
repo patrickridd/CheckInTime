@@ -14,14 +14,15 @@ import CoreData
 
 extension Message {
 
-    @NSManaged var text: String?
+    @NSManaged var hasResponded: NSNumber?
     @NSManaged var latitude: NSNumber?
     @NSManaged var longitude: NSNumber?
-    @NSManaged var timeSent: NSDate
+    @NSManaged var text: String?
     @NSManaged var timeDue: NSDate
-    @NSManaged var hasResponded: NSNumber
     @NSManaged var timeResponded: NSDate?
-    @NSManaged var receiver: User?
-    @NSManaged var sender: User?
+    @NSManaged var timeSent: NSDate
+    @NSManaged var senderID: String
+    @NSManaged var receiverID: String
+    @NSManaged var users: NSOrderedSet?
 
 }

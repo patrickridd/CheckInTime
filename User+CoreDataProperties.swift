@@ -14,10 +14,10 @@ import CoreData
 
 extension User {
 
-    @NSManaged var phoneNumber: String?
-    @NSManaged var name: String?
     @NSManaged var imageData: NSData
-    @NSManaged var messages: NSOrderedSet?
+    @NSManaged var name: String
+    @NSManaged var phoneNumber: String
     @NSManaged var contacts: NSOrderedSet?
+    @NSManaged var messages: NSOrderedSet?
 
 }

@@ -35,9 +35,11 @@ class MessageController {
     }
     
     func createMessage(sender: User, receiver: User, timeDue: NSDate) {
-        let message = Message(timeDue: timeDue, receiver: receiver, sender: sender)
+        
+        let message = Message(timeDue: timeDue, initializedUsers: [sender,receiver], receiverID: receiver.phoneNumber, senderID: sender.phoneNumber)
         messages.insert(message, atIndex: 0)
         
+        saveContext()
         
     }
     
