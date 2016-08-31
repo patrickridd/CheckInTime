@@ -27,8 +27,8 @@
 		21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477181D7603850094FCBC /* CloudKitManager.swift */; };
 		21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4773C1D7638AB0094FCBC /* LoginViewController.swift */; };
 		21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D477431D767DD40094FCBC /* CloudKit.framework */; };
-		21D4776F1D7745600094FCBC /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4776E1D7745600094FCBC /* User+CoreDataProperties.swift */; };
 		21D477751D774BE00094FCBC /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */; };
+		21D477791D7770B20094FCBC /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477781D7770B20094FCBC /* User+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,8 +55,8 @@
 		21D4773C1D7638AB0094FCBC /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		21D477421D767DC00094FCBC /* WhereYouApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WhereYouApp.entitlements; sourceTree = "<group>"; };
 		21D477431D767DD40094FCBC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		21D4776E1D7745600094FCBC /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21D477781D7770B20094FCBC /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,7 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */,
-				21D4776E1D7745600094FCBC /* User+CoreDataProperties.swift */,
+				21D477781D7770B20094FCBC /* User+CoreDataProperties.swift */,
 				21D477091D75FD390094FCBC /* Stack.swift */,
 				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,
 			);
@@ -235,7 +235,7 @@
 				21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */,
 				21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */,
 				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
-				21D4776F1D7745600094FCBC /* User+CoreDataProperties.swift in Sources */,
+				21D477791D7770B20094FCBC /* User+CoreDataProperties.swift in Sources */,
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
 				21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */,
 				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,

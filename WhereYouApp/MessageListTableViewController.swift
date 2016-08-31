@@ -20,12 +20,15 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 return
             }
         }
-        
-        
-        guard let _ = UserController.sharedController.user else {
-            self.presentLoginScreen()
-            return
+        UserController.sharedController.checkForUserAccount { (hasAccount) in
+            if !hasAccount {
+                self.presentLoginScreen()
+                return
+            }
         }
+        
+        
+        
         
     }
     

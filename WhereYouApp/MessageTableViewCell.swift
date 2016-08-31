@@ -38,7 +38,7 @@ class MessageTableViewCell: UITableViewCell {
     func updateWith(message: Message) {
 //        guard let sender = message.sender,
 //            receiver = message.receiver,
-                guard let user = UserController.sharedController.user else {
+                guard let user = UserController.sharedController.loggedInUser else {
                 return
         }
     

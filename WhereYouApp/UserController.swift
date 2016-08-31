@@ -14,11 +14,11 @@ import CloudKit
 class UserController {
     
     static let sharedController = UserController()
-    var user: User?
+    var loggedInUser: User?
     
     let moc = Stack.sharedStack.managedObjectContext
     
-    
+    var users = [User]()
     
     
     
@@ -38,23 +38,28 @@ class UserController {
         
         let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData)
         /* Create Custom User Record with a recordID made from the users phone number so we can use the phone number to fetch him/her from coredata */
-            
+        
         let recordID = CKRecordID(recordName: user.phoneNumber)
         let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
         // create reference to Current User's cloudkit ID to be able to fetch Custom Record.
         let reference = CKReference(recordID: record.recordID, action: .None)
         customUserRecord["identifier"] = reference
+            
         // Save Custom Record's Record ID into core data by converting it to NSData
         user.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(customUserRecord.recordID)
+            // Save Original record's record id as reference in core data.
+        user.originalRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
         // Save user properties to cloudkit
         customUserRecord[User.nameKey] = user.name
         customUserRecord[User.phoneNumberKey] = user.phoneNumber
         customUserRecord[User.imageKey] = user.imageAsset
-        
-        self.user = user
+              
+        self.loggedInUser = user
             CloudKitManager.cloudKitController.saveRecord(customUserRecord, completion: { (record, error) in
-                
+                if let error = error {
+                    print("Error saving to cloudkit. Error: \(error.localizedDescription)")
+                }
                 self.saveContext()
                 completion()
             })
@@ -63,35 +68,52 @@ class UserController {
         
     }
     
-    init() {
+    func checkForUserAccount(completion: (hasAccount: Bool)-> Void) {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
             guard let record = record else {
                 return
             }
-            let reference = CKReference(recordID: record.recordID, action: .None)
-            let predicate = NSPredicate(format: "identifier == %@", argumentArray: [reference])
+            
+            let ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
+            
+            let predicate = NSPredicate(format: "originalRecordID == %@", argumentArray: [ckRecordID])
+            let request = NSFetchRequest(entityName: "User")
+            request.predicate = predicate
+            
+            guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
+                users = fetchedUsers where users.count > 0 else {
+                print("Cant find loggedInUser")
+                completion(hasAccount: false)
+                return
+            }
+            
+            self.loggedInUser = users.first
+            
             CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
+                
                 guard let user = User(record: record)  else {
                     print("User was nil")
-
+                    completion(hasAccount: false)
                     return
                 }
                 
-                self.user = user
+                self.loggedInUser = user
                 
                 }, completion: { (records, error) in
+                    
+                    
                     let request = NSFetchRequest(entityName: "User")
                     
                     guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
-                        users = fetchedUsers, user = self.user else {
-                        print("No Users saved")
-                        return
+                        users = fetchedUsers, loggedInUser = self.loggedInUser else {
+                            print("No Users saved")
+                            return
                     }
-                    user.contacts = users
                     
+                    loggedInUser.contacts = users.filter({$0.phoneNumber != loggedInUser.phoneNumber})
+                    completion(hasAccount: true)
             })
-            
         }
         
     }

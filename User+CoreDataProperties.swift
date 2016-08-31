@@ -18,6 +18,7 @@ extension User {
     @NSManaged var name: String
     @NSManaged var phoneNumber: String
     @NSManaged var ckRecordID: NSData
+    @NSManaged var originalRecordID: NSData
     @NSManaged var messages: NSSet?
 
 }

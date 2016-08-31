@@ -16,11 +16,12 @@
         <attribute name="ckRecordID" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="originalRecordID" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="phoneNumber" attributeType="String" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" inverseName="sender" inverseEntity="Message" syncable="YES"/>
     </entity>
     <elements>
         <element name="Message" positionX="-441" positionY="-162" width="128" height="195"/>
-        <element name="User" positionX="-198" positionY="-234" width="128" height="120"/>
+        <element name="User" positionX="-198" positionY="-234" width="128" height="135"/>
     </elements>
 </model>

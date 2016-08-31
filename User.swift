@@ -22,7 +22,11 @@ class User: NSManagedObject {
     
     var contactReferences: [CKReference] = []
     var messageReferences: [CKReference] = []
-    var contacts = [User]()
+    var contacts = [User]() {
+        didSet {
+            
+        }
+    }
    
     
 // Insert code here to add functionality to your managed object subclass
@@ -74,9 +78,7 @@ class User: NSManagedObject {
     convenience init?(record: CKRecord) {
         guard let name = record[User.nameKey] as? String,
             phoneNumber = record[User.phoneNumberKey] as? String,
-            image = record[User.imageKey] as? CKAsset,
-            contacts = record[User.contactsKey] as? [CKReference],
-            messages = record[User.messagesKey] as? [CKReference] else {
+            image = record[User.imageKey] as? CKAsset else {
                 return nil
         }
         
@@ -88,8 +90,7 @@ class User: NSManagedObject {
         
         self.name = name
         self.phoneNumber = phoneNumber
-        self.contactReferences = contacts
-        self.messageReferences = messages
+        
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {
@@ -97,8 +98,13 @@ class User: NSManagedObject {
             return
         }
         self.imageData = photoData
-        
-        
+    
+        guard let contacts = record[User.contactsKey] as? [CKReference],
+            messages = record[User.messagesKey] as? [CKReference] else {
+                return
+        }
+        self.contactReferences = contacts
+        self.messageReferences = messages
         
         
     }
