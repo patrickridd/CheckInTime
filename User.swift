@@ -27,6 +27,12 @@ class User: NSManagedObject {
             
         }
     }
+    
+    var userMessages = [Message]() {
+        didSet {
+            
+        }
+    }
    
     
 // Insert code here to add functionality to your managed object subclass

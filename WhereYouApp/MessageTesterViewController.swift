@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class MessageTesterViewController: UIViewController {
 
@@ -37,7 +38,26 @@ class MessageTesterViewController: UIViewController {
 
     @IBAction func sendButtonTapped(sender: AnyObject) {
         dueDateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
-
+//        guard let dateText = dueDateTextField.text else {
+//            
+//        }
+        
+        
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: ["8015545335"])
+        
+        CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
+            guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {
+                return
+            }
+            loggedInUser.contacts.append(receiver)
+             MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
+            
+            
+            }) { (records, error) in
+                
+               self.dismissViewControllerAnimated(true, completion: nil)
+                
+        }
         
     }
     

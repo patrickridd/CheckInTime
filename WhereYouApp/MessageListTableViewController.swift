@@ -31,6 +31,13 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
         
     }
+
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+                
+    }
+    
     
     func presentICloudAlert() {
         
@@ -52,8 +59,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
     }
     
-    
-    
     func presentLoginScreen() {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -62,7 +67,10 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
     }
     
+
     
+    
+        
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return MessageController.sharedController.fetchedResultsController.sections?.count ?? 0
     }
@@ -76,10 +84,10 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? MessageTableViewCell else {
+        guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? MessageTableViewCell, message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message  else {
             return UITableViewCell()
         }
-        let message = MessageController.sharedController.messages[indexPath.row]
+        
         cell.updateWith(message)
         
         

@@ -10,16 +10,19 @@ import Foundation
 import CoreData
 import CloudKit
 
+let MessagesDidRefreshNotification = "MessagesDidRefreshNotification"
+
 class MessageController {
     
     static let sharedController = MessageController()
     let moc = Stack.sharedStack.managedObjectContext
-    
-    var messages = [Message]() {
-        didSet{
-           // let nc = NSNotification
-        }
-    }
+//    
+//    var messages = [Message]() {
+//        didSet{
+//            let nc = NSNotificationCenter.defaultCenter()
+//            nc.postNotificationName(MessagesDidRefreshNotification, object: nil)
+//        }
+//    }
     
     let fetchedResultsController: NSFetchedResultsController
     
@@ -33,7 +36,7 @@ class MessageController {
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeSent", cacheName: nil)
         
         _ = try? fetchedResultsController.performFetch()
-        self.messages = (fetchedResultsController.fetchedObjects as? [Message]) ?? []
+       // self.messages = (fetchedResultsController.fetchedObjects as? [Message]) ?? []
         
     }
     
@@ -42,7 +45,7 @@ class MessageController {
     func createMessage(sender: User, receiver: User, timeDue: NSDate) {
         
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
-        messages.insert(message, atIndex: 0)
+      //  messages.insert(message, atIndex: 0)
         
         
         saveContext()
@@ -60,6 +63,7 @@ class MessageController {
         record[Message.timeRespondedKey] = message.timeResponded
         CloudKitManager.cloudKitController.saveRecord(record) { (record, error) in
             
+       //     self.messages.append(message)
             print("Saved message to cloudkit")
         }
     }
