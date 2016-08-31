@@ -38,12 +38,10 @@ class MessageTesterViewController: UIViewController {
 
     @IBAction func sendButtonTapped(sender: AnyObject) {
         dueDateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
-//        guard let dateText = dueDateTextField.text else {
-//            
-//        }
+
         
         
-        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: ["8015545335"])
+        let predicate = NSPredicate(format: "name == %@", argumentArray: ["pat mac"])
         
         CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
             guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {

@@ -39,7 +39,7 @@ class MessageTableViewCell: UITableViewCell {
 //        guard let sender = message.sender,
 //            receiver = message.receiver,
                 guard let user = UserController.sharedController.loggedInUser else {
-                return
+                    return
         }
     
         

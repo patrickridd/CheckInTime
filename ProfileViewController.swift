@@ -22,7 +22,7 @@ class ProfileViewController: UIViewController {
     }
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {
-    
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
     @IBAction func deleteAccountButtonTapped(sender: AnyObject) {

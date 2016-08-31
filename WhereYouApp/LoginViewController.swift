@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
     
     @IBOutlet weak var imageView: UIImageView!
@@ -18,7 +18,14 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
+            if !signedIn {
+                self.presentICloudAlert()
+                return
+            }
+        }
+        numberTextField.delegate = self
+        
     }
 
     @IBAction func submitButtonTapped(sender: AnyObject) {
@@ -54,6 +61,32 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         
     }
+    
+    func presentICloudAlert() {
+        
+        
+        let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
+        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
+            let settingsUrl = NSURL(string: "prefs:root=CASTLE")
+            if let url = settingsUrl {
+                UIApplication.sharedApplication().openURL(url)
+                
+            }
+        }
+        alert.addAction(settingsAction)
+        alert.addAction(dismissAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+        
+        
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        return numberTextField.resignFirstResponder()
+        
+    }
+    
     
     func presentNameAlert() {
         let alert = UIAlertController(title: nil, message: "Name needs one character or more", preferredStyle: .Alert)

@@ -33,7 +33,6 @@ class User: NSManagedObject {
             
         }
     }
-   
     
 // Insert code here to add functionality to your managed object subclass
     convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
@@ -45,6 +44,7 @@ class User: NSManagedObject {
         self.name = name
         self.phoneNumber = phoneNumber
         self.imageData = imageData
+        self.timeCreated = NSDate()
         
     }
     

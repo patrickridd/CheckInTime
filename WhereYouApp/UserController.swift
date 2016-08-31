@@ -70,17 +70,10 @@ class UserController {
     
     func checkForUserAccount(completion: (hasAccount: Bool)-> Void) {
         
-        CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
-            guard let record = record else {
-                return
-            }
-            
-            let ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
-            
-            let predicate = NSPredicate(format: "originalRecordID == %@", argumentArray: [ckRecordID])
+            let sortDescriptor = NSSortDescriptor(key: "timeCreated", ascending: false)
             let request = NSFetchRequest(entityName: "User")
-            request.predicate = predicate
-            
+            request.sortDescriptors = [sortDescriptor]
+
             guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
                 users = fetchedUsers where users.count > 0 else {
                 print("Cant find loggedInUser")
@@ -90,31 +83,19 @@ class UserController {
             
             self.loggedInUser = users.first
             
-            CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
-                
-                guard let user = User(record: record)  else {
-                    print("User was nil")
-                    completion(hasAccount: false)
+            let contactRequest = NSFetchRequest(entityName: "User")
+            
+            guard let fetchedContacts = (try? self.moc.executeFetchRequest(contactRequest) as? [User]),
+                contacts = fetchedContacts, loggedInUser = self.loggedInUser else {
+                    print("No Users saved")
                     return
-                }
-                
-                self.loggedInUser = user
-                
-                }, completion: { (records, error) in
-                    
-                    
-                    let request = NSFetchRequest(entityName: "User")
-                    
-                    guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
-                        users = fetchedUsers, loggedInUser = self.loggedInUser else {
-                            print("No Users saved")
-                            return
-                    }
-                    
-                    loggedInUser.contacts = users.filter({$0.phoneNumber != loggedInUser.phoneNumber})
-                    completion(hasAccount: true)
-            })
-        }
+            }
+            
+            loggedInUser.contacts = contacts.filter({$0.phoneNumber != loggedInUser.phoneNumber})
+            completion(hasAccount: true)
+
+            
+        
         
     }
     

@@ -11,15 +11,12 @@ import UIKit
 
 class MessageListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    
+    static let sharedController = MessageListTableViewController()
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
-            if !signedIn {
-                self.presentICloudAlert()
-                return
-            }
-        }
+     
         UserController.sharedController.checkForUserAccount { (hasAccount) in
             if !hasAccount {
                 self.presentLoginScreen()
@@ -27,37 +24,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             }
         }
         
-        
-        
-        
     }
 
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-                
-    }
-    
-    
-    func presentICloudAlert() {
-        
-        
-        let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)
-        let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
-        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
-            let settingsUrl = NSURL(string: "prefs:root=CASTLE")
-            if let url = settingsUrl {
-                UIApplication.sharedApplication().openURL(url)
-
-            }
-        }
-        alert.addAction(settingsAction)
-        alert.addAction(dismissAction)
-            self.presentViewController(alert, animated: true, completion: nil)
-    
-        
-        
-    }
     
     func presentLoginScreen() {
         
@@ -66,9 +34,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         self.presentViewController(loginVC, animated: true, completion: nil)
         
     }
-    
-
-    
     
         
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
