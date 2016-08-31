@@ -29,6 +29,7 @@
 		21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D477431D767DD40094FCBC /* CloudKit.framework */; };
 		21D477751D774BE00094FCBC /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */; };
 		21D477791D7770B20094FCBC /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477781D7770B20094FCBC /* User+CoreDataProperties.swift */; };
+		21D4777B1D7775990094FCBC /* MessageTesterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		21D477431D767DD40094FCBC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21D477781D7770B20094FCBC /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTesterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */,
 				21D476B01D74CF230094FCBC /* ContactDetailViewController.swift */,
 				21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */,
+				21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */,
 				21AEA87F1D736770005EF030 /* Main.storyboard */,
 			);
 			name = "View Controller";
@@ -242,6 +245,7 @@
 				21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */,
 				21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */,
 				21D477751D774BE00094FCBC /* Message+CoreDataProperties.swift in Sources */,
+				21D4777B1D7775990094FCBC /* MessageTesterViewController.swift in Sources */,
 				21D477141D76035D0094FCBC /* ContactController.swift in Sources */,
 				21D477031D75FC580094FCBC /* User.swift in Sources */,
 				21D477071D75FC580094FCBC /* Message.swift in Sources */,
