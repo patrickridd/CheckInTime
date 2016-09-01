@@ -82,11 +82,18 @@ class MessageController {
     
     func fetchMessagesFromCloudKit(completion: ()-> Void) {
         
-        let predicate = NSPredicate(format: "", argumentArray: [])
-        
-        CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+        CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
+            guard let userRecord = userRecord else {
+                return
+            }
             
+            let reference = CKReference(recordID: userRecord.recordID, action: .None)
             
+            let predicate = NSPredicate(format: "users CONTAINS ", argumentArray: [reference])
+            
+            CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+                
+                
             }) { (records, error) in
                 guard let records = records else {
                     print("No messages")
@@ -97,8 +104,9 @@ class MessageController {
                 let _ = records.flatMap({Message(record: $0)})
                 self.saveContext()
                 completion()
+            }
+            
         }
-        
         
     }
     

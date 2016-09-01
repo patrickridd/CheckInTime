@@ -44,6 +44,30 @@ class CloudKitManager {
         
     }
     
+    func checkForCloudKitUserAccount(completion: (hasCloudKitAccount: Bool, userRecord: CKRecord?) -> Void) {
+  
+        self.fetchLoggedInUserRecord { (record, error) in
+            guard let record = record else {
+                return
+            }
+            let reference = CKReference(recordID: record.recordID, action: .None)
+            let predicate = NSPredicate(format: "identifier == %@", argumentArray: [reference])
+            self.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+                
+                
+                
+                }, completion: { (records, error) in
+                    guard let records = records, record = records.first else {
+                        print("No customer user associated with iCloud Account")
+                        completion(hasCloudKitAccount: false, userRecord: nil)
+                        return
+                    }
+                    
+                    completion(hasCloudKitAccount: true, userRecord: record)
+            })
+        }
+    }
+    
     
     func fetchLoggedInUserRecord(completion: ((record: CKRecord?, error: NSError? ) -> Void)?) {
         
