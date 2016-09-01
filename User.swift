@@ -14,6 +14,7 @@ import CloudKit
 
 class User: NSManagedObject {
 
+    static let recordType = "User"
     static let nameKey = "name"
     static let phoneNumberKey = "phoneNumber"
     static let imageKey = "image"

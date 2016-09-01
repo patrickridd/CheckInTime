@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -18,12 +19,22 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
-            if !signedIn {
-                self.presentICloudAlert()
-                return
-            }
+       self.checkForCloudKitAccount { (hasCloudKitAccount, userRecord) in
+        if hasCloudKitAccount {
+            self.presentRestoreUser(userRecord!, completion: { (restoredUser) in
+                if restoredUser {
+                    MessageController.sharedController.fetchMessagesFromCloudKit({ 
+                        
+                        self.dismissViewControllerAnimated(true, completion: nil)
+
+                    })
+                }
+                
+            })
         }
+        
+        }
+        
         numberTextField.delegate = self
         
     }
@@ -61,6 +72,59 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         
     }
+    
+    func checkForCloudKitAccount(completion: (hasCloudKitAccount: Bool, userRecord: CKRecord?) -> Void) {
+        CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
+            if !signedIn {
+                self.presentICloudAlert()
+                return
+            }
+        }
+        CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
+            guard let record = record else {
+                return
+            }
+            let reference = CKReference(recordID: record.recordID, action: .None)
+            let predicate = NSPredicate(format: "identifier == %@", argumentArray: [reference])
+            CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+               
+                
+                
+                }, completion: { (records, error) in
+                    guard let records = records, record = records.first else {
+                        print("No customer user associated with iCloud Account")
+                        completion(hasCloudKitAccount: false, userRecord: nil)
+                        return
+                    }
+                    
+                    completion(hasCloudKitAccount: true, userRecord: record)
+            })
+        }
+    }
+    
+    func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool) -> Void) {
+        let alert = UIAlertController(title: "You have an existing User account in CloudKit, would you like to restore it on this device?", message: nil
+        , preferredStyle: .Alert)
+        
+        let restoreAction = UIAlertAction(title: "Restore", style: .Default) { (_) in
+            guard let _ = User(record: record) else {
+                print("Could not restore user")
+                completion(restoredUser: false)
+                return
+            }
+            UserController.sharedController.saveContext()
+            print("Restored User")
+            completion(restoredUser: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel and Create new User", style: .Cancel) { (_) in
+            completion(restoredUser: false)
+        }
+        alert.addAction(restoreAction)
+        alert.addAction(cancelAction)
+    
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     
     func presentICloudAlert() {
         

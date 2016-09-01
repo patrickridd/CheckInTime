@@ -69,7 +69,7 @@ class UserController {
         
     }
     
-    func checkForUserAccount(completion: (hasAccount: Bool)-> Void) {
+    func checkForCoreDataUserAccount(completion: (hasAccount: Bool)-> Void) {
         
             let sortDescriptor = NSSortDescriptor(key: "timeCreated", ascending: false)
             let request = NSFetchRequest(entityName: "User")
@@ -77,7 +77,7 @@ class UserController {
 
             guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
                 users = fetchedUsers where users.count > 0 else {
-                print("Cant find loggedInUser")
+                print("Cant find coreDataloggedInUser")
                 completion(hasAccount: false)
                 return
             }

@@ -80,6 +80,28 @@ class MessageController {
         }
     }
     
+    func fetchMessagesFromCloudKit(completion: ()-> Void) {
+        
+        let predicate = NSPredicate(format: "", argumentArray: [])
+        
+        CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            
+            
+            }) { (records, error) in
+                guard let records = records else {
+                    print("No messages")
+                    completion()
+                    return
+                }
+                
+                let _ = records.flatMap({Message(record: $0)})
+                self.saveContext()
+                completion()
+        }
+        
+        
+    }
+    
     
 //    func addSubscriptionToMessage(message: Message, alertBody: String?) {
 //        guard let record = message.record else {
