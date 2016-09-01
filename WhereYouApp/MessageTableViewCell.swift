@@ -46,10 +46,10 @@ class MessageTableViewCell: UITableViewCell {
         
         if message.sender.phoneNumber == user.phoneNumber {
             contactName.text = message.receiver.name
-            self.profileImage.image = message.receiver.photo
+           // self.profileImage.image = message.receiver.photo
         } else {
             contactName.text = message.sender.name
-            self.profileImage.image = message.sender.photo
+           // self.profileImage.image = message.sender.photo
         }
         
         // If message hasn't been responded to...

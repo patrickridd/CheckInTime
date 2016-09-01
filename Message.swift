@@ -48,13 +48,9 @@ class Message: NSManagedObject {
     
     
     convenience init?(record: CKRecord) {
-        guard let text = record[Message.textKey] as? String,
-            latitude = record[Message.latitudeKey] as? Double,
-            longitude = record[Message.longitudeKey] as? Double,
-            timeDue = record[Message.timeDueKey] as? NSDate,
+        guard let timeDue = record[Message.timeDueKey] as? NSDate,
             timeSent = record[Message.timeSentKey] as? NSDate,
             hasResponded = record[Message.hasRespondedKey] as? Int,
-            timeResponded = record[Message.timeRespondedKey] as? NSDate,
             senderID = record[Message.senderIDKey] as? String,
             receiverID = record[Message.receiverIDKey] as? String else {
                 return nil
@@ -64,20 +60,33 @@ class Message: NSManagedObject {
         
         self.init(entity: entity, insertIntoManagedObjectContext: context)
 
-        self.text = text
-        self.longitude = longitude
-        self.latitude = latitude
+       
         self.timeDue = timeDue
         self.timeSent = timeSent
         self.hasResponded = hasResponded
-        self.timeResponded = timeResponded
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
+        
+        
         
         guard let fetchedSender = UserController.sharedController.fetchCoreDataUserWithNumber(senderID), fetchedReceiver = UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) else {
             return nil
         }
         self.sender = fetchedSender
         self.receiver = fetchedReceiver
+        
+        // Only Apply for the when the receiver responds.
+        guard let text = record[Message.textKey] as? String,
+        latitude = record[Message.latitudeKey] as? Double,
+        longitude = record[Message.longitudeKey] as? Double,
+        timeResponded = record[Message.timeRespondedKey] as? NSDate  else {
+            return
+        }
+        
+        self.text = text
+        self.longitude = longitude
+        self.latitude = latitude
+        self.timeResponded = timeResponded
+
         
         
     }
