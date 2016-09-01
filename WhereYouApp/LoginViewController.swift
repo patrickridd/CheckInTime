@@ -94,7 +94,15 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             }
             UserController.sharedController.saveContext()
             print("Restored User")
-            completion(restoredUser: true)
+            CloudKitManager.cloudKitController.fetchSubscription("My Messages", completion: { (subscription, error) in
+                guard let subscription = subscription else {
+                    MessageController.sharedController.subscribeToMessages()
+                    return
+                }
+                print("Subcribed to Subscription: \(subscription)")
+                completion(restoredUser: true)
+
+            })
         }
         let cancelAction = UIAlertAction(title: "Cancel and Create new User", style: .Cancel) { (_) in
             completion(restoredUser: false)

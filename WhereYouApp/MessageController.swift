@@ -92,16 +92,17 @@ class MessageController {
             let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
             
             CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+                let _ = Message(record: record)
+                
                 
                 
             }) { (records, error) in
-                guard let records = records else {
-                    print("No messages")
+                if let error = error {
+                    print("No messages. Error: \(error.localizedDescription)")
                     completion()
                     return
                 }
                 
-                let _ = records.flatMap({Message(record: $0)})
                 self.saveContext()
                 completion()
             }
