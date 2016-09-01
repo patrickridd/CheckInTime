@@ -59,6 +59,12 @@ class MessageController {
       //  messages.insert(message, atIndex: 0)
          saveContext()
        
+        guard let senderRecord = sender.record,
+            receiverRecord = receiver.record else {
+                print("No sender/receiver record found")
+                return
+        }
+        
         
         // Save message to CloudKit
         let record = CKRecord(recordType: Message.recordType)
@@ -66,6 +72,9 @@ class MessageController {
         record[Message.senderIDKey] = sender.phoneNumber
         record[Message.receiverIDKey] = receiver.phoneNumber
         record[Message.hasRespondedKey] = message.hasResponded
+        let senderReference = CKReference(recordID: senderRecord.recordID, action: .None)
+        let receiverReference = CKReference(recordID: receiverRecord.recordID, action: .None)
+        record[Message.users] = [senderReference, receiverReference]
        // record[Message.latitudeKey] = message.latitude
        // record[Message.longitudeKey] = message.longitude
        // record[Message.textKey] = message.text
@@ -89,7 +98,7 @@ class MessageController {
             
             let reference = CKReference(recordID: userRecord.recordID, action: .None)
             
-            let predicate = NSPredicate(format: "users CONTAINS ", argumentArray: [reference])
+            let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
             
             CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
                 
@@ -164,7 +173,7 @@ class MessageController {
         guard let fetchedMessages = try? moc.executeFetchRequest(request) as? [Message],
             messages = fetchedMessages where messages.count > 0,
                let fetchedMessage = messages.first else {
-                let messages = Message(record: record)
+                let _ = Message(record: record)
                 saveContext()
                 return
         }

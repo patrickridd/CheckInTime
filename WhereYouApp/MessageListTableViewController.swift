@@ -15,17 +15,19 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     static let sharedController = MessageListTableViewController()
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-     
-        UserController.sharedController.checkForUserAccount { (hasAccount) in
+        
+        UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount) in
             if !hasAccount {
                 self.presentLoginScreen()
                 return
             }
-        }
+            
+        })
         
     }
-
+    
     
     func presentLoginScreen() {
         
@@ -35,7 +37,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
     }
     
-        
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return MessageController.sharedController.fetchedResultsController.sections?.count ?? 0
     }
