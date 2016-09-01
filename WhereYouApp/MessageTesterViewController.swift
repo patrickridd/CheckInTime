@@ -41,7 +41,7 @@ class MessageTesterViewController: UIViewController {
 
         
         
-        let predicate = NSPredicate(format: "name == %@", argumentArray: ["pat mac"])
+        let predicate = NSPredicate(format: "name == %@", argumentArray: ["patman"])
         
         CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
             guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {

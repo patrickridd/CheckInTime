@@ -41,6 +41,7 @@ class UserController {
         
         let recordID = CKRecordID(recordName: user.phoneNumber)
         let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
+        user.record = customUserRecord
         // create reference to Current User's cloudkit ID to be able to fetch Custom Record.
         let reference = CKReference(recordID: record.recordID, action: .None)
         customUserRecord["identifier"] = reference

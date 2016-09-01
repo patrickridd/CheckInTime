@@ -27,12 +27,7 @@ class User: NSManagedObject {
             
         }
     }
-    
-    var userMessages = [Message]() {
-        didSet {
-            
-        }
-    }
+    var record: CKRecord?
     
 // Insert code here to add functionality to your managed object subclass
     convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
@@ -96,7 +91,8 @@ class User: NSManagedObject {
         
         self.name = name
         self.phoneNumber = phoneNumber
-        
+        self.record = record
+
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {
@@ -111,7 +107,6 @@ class User: NSManagedObject {
         }
         self.contactReferences = contacts
         self.messageReferences = messages
-        
         
     }
     
