@@ -83,7 +83,7 @@ class UserController {
             }
             
             self.loggedInUser = users.first
-            
+            self.fetchRecordForCoreDataUser()
             let contactRequest = NSFetchRequest(entityName: "User")
             
             guard let fetchedContacts = (try? self.moc.executeFetchRequest(contactRequest) as? [User]),
@@ -91,12 +91,35 @@ class UserController {
                     print("No Users saved")
                     return
             }
-            
+        
             loggedInUser.contacts = contacts.filter({$0.phoneNumber != loggedInUser.phoneNumber})
             completion(hasAccount: true)
 
             
         
+        
+    }
+    
+    func fetchRecordForCoreDataUser() {
+        guard let loggedInUser = loggedInUser else {
+            print("no logged in user to fetch record for")
+            return
+        }
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [loggedInUser.phoneNumber])
+        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            
+            
+        }) { (records, error) in
+            guard let records = records,
+                record = records.first else {
+                    print("Couldn't find record with phone number")
+                    return
+            }
+            
+            loggedInUser.record = record
+            print("logged in cloudkit record fetched")
+        }
+
         
     }
     
