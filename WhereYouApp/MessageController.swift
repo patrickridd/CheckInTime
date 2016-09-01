@@ -10,19 +10,12 @@ import Foundation
 import CoreData
 import CloudKit
 
-let MessagesDidRefreshNotification = "MessagesDidRefreshNotification"
 
 class MessageController {
     
     static let sharedController = MessageController()
     let moc = Stack.sharedStack.managedObjectContext
-//    
-//    var messages = [Message]() {
-//        didSet{
-//            let nc = NSNotificationCenter.defaultCenter()
-//            nc.postNotificationName(MessagesDidRefreshNotification, object: nil)
-//        }
-//    }
+
     
     let fetchedResultsController: NSFetchedResultsController
     
@@ -30,10 +23,11 @@ class MessageController {
         
         let request = NSFetchRequest(entityName: "Message")
         let sortDescriptor = NSSortDescriptor(key: "timeSent", ascending: false)
+        let sortDescriptorBool = NSSortDescriptor(key: "hasResponded", ascending: false)
         
-        request.sortDescriptors = [sortDescriptor]
+        request.sortDescriptors = [sortDescriptor, sortDescriptorBool]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeSent", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
         
         _ = try? fetchedResultsController.performFetch()        
         

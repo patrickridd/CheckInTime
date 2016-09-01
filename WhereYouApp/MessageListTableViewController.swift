@@ -7,24 +7,29 @@
 //
 
 import UIKit
-//import CloudKit
+import CoreData
 
-class MessageListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MessageListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate  {
     
     
     static let sharedController = MessageListTableViewController()
     @IBOutlet weak var tableView: UITableView!
+   
+    
+    
+    
+    
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
+        MessageController.sharedController.fetchedResultsController.delegate = self
         UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount) in
             if !hasAccount {
                 self.presentLoginScreen()
                 return
             }
-            
         })
+        
         
     }
     
@@ -37,6 +42,9 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
     }
     
+    
+    
+    // Data Source Methods
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return MessageController.sharedController.fetchedResultsController.sections?.count ?? 0
@@ -60,6 +68,80 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
         return cell
     }
+    
+    // Override to support editing the table view.
+     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // Delete the row from the data source
+            guard let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
+                return
+            }
+            MessageController.sharedController.deleteMessage(message)
+            
+            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
+    }
+    
+     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let sections = MessageController.sharedController.fetchedResultsController.sections else { return nil }
+        
+        return sections[section].name
+        
+        
+    }
+    
+    // MARK: NSFetchedResultsControllerDelegate
+    
+    
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView.beginUpdates()
+    }
+    
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        switch type {
+        case .Delete:
+            tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
+        case .Insert:
+            tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
+        default: break
+        }
+        
+    }
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
+        
+        switch type {
+        case .Delete:
+            guard let indexPath = indexPath else { return }
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        case .Insert:
+            guard let newIndexPath = newIndexPath else { return }
+            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+        case .Update:
+            guard let indexPath = indexPath else { return }
+            
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        case .Move:
+            guard let indexPath = indexPath, newIndexPath = newIndexPath else { return }
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+        }
+        
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
+    }
+    
+
+
+    
+    
+    
+    
     /*
      // MARK: - Navigation
      
