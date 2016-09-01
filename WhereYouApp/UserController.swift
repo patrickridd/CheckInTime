@@ -83,7 +83,19 @@ class UserController {
             }
             
             self.loggedInUser = users.first
-            self.fetchRecordForCoreDataUser()
+            self.fetchRecordForCoreDataUser { 
+                // Subscribe to Message Changes.
+                CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
+                    guard let subscription = subscription else {
+                        print("Trying to subscribe to My Messages")
+                        MessageController.sharedController.subscribeToMessages()
+                        return
+                    }
+                    print("You are subscribed to received messages. Subscription: \(subscription.subscriptionID)")
+                }
+
+                
+        }
             let contactRequest = NSFetchRequest(entityName: "User")
             
             guard let fetchedContacts = (try? self.moc.executeFetchRequest(contactRequest) as? [User]),
@@ -100,7 +112,7 @@ class UserController {
         
     }
     
-    func fetchRecordForCoreDataUser() {
+    func fetchRecordForCoreDataUser(completion: ()-> Void) {
         guard let loggedInUser = loggedInUser else {
             print("no logged in user to fetch record for")
             return
@@ -113,11 +125,13 @@ class UserController {
             guard let records = records,
                 record = records.first else {
                     print("Couldn't find record with phone number")
+                    completion()
                     return
             }
             
             loggedInUser.record = record
             print("logged in cloudkit record fetched")
+            completion()
         }
 
         

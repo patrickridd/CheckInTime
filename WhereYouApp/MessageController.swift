@@ -35,19 +35,7 @@ class MessageController {
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeSent", cacheName: nil)
         
-        _ = try? fetchedResultsController.performFetch()
-
-        // Subscribe to Message Changes.
-        CloudKitManager.cloudKitController.fetchSubscription("receiver") { (subscription, error) in
-            guard let subscription = subscription else {
-                print("Trying to subscribe to received messages")
-                self.subscribeToReceivedMessages()
-                return
-            }
-            print("You are subscribed to received messages. Subscription: \(subscription.subscriptionID)")
-        }
-        
-        
+        _ = try? fetchedResultsController.performFetch()        
         
     }
     
@@ -57,8 +45,12 @@ class MessageController {
         
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
       //  messages.insert(message, atIndex: 0)
-         saveContext()
-       
+        let record = CKRecord(recordType: Message.recordType)
+        message.recordName = record.recordID.recordName
+        message.record = record
+
+        
+        
         guard let senderRecord = sender.record,
             receiverRecord = receiver.record else {
                 print("No sender/receiver record found")
@@ -67,8 +59,7 @@ class MessageController {
         
         
         // Save message to CloudKit
-        let record = CKRecord(recordType: Message.recordType)
-        message.record = record
+        
         record[Message.senderIDKey] = sender.phoneNumber
         record[Message.receiverIDKey] = receiver.phoneNumber
         record[Message.hasRespondedKey] = message.hasResponded
@@ -119,55 +110,49 @@ class MessageController {
         
     }
     
-    
-//    func addSubscriptionToMessage(message: Message, alertBody: String?) {
-//        guard let record = message.record else {
+//    func subscribeToReceivedMessages() {
+//        guard let userPhone = UserController.sharedController.loggedInUser?.phoneNumber else {
 //            return
 //        }
-//        
-//        let reference = CKReference(recordID: record.recordID, action: .DeleteSelf)
-//        
-//        let subscriptionID = record.recordID.recordName
-//        let predicate = NSPredicate(format: "recordID == %@", argumentArray: [reference])
-//        
-//        CloudKitManager.cloudKitController.subscribe(Message.recordType, predicate: predicate, subscriptionID: subscriptionID, contentAvailable: true, alertBody: alertBody, desiredKeys: nil, options: .FiresOnRecordCreation) { (subscription, error) in
+//    //    let userRecordID = CKRecordID(recordName: userPhone)
+//        let predicate = NSPredicate(format: "receiverID == %@", argumentArray: [userPhone])
+//        CloudKitManager.cloudKitController.subscribe(Message.recordType, predicate: predicate, subscriptionID: "receiver", contentAvailable: true, options: [.FiresOnRecordCreation,.FiresOnRecordUpdate]) { (subscription, error) in
 //            
-//            if error == nil {
-//                print("Successful Subscription")
+//            if let subscription = subscription {
+//                print("Subscription Saved. Subscription: \(subscription.notificationInfo)")
 //            } else {
-//                print("Error adding Subscription. Error: \(error?.localizedDescription)")
+//                print("Error saving subscription. Error: \(error?.localizedDescription)")
 //            }
-//            
+//        
 //        }
 //    }
     
-    func subscribeToReceivedMessages() {
-        guard let userPhone = UserController.sharedController.loggedInUser?.phoneNumber else {
+    func subscribeToMessages() {
+        guard let userRecord = UserController.sharedController.loggedInUser?.record else {
+            print("No ckrecord to subscribe")
             return
         }
-    //    let userRecordID = CKRecordID(recordName: userPhone)
-        let predicate = NSPredicate(format: "receiverID == %@", argumentArray: [userPhone])
-        CloudKitManager.cloudKitController.subscribe(Message.recordType, predicate: predicate, subscriptionID: "receiver", contentAvailable: true, options: [.FiresOnRecordCreation,.FiresOnRecordUpdate]) { (subscription, error) in
+        let reference = CKReference(recordID: userRecord.recordID, action: .None)
+        
+        let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
+        CloudKitManager.cloudKitController.subscribe(Message.recordType, predicate: predicate, subscriptionID: "My Messages", contentAvailable: true, options: [.FiresOnRecordCreation,.FiresOnRecordUpdate]) { (subscription, error) in
             
             if let subscription = subscription {
                 print("Subscription Saved. Subscription: \(subscription.notificationInfo)")
             } else {
                 print("Error saving subscription. Error: \(error?.localizedDescription)")
             }
-        
+            
         }
-        
-        
-        
-        
-        
     }
+    
+
     
     func updateOrAddRemoteNotification(record: CKRecord) {
         
-        let ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
+        
         let request = NSFetchRequest(entityName: Message.recordType)
-        let predicate = NSPredicate(format: "ckRecordID CONTAINS %@", argumentArray: [ckRecordID])
+        let predicate = NSPredicate(format: "recordName == %@", argumentArray: [record.recordID.recordName])
         request.predicate = predicate
         
         guard let fetchedMessages = try? moc.executeFetchRequest(request) as? [Message],

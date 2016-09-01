@@ -5,6 +5,7 @@
         <attribute name="hasResponded" attributeType="Boolean" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="recordName" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timeDue" attributeType="Date" syncable="YES"/>
         <attribute name="timeResponded" optional="YES" attributeType="Date" syncable="YES"/>
@@ -22,7 +23,7 @@
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" inverseName="sender" inverseEntity="Message" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Message" positionX="-441" positionY="-162" width="128" height="195"/>
+        <element name="Message" positionX="-441" positionY="-162" width="128" height="210"/>
         <element name="User" positionX="-198" positionY="-234" width="128" height="150"/>
     </elements>
 </model>

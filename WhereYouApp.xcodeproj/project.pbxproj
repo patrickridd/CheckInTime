@@ -27,9 +27,9 @@
 		21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477181D7603850094FCBC /* CloudKitManager.swift */; };
 		21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4773C1D7638AB0094FCBC /* LoginViewController.swift */; };
 		21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D477431D767DD40094FCBC /* CloudKit.framework */; };
-		21D477751D774BE00094FCBC /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */; };
 		21D4777B1D7775990094FCBC /* MessageTesterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */; };
 		21D4777D1D778A730094FCBC /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4777C1D778A730094FCBC /* User+CoreDataProperties.swift */; };
+		21F8FA691D78C264002F99DB /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,9 +56,9 @@
 		21D4773C1D7638AB0094FCBC /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		21D477421D767DC00094FCBC /* WhereYouApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WhereYouApp.entitlements; sourceTree = "<group>"; };
 		21D477431D767DD40094FCBC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTesterViewController.swift; sourceTree = "<group>"; };
 		21D4777C1D778A730094FCBC /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,8 +125,8 @@
 		21D476BA1D74D1070094FCBC /* CoreData Model */ = {
 			isa = PBXGroup;
 			children = (
-				21D477741D774BE00094FCBC /* Message+CoreDataProperties.swift */,
 				21D4777C1D778A730094FCBC /* User+CoreDataProperties.swift */,
+				21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */,
 				21D477091D75FD390094FCBC /* Stack.swift */,
 				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,
 			);
@@ -247,11 +247,11 @@
 				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,
 				21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */,
 				21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */,
-				21D477751D774BE00094FCBC /* Message+CoreDataProperties.swift in Sources */,
 				21D4777B1D7775990094FCBC /* MessageTesterViewController.swift in Sources */,
 				21D477141D76035D0094FCBC /* ContactController.swift in Sources */,
 				21D477031D75FC580094FCBC /* User.swift in Sources */,
 				21D477071D75FC580094FCBC /* Message.swift in Sources */,
+				21F8FA691D78C264002F99DB /* Message+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

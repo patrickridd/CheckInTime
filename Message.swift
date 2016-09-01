@@ -66,7 +66,8 @@ class Message: NSManagedObject {
         self.hasResponded = hasResponded
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
-        
+        self.recordName = record.recordID.recordName
+
         
         guard let fetchedSender = UserController.sharedController.fetchCoreDataUserWithNumber(senderID), fetchedReceiver = UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) else {
             return nil
@@ -86,7 +87,6 @@ class Message: NSManagedObject {
         self.longitude = longitude
         self.latitude = latitude
         self.timeResponded = timeResponded
-
         
         
     }
