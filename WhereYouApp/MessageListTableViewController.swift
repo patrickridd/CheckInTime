@@ -163,7 +163,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             }
         let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message
         messageDetailVC.message = message
-            
+        messageDetailVC.hidesBottomBarWhenPushed = true
         
      // Pass the selected object to the new view controller.
             
