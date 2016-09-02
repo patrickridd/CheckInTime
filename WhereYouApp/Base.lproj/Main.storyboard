@@ -377,8 +377,8 @@
                     <connections>
                         <outlet property="mapView" destination="CNa-Ia-dRJ" id="4IK-YZ-tB9"/>
                         <outlet property="messageLabel" destination="rdE-33-zLI" id="Yok-U0-kL7"/>
+                        <outlet property="messageTextView" destination="rya-Wm-OFd" id="4bT-z2-Yh0"/>
                         <outlet property="sendButton" destination="DYc-Xk-5XT" id="A57-FX-MIc"/>
-                        <outlet property="textView" destination="rya-Wm-OFd" id="tcD-BR-L9n"/>
                         <outlet property="timeDueLabel" destination="PBt-gj-EVs" id="jOW-WN-PeI"/>
                         <outlet property="titleLabel" destination="PP0-zM-HvV" id="0jg-q0-UI0"/>
                     </connections>

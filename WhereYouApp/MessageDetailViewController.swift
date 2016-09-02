@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
+class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate {
     
     var message: Message?
     var loggedInUser: User?
@@ -24,7 +24,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var timeDueLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var titleLabel: UINavigationItem!
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var messageLabel: UILabel!
     
     var location: CLLocation? {
@@ -33,8 +33,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
                 print("Location was nil")
                 return
             }
-        
-            print(location)
             
             let span: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: self.latSpan, longitudeDelta: self.longSpan)
             let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
@@ -44,7 +42,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
             
             let myAnnotation = MKPointAnnotation()
             myAnnotation.title = loggedInUser?.name
-            myAnnotation.subtitle = textView.text ?? defaultMessage
+            myAnnotation.subtitle = messageTextView.text ?? defaultMessage
             myAnnotation.coordinate = coordinate
             mapView.addAnnotation(myAnnotation)
             mapView.showsUserLocation = true
@@ -52,7 +50,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-       let defaultMessage = "This is WhereImApp"
+       let defaultMessage = "type a short message here"
     
     let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -67,10 +65,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        
+        messageTextView.delegate = self
     }
+    
+    
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -119,7 +118,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
         
         // Hide TextView
-        textView.hidden = true
+        messageTextView.hidden = true
         // Disable Send Button
         sendButton.enabled = false
         
@@ -171,7 +170,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         sendButton.enabled = true
         
         // Unhide textView
-        textView.hidden = false
+        messageTextView.hidden = false
+        applyPlaceholderStyle(messageTextView, placeholderText: self.defaultMessage)
+
         // hide label
         messageLabel.hidden = true
         
@@ -207,7 +208,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let newLocation = locations.last {
                     dispatch_async(dispatch_get_main_queue(), {
-                        print(self.location)
                         self.location = newLocation
         })
 
@@ -216,6 +216,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         
     }
     
+    
+
+    
     @IBAction func sendButtonTapped(sender: AnyObject) {
         
     }
@@ -223,6 +226,78 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popToRootViewControllerAnimated(true)
     }
+    
+    // MARK: - TextView placeholder
+    
+    func applyPlaceholderStyle(textView: UITextView, placeholderText: String) {
+        
+        // make it look (initially) like a placeholder
+        textView.textColor = UIColor.lightGrayColor()
+        textView.text = placeholderText
+        textView.font = UIFont(name: "avenir", size: 14)
+    }
+    
+    func applyNonPlaceholderStyle(textView: UITextView) {
+        
+        // make it look like normal text instead of a placeholder
+        textView.textColor = UIColor.darkTextColor()
+        textView.alpha = 1.0
+        textView.font = UIFont(name: "avenir", size: 14)
+    }
+    
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        if textView == messageTextView && textView.text == self.defaultMessage {
+            // move cursor to start
+            moveCursorToStart(textView)
+        }
+        return true
+    }
+    
+    func moveCursorToStart(textView: UITextView) {
+        dispatch_async(dispatch_get_main_queue(), {
+            textView.selectedRange = NSMakeRange(0, 0);
+        })
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        // remove the placeholder text when they start typing
+        // first, see if the field is empty
+        // if it's not empty, then the text should be black and not italic
+        // BUT, we also need to remove the placeholder text if that's the only text
+        // if it is empty, then the text should be the placeholder
+        let newLength = textView.text.utf16.count + text.utf16.count - range.length
+        if newLength > 0 { // have text, so don't show the placeholder
+            // check if the only text is the placeholder and remove it if needed
+            // unless they've hit the delete button with the placeholder displayed
+            if textView == messageTextView && textView.text == self.defaultMessage {
+                if text.utf16.count == 0 { // they hit the back button
+                    return false // ignore it
+                }
+                applyNonPlaceholderStyle(textView)
+                textView.text = ""
+            }
+            return true
+        } else {  // no text, so show the placeholder
+            applyPlaceholderStyle(textView, placeholderText: self.defaultMessage)
+            moveCursorToStart(textView)
+            return false
+        }
+    }
+    
+    func textViewDidChangeSelection (textView: UITextView) {
+        // if placeholder is shown, prevent positioning of cursor within or selection of placeholder text
+        if textView == messageTextView && textView.text == defaultMessage {
+            moveCursorToStart(textView)
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if messageTextView.text.characters.count == 0 {
+            messageTextView.text = self.defaultMessage
+            messageTextView.textColor = .lightGrayColor()
+        }
+    }
+    
     
     
     /*
