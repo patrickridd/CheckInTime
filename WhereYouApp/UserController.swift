@@ -87,12 +87,12 @@ class UserController {
         
         // Subscribe to Message Changes.
         CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
-            guard let subscription = subscription else {
+            guard let _ = subscription else {
                 print("Trying to subscribe to My Messages")
                 MessageController.sharedController.subscribeToMessages()
                 return
             }
-            print("You are subscribed to received messages. Subscription: \(subscription.description)")
+            print("You are subscribed to received messages)")
         }
         
         self.fetchContactsFromCoreData { (contacts) in

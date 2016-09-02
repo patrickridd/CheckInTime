@@ -11,24 +11,30 @@ import MapKit
 import CoreLocation
 
 class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
-
+    
     var message: Message?
     var loggedInUser: User?
     var usersContact: User?
+    var locationManager: CLLocationManager!
+    let latSpan: CLLocationDegrees = 0.005
+    let longSpan: CLLocationDegrees = 0.005
+
     
+    @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var timeDueLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var titleLabel: UINavigationItem!
-    @IBOutlet weak var sendButton: UIBarButtonItem!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var messageLabel: UILabel!
-
+    
     var location: CLLocation? {
         didSet {
             guard let location = location else {
                 print("Location was nil")
                 return
             }
+        
+            print(location)
             
             let span: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: self.latSpan, longitudeDelta: self.longSpan)
             let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
@@ -45,11 +51,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
             
         }
     }
-
-    var locationManager: CLLocationManager!
-    let latSpan: CLLocationDegrees = 0.005
-    let longSpan: CLLocationDegrees = 0.005
-    let defaultMessage = "This is WhereImApp"
+    
+       let defaultMessage = "This is WhereImApp"
     
     let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -59,37 +62,41 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         return formatter
     }()
     
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         guard let user = UserController.sharedController.loggedInUser,
             message = message else {
-            print("message in Detail View is nil OR loggedInUser is nil")
-            return
+                print("message in Detail View is nil OR loggedInUser is nil")
+                return
         }
         self.loggedInUser = user
         
         // Put the Name of whoever isn't the loggedInUser in the titleLabel
-
+        
         if message.sender.name == user.name {
             self.usersContact = message.receiver
         } else {
             self.usersContact = message.sender
         }
-        
-       
-        
-        updateWith(message)
-    }
 
-    
+        updateWith(message)
+
+    }
     
     
     // Updates View with Message Details
     func updateWith(message: Message) {
-       
+        
         // Set title to the name of the loggedInUser's contact
         self.titleLabel.title = usersContact?.name
         
@@ -107,7 +114,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         
         // Update the send button title
         if let timeRespondedDate = message.timeResponded {
-        sendButton.title = "Responded at \(dateFormatter.stringFromDate(timeRespondedDate))"
+            sendButton.setTitle("Responded at \(dateFormatter.stringFromDate(timeRespondedDate))", forState: .Normal)
         }
         self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
         
@@ -122,7 +129,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         if let text = message.text {
             messageLabel.text = text
         } else {
-            messageLabel.text = defaultMessage
+            messageLabel.text = self.defaultMessage
         }
         
         // Get message's location through its latitude and longitude
@@ -144,7 +151,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         let myAnnotation = MKPointAnnotation()
         
         myAnnotation.coordinate = coordinate
-    
+        
         myAnnotation.title = self.usersContact?.name
         // If the Contact decides to send a text message put it in the annotation else give it the defaultMessage
         if let messageText = message.text {
@@ -158,9 +165,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func updateWithAToBeFilledRequestMessage(message: Message) {
-    
+        
         // set the button title back to send and enable it.
-        sendButton.title = "Send"
+        sendButton.setTitle("Send", forState: .Normal)
         sendButton.enabled = true
         
         // Unhide textView
@@ -174,7 +181,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-      //  checkCoreLocationPermission()
+        checkCoreLocationPermission()
         
     }
     
@@ -196,32 +203,36 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate {
             self.presentViewController(alert, animated: true, completion: nil)
         }
     }
-
+    
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let newLocation = locations.last {
-            self.location = newLocation
+                    dispatch_async(dispatch_get_main_queue(), {
+                        print(self.location)
+                        self.location = newLocation
+        })
+
         }
         locationManager.stopUpdatingLocation()
         
     }
     
     @IBAction func sendButtonTapped(sender: AnyObject) {
-    
+        
     }
-  
+    
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popToRootViewControllerAnimated(true)
     }
     
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
