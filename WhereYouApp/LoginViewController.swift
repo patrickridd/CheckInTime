@@ -31,7 +31,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 if restoredUser {
                     UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
                         if hasUsers {
-                            MessageController.sharedController.fetchMessagesFromCloudKit({
+                            MessageController.sharedController.fetchAllMessagesFromCloudKit({
                                 print("Messages restored")
                                 self.dismissViewControllerAnimated(true, completion: nil)
                                 

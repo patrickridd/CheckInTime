@@ -12,6 +12,11 @@ import CloudKit
 
 class Message: NSManagedObject {
     
+    
+    //////////////////////////////////////////////////////
+    //////////////////// Static Keys /////////////////////
+    //////////////////////////////////////////////////////
+    
     static let recordType = "Message"
     static let textKey = "text"
     static let latitudeKey = "latitude"
@@ -24,8 +29,10 @@ class Message: NSManagedObject {
     static let senderIDKey = "senderID"
     static let users = "users"
     
+    // Stored Properties not found in CoreDataModel
     var record: CKRecord?
     var senderID: String?
+    
 // Insert code here to add functionality to your managed object subclass
     convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, sender: User, receiver : User, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
@@ -48,6 +55,27 @@ class Message: NSManagedObject {
     }
     
     
+    
+    
+//////////////////////////////////////////////////////
+//////////// Cloudkit Properties /////////////////////
+//////////////////////////////////////////////////////
+
+    // Message CKReference
+    var cloudKitReference: CKReference? {
+        guard let data = self.ckRecordID,
+            let record =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
+                return nil
+        }
+        let reference = CKReference(record: record, action: .DeleteSelf)
+        return reference
+    }
+    
+    
+//////////////////////////////////////////////////////
+//////////// CloudKit Failable Initializer ///////////
+//////////////////////////////////////////////////////
+
     convenience init?(record: CKRecord) {
         guard let timeDue = record[Message.timeDueKey] as? NSDate,
             timeSent = record[Message.timeSentKey] as? NSDate,
