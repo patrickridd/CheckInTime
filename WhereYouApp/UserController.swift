@@ -28,35 +28,36 @@ class UserController {
             guard let record = record else {
                 print("Not signed in to cloudkit")
                 return
-            
+                
             }
-        
-        guard let imageData = UIImagePNGRepresentation(image) else {
-            print("Cant get NSData from Image")
-            return
-        }
-        
-        let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData)
-        /* Create Custom User Record with a recordID made from the users phone number so we can use the phone number to fetch him/her from coredata */
-        
-        let recordID = CKRecordID(recordName: user.phoneNumber)
-        let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
-        user.record = customUserRecord
-        // create reference to Current User's cloudkit ID to be able to fetch Custom Record.
-        let reference = CKReference(recordID: record.recordID, action: .None)
-        customUserRecord["identifier"] = reference
             
-        // Save Custom Record's Record ID into core data by converting it to NSData
-        user.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(customUserRecord.recordID)
+            guard let imageData = UIImagePNGRepresentation(image) else {
+                print("Cant get NSData from Image")
+                return
+            }
+            
+            let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData)
+            /* Create Custom User Record with a recordID made from the users phone number so we can use the phone number to fetch him/her from coredata */
+            
+            user.recordName = record.recordID.recordName
+            let recordID = CKRecordID(recordName: user.phoneNumber)
+            let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
+            
+            // create reference to Current User's cloudkit ID to be able to fetch Custom Record.
+            let reference = CKReference(recordID: record.recordID, action: .None)
+            customUserRecord["identifier"] = reference
+            
+            // Save Custom Record's Record ID into core data by converting it to NSData
+            user.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(customUserRecord)
             // Save Original record's record id as reference in core data.
-        user.originalRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
-        
-        // Save user properties to cloudkit
-        customUserRecord[User.nameKey] = user.name
-        customUserRecord[User.phoneNumberKey] = user.phoneNumber
-        customUserRecord[User.imageKey] = user.imageAsset
-              
-        self.loggedInUser = user
+            user.originalRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
+            
+            // Save user properties to cloudkit
+            customUserRecord[User.nameKey] = user.name
+            customUserRecord[User.phoneNumberKey] = user.phoneNumber
+            customUserRecord[User.imageKey] = user.imageAsset
+            
+            self.loggedInUser = user
             CloudKitManager.cloudKitController.saveRecord(customUserRecord, completion: { (record, error) in
                 if let error = error {
                     print("Error saving to cloudkit. Error: \(error.localizedDescription)")
@@ -64,79 +65,58 @@ class UserController {
                 self.saveContext()
                 completion()
             })
-
+            
         }
         
     }
     
     func checkForCoreDataUserAccount(completion: (hasAccount: Bool)-> Void) {
         
-            let sortDescriptor = NSSortDescriptor(key: "timeCreated", ascending: false)
-            let request = NSFetchRequest(entityName: "User")
-            request.sortDescriptors = [sortDescriptor]
-
-            guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
-                users = fetchedUsers where users.count > 0 else {
+        let sortDescriptor = NSSortDescriptor(key: "timeCreated", ascending: false)
+        let request = NSFetchRequest(entityName: "User")
+        request.sortDescriptors = [sortDescriptor]
+        
+        guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
+            users = fetchedUsers where users.count > 0 else {
                 print("Cant find coreDataloggedInUser")
                 completion(hasAccount: false)
                 return
-            }
-            
-            self.loggedInUser = users.first
-            self.fetchRecordForCoreDataUser { 
-                // Subscribe to Message Changes.
-                CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
-                    guard let subscription = subscription else {
-                        print("Trying to subscribe to My Messages")
-                        MessageController.sharedController.subscribeToMessages()
-                        return
-                    }
-                    print("You are subscribed to received messages. Subscription: \(subscription.subscriptionID)")
-                }
-
-                
         }
-            let contactRequest = NSFetchRequest(entityName: "User")
-            
-            guard let fetchedContacts = (try? self.moc.executeFetchRequest(contactRequest) as? [User]),
-                contacts = fetchedContacts, loggedInUser = self.loggedInUser else {
-                    print("No Users saved")
-                    return
-            }
         
-            loggedInUser.contacts = contacts.filter({$0.phoneNumber != loggedInUser.phoneNumber})
+        self.loggedInUser = users.first
+        
+        // Subscribe to Message Changes.
+        CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
+            guard let subscription = subscription else {
+                print("Trying to subscribe to My Messages")
+                MessageController.sharedController.subscribeToMessages()
+                return
+            }
+            print("You are subscribed to received messages. Subscription: \(subscription.subscriptionID)")
+        }
+        
+        self.fetchContactsFromCoreData { (contacts) in
+            self.loggedInUser?.contacts = contacts
             completion(hasAccount: true)
-
             
+        }
+    }
+    
+    func fetchContactsFromCoreData(completion: (contacts: [User]) -> Void) {
+        let contactRequest = NSFetchRequest(entityName: "User")
         
+        guard let fetchedContacts = (try? self.moc.executeFetchRequest(contactRequest) as? [User]),
+            users = fetchedContacts, loggedInUser = self.loggedInUser else {
+                print("No Users saved")
+                return
+        }
+        
+        let contacts = users.filter({$0.phoneNumber != loggedInUser.phoneNumber})
+        completion(contacts: contacts)
         
     }
     
-    func fetchRecordForCoreDataUser(completion: ()-> Void) {
-        guard let loggedInUser = loggedInUser else {
-            print("no logged in user to fetch record for")
-            return
-        }
-        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [loggedInUser.phoneNumber])
-        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-            
-            
-        }) { (records, error) in
-            guard let records = records,
-                record = records.first else {
-                    print("Couldn't find record with phone number")
-                    completion()
-                    return
-            }
-            
-            loggedInUser.record = record
-            print("logged in cloudkit record fetched")
-            completion()
-        }
-
-        
-    }
-    
+    // Fetches One User from CoreData by using their phone number //
     func fetchCoreDataUserWithNumber(recordName: String) -> User? {
         
         let request = NSFetchRequest(entityName: "User")
@@ -151,9 +131,46 @@ class UserController {
         
     }
     
+    // Fetches the loggedInUsers Contacts From Cloudkit in they get deleted. //
+    func fetchCloudKitContacts(completion: (hasUsers: Bool)->Void) {
+        guard let loggedInUser = loggedInUser else {
+            print("No user logged in yet")
+            return
+        }
+        
+        guard let data = loggedInUser.ckRecordID,
+            record = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord,
+               references = record[User.contactsKey] as? [CKReference] else {
+                return
+        }
+        
+        loggedInUser.contactReferences = references
+        
+        let predicate = NSPredicate(format: "recordID IN %@", argumentArray: [references])
+        
+        
+        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            if let user = User(record: record) {
+                loggedInUser.contacts.append(user)
+            }
+            
+            }) { (records, error) in
+                if let error = error {
+                    print("Error fetching contacts: Error: \(error.localizedDescription)")
+                    completion(hasUsers: false)
+                    return
+                }
+            completion(hasUsers: true)
+                
+        }
+        
+    }
+    
+    // Saves the ManagedObject Context
+    
     func saveContext() {
         do{
-           try moc.save()
+            try moc.save()
         }catch let error as NSError {
             print("Error saving to context. Error: \(error.localizedDescription)")
         }

@@ -25,22 +25,26 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             }
         }
         
-        
        CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
         if hasCloudKitAccount {
             self.presentRestoreUser(userRecord!, completion: { (restoredUser) in
                 if restoredUser {
-                    MessageController.sharedController.fetchMessagesFromCloudKit({ 
-                        print("Messages restored")
-                        self.dismissViewControllerAnimated(true, completion: nil)
-
+                    UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
+                        if hasUsers {
+                            MessageController.sharedController.fetchMessagesFromCloudKit({
+                                print("Messages restored")
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                                
+                            })
+                            
+                        }
+                
                     })
                 }
-                
             })
         }
         
-        }
+    }
         
         numberTextField.delegate = self
         
@@ -87,16 +91,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         , preferredStyle: .Alert)
         
         let restoreAction = UIAlertAction(title: "Restore", style: .Default) { (_) in
-            guard let _ = User(record: record) else {
+            guard let user = User(record: record) else {
                 print("Could not restore user")
                 completion(restoredUser: false)
                 return
             }
+            UserController.sharedController.loggedInUser = user
             UserController.sharedController.saveContext()
             print("Restored User")
             CloudKitManager.cloudKitController.fetchSubscription("My Messages", completion: { (subscription, error) in
                 guard let subscription = subscription else {
                     MessageController.sharedController.subscribeToMessages()
+                    completion(restoredUser: true)
                     return
                 }
                 print("Subcribed to Subscription: \(subscription)")
@@ -104,7 +110,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
 
             })
         }
-        let cancelAction = UIAlertAction(title: "Cancel and Create new User", style: .Cancel) { (_) in
+        let cancelAction = UIAlertAction(title: "Create New User", style: .Cancel) { (_) in
             completion(restoredUser: false)
         }
         alert.addAction(restoreAction)

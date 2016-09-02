@@ -19,11 +19,12 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="originalRecordID" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="phoneNumber" attributeType="String" syncable="YES"/>
+        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timeCreated" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" inverseName="sender" inverseEntity="Message" syncable="YES"/>
     </entity>
     <elements>
         <element name="Message" positionX="-441" positionY="-162" width="128" height="210"/>
-        <element name="User" positionX="-198" positionY="-234" width="128" height="150"/>
+        <element name="User" positionX="-198" positionY="-234" width="128" height="165"/>
     </elements>
 </model>

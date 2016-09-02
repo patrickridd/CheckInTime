@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  WhereYouApp
 //
-//  Created by Patrick Ridd on 8/31/16.
+//  Created by Patrick Ridd on 9/1/16.
 //  Copyright © 2016 PatrickRidd. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -16,10 +16,11 @@ extension User {
 
     @NSManaged var imageData: NSData
     @NSManaged var name: String
+    @NSManaged var originalRecordID: NSData?
     @NSManaged var phoneNumber: String
-    @NSManaged var ckRecordID: NSData
-    @NSManaged var originalRecordID: NSData
     @NSManaged var timeCreated: NSDate
-    @NSManaged var messages: NSSet?
+    @NSManaged var ckRecordID: NSData?
+    @NSManaged var recordName: String
+    @NSManaged var messages: NSOrderedSet?
 
 }

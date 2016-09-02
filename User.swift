@@ -28,8 +28,14 @@ class User: NSManagedObject {
             
         }
     }
-    var record: CKRecord?
     
+    var record: CKRecord? {
+        guard let data = ckRecordID, let ckRecord = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
+            return nil
+        }
+        return ckRecord
+    }
+
 // Insert code here to add functionality to your managed object subclass
     convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
@@ -41,7 +47,7 @@ class User: NSManagedObject {
         self.phoneNumber = phoneNumber
         self.imageData = imageData
         self.timeCreated = NSDate()
-        
+    
     }
     
     
@@ -92,23 +98,14 @@ class User: NSManagedObject {
         
         self.name = name
         self.phoneNumber = phoneNumber
-        self.record = record
-
-        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
-        
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record)
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {
             self.imageData = NSData()
             return
         }
         self.imageData = photoData
     
-        guard let contacts = record[User.contactsKey] as? [CKReference],
-            messages = record[User.messagesKey] as? [CKReference] else {
-                return
-        }
-        self.contactReferences = contacts
-        self.messageReferences = messages
-        
+       
     }
     
 }

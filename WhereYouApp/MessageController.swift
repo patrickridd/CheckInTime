@@ -27,7 +27,7 @@ class MessageController {
         
         request.sortDescriptors = [sortDescriptor, sortDescriptorBool]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID", cacheName: nil)
         
         _ = try? fetchedResultsController.performFetch()        
         
@@ -37,18 +37,27 @@ class MessageController {
     
     func createMessage(sender: User, receiver: User, timeDue: NSDate) {
         
+        // create new Message
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
-      //  messages.insert(message, atIndex: 0)
+
+        // Create CKRecord and give your model the record and recordName
+        // recordName can then be fetched from core data
         let record = CKRecord(recordType: Message.recordType)
         message.recordName = record.recordID.recordName
         message.record = record
 
-        
-        
-        guard let senderRecord = sender.record,
-            receiverRecord = receiver.record else {
-                print("No sender/receiver record found")
+        // Get CKRecord Data
+        guard let senderData = sender.ckRecordID,
+            receiverData = receiver.ckRecordID else {
+                print("CKRecord NSData was nil")
                 return
+        }
+        
+        // Convert Data back to CKRecord so you can create users reference
+        guard let senderRecord = NSKeyedUnarchiver.unarchiveObjectWithData(senderData) as? CKRecord,
+           receiverRecord = NSKeyedUnarchiver.unarchiveObjectWithData(receiverData) as? CKRecord else {
+            print("Couldn't get back CKRecords from NSData")
+            return
         }
         
         
@@ -60,6 +69,8 @@ class MessageController {
         let senderReference = CKReference(recordID: senderRecord.recordID, action: .None)
         let receiverReference = CKReference(recordID: receiverRecord.recordID, action: .None)
         record[Message.users] = [senderReference, receiverReference]
+        
+        
        // record[Message.latitudeKey] = message.latitude
        // record[Message.longitudeKey] = message.longitude
        // record[Message.textKey] = message.text
@@ -74,6 +85,9 @@ class MessageController {
         }
     }
     
+    
+    
+    
     func fetchMessagesFromCloudKit(completion: ()-> Void) {
         
         CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
@@ -86,8 +100,8 @@ class MessageController {
             let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
             
             CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-                let _ = Message(record: record)
-                
+                let message = Message(record: record)
+                print("\(message?.sender.name)")
                 
                 
             }) { (records, error) in
@@ -96,31 +110,14 @@ class MessageController {
                     completion()
                     return
                 }
-                
                 self.saveContext()
                 completion()
             }
-            
         }
-        
     }
     
-//    func subscribeToReceivedMessages() {
-//        guard let userPhone = UserController.sharedController.loggedInUser?.phoneNumber else {
-//            return
-//        }
-//    //    let userRecordID = CKRecordID(recordName: userPhone)
-//        let predicate = NSPredicate(format: "receiverID == %@", argumentArray: [userPhone])
-//        CloudKitManager.cloudKitController.subscribe(Message.recordType, predicate: predicate, subscriptionID: "receiver", contentAvailable: true, options: [.FiresOnRecordCreation,.FiresOnRecordUpdate]) { (subscription, error) in
-//            
-//            if let subscription = subscription {
-//                print("Subscription Saved. Subscription: \(subscription.notificationInfo)")
-//            } else {
-//                print("Error saving subscription. Error: \(error?.localizedDescription)")
-//            }
-//        
-//        }
-//    }
+
+    
     
     func subscribeToMessages() {
         guard let userRecord = UserController.sharedController.loggedInUser?.record else {
@@ -153,14 +150,16 @@ class MessageController {
         guard let fetchedMessages = try? moc.executeFetchRequest(request) as? [Message],
             messages = fetchedMessages where messages.count > 0,
                let fetchedMessage = messages.first else {
-                let _ = Message(record: record)
+                let message = Message(record: record)!
+                print("\(message.sender.name)")
+                
                 saveContext()
                 return
         }
         
         self.deleteMessage(fetchedMessage)
-        let _ = Message(record: record)
-        
+        let message = Message(record: record)
+        print("\(message?.sender.name)")
         saveContext()
         
         

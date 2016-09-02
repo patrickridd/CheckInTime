@@ -37,26 +37,52 @@ class MessageTesterViewController: UIViewController {
     }
 
     @IBAction func sendButtonTapped(sender: AnyObject) {
+        
         dueDateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
 
         
-        
-        let predicate = NSPredicate(format: "name == %@", argumentArray: ["patman"])
-        
-        CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
-            guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {
-                return
-            }
-            loggedInUser.contacts.append(receiver)
-             MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
-            
-            
-            }) { (records, error) in
-                
-               self.dismissViewControllerAnimated(true, completion: nil)
-                
+        guard let user = UserController.sharedController.loggedInUser else {
+            return
         }
         
+        UserController.sharedController.fetchContactsFromCoreData { (contacts) in
+            if contacts.count == 0 {
+                let predicate = NSPredicate(format: "name != %@", argumentArray: [user.name])
+                
+                CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
+                    guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {
+                        return
+                    }
+                    UserController.sharedController.saveContext()
+                    loggedInUser.contacts.append(receiver)
+                    
+                    guard let data = user.ckRecordID, loggedInUserRecord = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
+                        print("Couldn't get CKRecord from NSData")
+                        return
+                    }
+                    let reference = CKReference(recordID: record.recordID, action: .None)
+                    
+                    user.contactReferences.append(reference)
+                    loggedInUserRecord[User.contactsKey] = user.contactReferences
+                    
+                    
+                    
+                    MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
+                    
+                }) { (records, error) in
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+            } else {
+                guard let receiver = contacts.first else { return }
+                UserController.sharedController.fetchContactsFromCoreData({_ in 
+                    
+                })
+                
+                MessageController.sharedController.createMessage(user, receiver: receiver, timeDue: NSDate())
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+            
+        }
     }
     
     @IBAction func screenTapped(sender: AnyObject) {

@@ -21,7 +21,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.automaticallyAdjustsScrollViewInsets = false
+
         MessageController.sharedController.fetchedResultsController.delegate = self
         UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount) in
             if !hasAccount {
@@ -38,7 +39,10 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let loginVC = storyBoard.instantiateViewControllerWithIdentifier("loginScreen")
-        self.presentViewController(loginVC, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(loginVC, animated: true, completion: nil)
+        })
+
         
     }
     
@@ -85,7 +89,14 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
      func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         guard let sections = MessageController.sharedController.fetchedResultsController.sections else { return nil }
         
-        return sections[section].name
+        
+        guard let phoneNumber = UserController.sharedController.loggedInUser?.phoneNumber else { return "WhereYouApp" }
+        print(sections[section].name)
+        if sections[section].name == phoneNumber {
+            return "WhereYouApp Requests"
+        } else {
+            return "People want to Know WhereYouApp"
+        }
         
         
     }

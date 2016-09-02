@@ -25,7 +25,7 @@ class Message: NSManagedObject {
     static let users = "users"
     
     var record: CKRecord?
-    
+    var senderID: String?
 // Insert code here to add functionality to your managed object subclass
     convenience init(text: String? = nil, latitude: Double? = nil, longitude: Double? = nil, timeSent: NSDate = NSDate(), timeDue: NSDate, hasResponded: Bool = false, timeResponded: NSDate? = nil, sender: User, receiver : User, context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
@@ -42,6 +42,7 @@ class Message: NSManagedObject {
         self.timeResponded = timeResponded
         self.sender = sender
         self.receiver = receiver
+        self.senderID = sender.phoneNumber
                
         
     }
@@ -65,7 +66,6 @@ class Message: NSManagedObject {
         self.timeSent = timeSent
         self.hasResponded = hasResponded
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
-        
         self.recordName = record.recordID.recordName
 
         

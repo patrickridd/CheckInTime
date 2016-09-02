@@ -58,7 +58,7 @@ class CloudKitManager {
                 
                 }, completion: { (records, error) in
                     guard let records = records, record = records.first else {
-                        print("No customer user associated with iCloud Account")
+                        print("No custom user associated with iCloud Account")
                         completion(hasCloudKitAccount: false, userRecord: nil)
                         return
                     }
