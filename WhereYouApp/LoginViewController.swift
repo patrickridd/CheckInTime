@@ -37,6 +37,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                                 
                             })
                             
+                        } else {
+                            self.dismissViewControllerAnimated(true, completion: nil)
                         }
                 
                     })

@@ -92,7 +92,7 @@ class UserController {
                 MessageController.sharedController.subscribeToMessages()
                 return
             }
-            print("You are subscribed to received messages. Subscription: \(subscription.subscriptionID)")
+            print("You are subscribed to received messages. Subscription: \(subscription.description)")
         }
         
         self.fetchContactsFromCoreData { (contacts) in
@@ -141,6 +141,7 @@ class UserController {
         guard let data = loggedInUser.ckRecordID,
             record = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord,
                references = record[User.contactsKey] as? [CKReference] else {
+                completion(hasUsers: false)
                 return
         }
         

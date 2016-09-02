@@ -27,7 +27,7 @@ class MessageController {
         
         request.sortDescriptors = [sortDescriptor, sortDescriptorBool]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
         
         _ = try? fetchedResultsController.performFetch()        
         

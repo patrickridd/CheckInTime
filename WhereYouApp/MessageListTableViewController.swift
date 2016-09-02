@@ -91,7 +91,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
         
         guard let phoneNumber = UserController.sharedController.loggedInUser?.phoneNumber else { return "WhereYouApp" }
-        print(sections[section].name)
+
         if sections[section].name == phoneNumber {
             return "WhereYouApp Requests"
         } else {
