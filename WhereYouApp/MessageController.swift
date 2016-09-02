@@ -141,11 +141,16 @@ class MessageController {
             
         }) { (records, error) in
             guard let records = records else {
-                print("No new messages from cloudkit found")
+                print("Message Records were nil")
                 return
             }
             // Initializes new Messages found from CloudKit and saves them to CoreData
-            let _ = records.flatMap({Message(record: $0)})
+            let messages = records.flatMap({Message(record: $0)})
+            if messages != [] {
+                print("Fetched new Message Records from cloudkit")
+            } else {
+                print("No new messages from cloudkit found")
+            }
             self.saveContext()
         }
         
