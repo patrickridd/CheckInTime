@@ -147,20 +147,27 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         tableView.endUpdates()
     }
     
-
-
     
     
     
-    
-    /*
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "messageSegue" {
      // Get the new view controller using segue.destinationViewController.
+        guard let messageDetailVC = segue.destinationViewController as? MessageDetailViewController,
+            let indexPath = tableView.indexPathForSelectedRow else {
+                return
+            }
+        let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message
+        messageDetailVC.message = message
+            
+        
      // Pass the selected object to the new view controller.
+            
+        }
      }
-     */
     
 }

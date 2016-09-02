@@ -85,6 +85,7 @@ class Message: NSManagedObject {
             receiverID = record[Message.receiverIDKey] as? String else {
                 return nil
         }
+        
         let context = Stack.sharedStack.managedObjectContext
         let entity = NSEntityDescription.entityForName("Message", inManagedObjectContext: context)!
         
@@ -103,6 +104,9 @@ class Message: NSManagedObject {
         }
         self.sender = fetchedSender
         self.receiver = fetchedReceiver
+        
+        
+        
         
         // Only Apply for the when the receiver responds.
         guard let text = record[Message.textKey] as? String,

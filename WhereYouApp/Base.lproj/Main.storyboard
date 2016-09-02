@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ptP-AN-0In">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ptP-AN-0In">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -312,16 +312,15 @@
                     <navigationItem key="navigationItem" title="title" id="PP0-zM-HvV"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="containerView" destination="x36-MX-yha" id="piE-Km-SPx"/>
                         <outlet property="messageLabel" destination="rdE-33-zLI" id="Yok-U0-kL7"/>
                         <outlet property="sendButton" destination="9sr-8p-F7f" id="Doc-dg-8Md"/>
                         <outlet property="textView" destination="rya-Wm-OFd" id="tcD-BR-L9n"/>
-                        <outlet property="title" destination="PP0-zM-HvV" id="9In-uh-aPh"/>
+                        <outlet property="titleLabel" destination="PP0-zM-HvV" id="0jg-q0-UI0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mgS-H4-Lsa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1647" y="484"/>
+            <point key="canvasLocation" x="1647" y="457"/>
         </scene>
         <!--WhereYouApps-->
         <scene sceneID="5RO-BO-Fyd">
@@ -471,7 +470,7 @@
                                             <outlet property="profileImage" destination="vO5-l7-n6E" id="LXK-kn-JRv"/>
                                             <outlet property="shouldRespondByLabel" destination="Heg-Sx-tuw" id="kdz-Hs-UFz"/>
                                             <outlet property="timeMessageSentLabel" destination="d40-hM-2Bx" id="bbS-Q3-YKK"/>
-                                            <segue destination="ovw-5G-6fs" kind="show" id="sQm-XH-vtG"/>
+                                            <segue destination="ovw-5G-6fs" kind="show" identifier="messageSegue" id="sQm-XH-vtG"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -686,10 +685,10 @@
             </objects>
             <point key="canvasLocation" x="457" y="994"/>
         </scene>
-        <!--View Controller-->
+        <!--Message Detail View Controller-->
         <scene sceneID="e7z-sc-6Ao">
             <objects>
-                <viewController id="fTE-BA-pzb" sceneMemberID="viewController">
+                <viewController id="fTE-BA-pzb" customClass="MessageDetailViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aDt-4B-73E"/>
                         <viewControllerLayoutGuide type="bottom" id="BE6-e5-T39"/>
@@ -710,6 +709,9 @@
                             <constraint firstAttribute="trailing" secondItem="1KZ-fb-ubD" secondAttribute="trailing" id="y7f-WK-CQD"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="1KZ-fb-ubD" id="LQn-iw-B9A"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5oQ-ms-ex5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
