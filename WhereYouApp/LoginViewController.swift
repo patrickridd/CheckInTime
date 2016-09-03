@@ -117,8 +117,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         alert.addAction(restoreAction)
         alert.addAction(cancelAction)
-    
-        self.presentViewController(alert, animated: true, completion: nil)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(alert, animated: true, completion: nil)
+
+        })
+
     }
     
     

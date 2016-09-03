@@ -98,17 +98,36 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         // Set title to the name of the loggedInUser's contact
         self.titleLabel.title = usersContact?.name
-        
-        
-        // Check to see if this is a request message or a response to a message
-        if message.timeResponded != nil {
-            updateWithAResponseMessage(message)
-        } else {
+            updateWithWaitingForReceiverResponse(message)
+        // Sender is looking at message that has not been responded to
+        if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
+            
+        }
+        // Receiver is looking at message that needs to be filled out and responded to
+        else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
             updateWithAToBeFilledRequestMessage(message)
         }
+        // Message is filled out and looks the same to reciever and sender
+        else {
+            updateWithAResponseMessage(message)
+        }
+    }
+    
+    
+    func updateWithWaitingForReceiverResponse(message: Message) {
+        // Update the send button title
+            sendButton.setTitle("Waiting For \(usersContact!.name) to Respond", forState: .Normal)
+    
+        self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
+        // Hide TextView
+        messageTextView.hidden = true
+        // Disable Send Button
+        sendButton.enabled = false
+        messageLabel.hidden = true
         
     }
     
+    // Updates VC with a message that shows the receiver's response and time the receiver responded
     func updateWithAResponseMessage(message: Message) {
         
         // Update the send button title
@@ -163,6 +182,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
     }
     
+    // Updates VC to show the receiver fields to fill out and their current location.
     func updateWithAToBeFilledRequestMessage(message: Message) {
         
         // set the button title back to send and enable it.
