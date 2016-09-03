@@ -124,7 +124,7 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         
-        hasRespondedLabel.text = "You have responded to \(userContact.name)'s WhereYouApp Request"
+        hasRespondedLabel.text = "You let \(userContact.name) know WhereYouApp"
         timeMessageSentLabel.text = "You responded at \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
     }

@@ -7,19 +7,83 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
 
-class ContactsTableViewController: UITableViewController {
+class ContactsTableViewController: UITableViewController, CNContactPickerDelegate  {
     
-    
+    var contactStore = CNContactStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    @IBAction func addContactsButtonTapped(sender: AnyObject) {
         
+       requestForAccess { (accessGranted) in
+        let contactPickerViewController = CNContactPickerViewController()
+        contactPickerViewController.delegate = self
+        contactPickerViewController.displayedPropertyKeys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactImageDataKey, CNContactPhoneNumbersKey]
         
+            self.presentViewController(contactPickerViewController, animated: true, completion: nil)
+        
+        }
+     
+
+    }
+    
+    func requestForAccess(completionHandler: (accessGranted: Bool) -> Void) {
+        let authorizationStatus = CNContactStore.authorizationStatusForEntityType(CNEntityType.Contacts)
+        
+        switch authorizationStatus {
+        case .Authorized:
+            completionHandler(accessGranted: true)
+            
+        case .Denied, .NotDetermined:
+            self.contactStore.requestAccessForEntityType(CNEntityType.Contacts, completionHandler: { (access, accessError) -> Void in
+                if access {
+                    completionHandler(accessGranted: access)
+                }
+                else {
+                    if authorizationStatus == CNAuthorizationStatus.Denied {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            let message = "\(accessError!.localizedDescription)\n\nPlease allow the app to access your contacts through the Settings."
+                            self.showMessage(message)
+                        })
+                    }
+                }
+            })
+            
+        default:
+            completionHandler(accessGranted: false)
+        }
     }
 
-  
+    
+    func showMessage(alert: String) {
+        let alertController = UIAlertController(title: "WhereYouApp", message: alert, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) -> Void in
+        }
+        
+        alertController.addAction(dismissAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+
+    }
+    
+    func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
+        if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.isKeyAvailable(CNContactImageDataKey) {
+        
+        let newContact = User(name: "", phoneNumber: "", imageData: NSData())
+            if  let name = CNContactFormatter.stringFromContact(contact, style: .FullName) {
+                newContact.name = name
+            }
+            if let imageData = contact.imageData {
+                newContact.imageData = imageData
+            }
+                    }
+    }
 
     // MARK: - Table view data source
 

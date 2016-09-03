@@ -44,7 +44,12 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             
             let myAnnotation = MKPointAnnotation()
             myAnnotation.title = loggedInUser?.name
-            myAnnotation.subtitle = messageTextView.text ?? defaultMessage
+            
+            if let text = messageTextView.text where text != self.defaultMessage {
+                myAnnotation.subtitle = text
+            } else if let loggedInName = loggedInUser?.name {
+                myAnnotation.subtitle = "Where \(loggedInName) App"
+            }
             myAnnotation.coordinate = coordinate
             mapView.addAnnotation(myAnnotation)
             mapView.showsUserLocation = true
@@ -326,28 +331,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
                     return
                 } else {
                     print("Saved and sent record")
+                    MessageController.sharedController.saveContext()
                 }
 
                 
         }
-        
-        
-//        CloudKitManager.cloudKitController.saveRecord(record) { (record, error) in
-//            if let error = error {
-//                print("Error saving record. Error: \(error.localizedDescription)")
-//                // Change Local message properties back to what they were.
-//                message.latitude = nil
-//                message.longitude = nil
-//                message.hasResponded = 0
-//                message.timeResponded = nil
-//                message.text = nil
-//                self.showErrorSendingAlert()
-//                return
-//            } else {
-//                print("Saved and sent record")
-//            }
-//            
-//        }
         
         // Change Button Title and Disable
         self.sendButton.setTitle("Message Sent", forState: .Normal)
@@ -363,12 +351,20 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         // Put message text in label to show user what they sent.
         if let text = message.text {
             self.messageLabel.text = text
+            let annotation = MKPointAnnotation()
+            annotation.title = loggedInUser.name
+            annotation.subtitle = text
+            
+            mapView.addAnnotation(annotation)
         } else {
             self.messageLabel.text = "Where\(loggedInUser.name)App"
         }
         
         // Show the time you responded
-        self.timeDueLabel.text = "You responded at \(dateFormatter.stringFromDate(NSDate()))"
+        self.timeDueLabel.text = "You responded \(dateFormatter.stringFromDate(NSDate()))"
+        
+        
+        
         
         // Go back to MessageListTableViewController
         self.dismissViewControllerAnimated(true, completion: nil)

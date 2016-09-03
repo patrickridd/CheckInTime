@@ -8,34 +8,6 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Table View Controller-->
-        <scene sceneID="bAS-iH-WiL">
-            <objects>
-                <tableViewController id="U9p-DE-l8A" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="L1C-3e-RIa">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="newUserCell" id="gSi-D5-ffa">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gSi-D5-ffa" id="J6r-dM-kAa">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="U9p-DE-l8A" id="ARR-g7-I9t"/>
-                            <outlet property="delegate" destination="U9p-DE-l8A" id="Z9k-HL-dZW"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7lz-hg-8sj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="829" y="1626"/>
-        </scene>
         <!--Contacts Table View Controller-->
         <scene sceneID="cub-Sd-BYW">
             <objects>
@@ -65,7 +37,7 @@
                     <navigationItem key="navigationItem" id="JCR-8H-r6H">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="jNO-2O-ebr">
                             <connections>
-                                <segue destination="U9p-DE-l8A" kind="presentation" id="M97-Ws-8nT"/>
+                                <action selector="addContactsButtonTapped:" destination="Xjd-by-bxG" id="f11-Rf-zMp"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -474,7 +446,7 @@
                                         <rect key="frame" x="0.0" y="92" width="320" height="101"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sgI-YI-LtR" id="pG1-cJ-DaN" userLabel="view">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="101"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Contact name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="iTu-ni-x6H">
@@ -483,7 +455,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" misplaced="YES" text="hasResponded" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="36s-Oc-fu6">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="hasResponded" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="36s-Oc-fu6">
                                                     <rect key="frame" x="128" y="16" width="185" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="axy-Xh-2eT"/>
@@ -498,8 +470,8 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" text="timeSent" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="d40-hM-2Bx">
-                                                    <rect key="frame" x="129" y="40" width="184" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="timeSent" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="d40-hM-2Bx">
+                                                    <rect key="frame" x="128" y="40" width="176" height="19"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -523,13 +495,13 @@
                                                 <constraint firstItem="Heg-Sx-tuw" firstAttribute="top" secondItem="d40-hM-2Bx" secondAttribute="bottom" constant="8" id="SkJ-gu-wyP"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="Heg-Sx-tuw" secondAttribute="bottom" constant="8" id="UpM-qE-ELc"/>
                                                 <constraint firstItem="d40-hM-2Bx" firstAttribute="top" secondItem="36s-Oc-fu6" secondAttribute="bottom" constant="3" id="V9X-0l-Wfu"/>
-                                                <constraint firstItem="36s-Oc-fu6" firstAttribute="centerX" secondItem="d40-hM-2Bx" secondAttribute="centerX" id="Vup-D1-kuC"/>
+                                                <constraint firstItem="36s-Oc-fu6" firstAttribute="centerX" secondItem="d40-hM-2Bx" secondAttribute="centerX" constant="4.5" id="Vup-D1-kuC"/>
                                                 <constraint firstItem="36s-Oc-fu6" firstAttribute="top" secondItem="pG1-cJ-DaN" secondAttribute="topMargin" constant="8" id="XFK-pC-G2m"/>
                                                 <constraint firstItem="vO5-l7-n6E" firstAttribute="top" secondItem="pG1-cJ-DaN" secondAttribute="topMargin" id="gBD-St-l8F"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="iTu-ni-x6H" secondAttribute="bottom" id="hKh-Ke-L66"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="d40-hM-2Bx" secondAttribute="trailing" constant="8" id="oe2-rL-VCE"/>
                                                 <constraint firstItem="vO5-l7-n6E" firstAttribute="leading" secondItem="pG1-cJ-DaN" secondAttribute="leadingMargin" constant="14" id="osC-4c-MN3"/>
-                                                <constraint firstItem="36s-Oc-fu6" firstAttribute="trailing" secondItem="d40-hM-2Bx" secondAttribute="trailing" id="pfP-2g-1CK"/>
+                                                <constraint firstItem="36s-Oc-fu6" firstAttribute="trailing" secondItem="d40-hM-2Bx" secondAttribute="trailing" constant="9" id="pfP-2g-1CK"/>
                                                 <constraint firstItem="Heg-Sx-tuw" firstAttribute="leading" secondItem="iTu-ni-x6H" secondAttribute="trailing" constant="12" id="zWa-Fq-cx1"/>
                                                 <constraint firstItem="Heg-Sx-tuw" firstAttribute="top" secondItem="d40-hM-2Bx" secondAttribute="bottom" constant="8" id="zZN-bv-A5Y"/>
                                             </constraints>
