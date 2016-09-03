@@ -61,16 +61,27 @@ class Message: NSManagedObject {
 //////////// Cloudkit Properties /////////////////////
 //////////////////////////////////////////////////////
 
+    
+    // Message Record 
+    var cloudKitRecord: CKRecord? {
+        guard let data = self.ckRecordID else {
+            return nil
+        }
+        let recordID = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
+        return CKRecord(recordType: Message.recordType, recordID: recordID)
+    }
+    
     // Message CKReference
     var cloudKitReference: CKReference? {
         guard let data = self.ckRecordID else {
                 return nil
         }
-        let record =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
+        let recordID =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
         
-        let reference = CKReference(recordID: record, action: .DeleteSelf)
+        let reference = CKReference(recordID: recordID, action: .DeleteSelf)
         return reference
     }
+    
     
     
 //////////////////////////////////////////////////////

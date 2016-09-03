@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CloudKit
 
 class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate {
     
@@ -82,7 +83,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
                 return
         }
         self.loggedInUser = user
-        
+        self.message = message
         // Put the Name of whoever isn't the loggedInUser in the titleLabel
         
         if message.sender.name == user.name {
@@ -254,12 +255,148 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
 
     
     @IBAction func sendButtonTapped(sender: AnyObject) {
+        guard let message = message, loggedInUser = loggedInUser else {
+            print("No message to send because it is nil")
+            return
+        }
+        // Get current location
         
+        checkCoreLocationPermission()
+        guard let location = location else {
+            print("Couldn't get Current Location")
+            return
+        }
+        // Input latitude and longitude into message properties
+        let latitude = Double(location.coordinate.latitude)
+        let longitude = Double(location.coordinate.longitude)
+
+        message.latitude = latitude
+        message.longitude = longitude
+        
+
+        // If user doesn't put text in the text view then input a default message.
+        if messageTextView.text != defaultMessage {
+            message.text = messageTextView.text
+        } else {
+            message.text = "Where \(loggedInUser.name) App"
+        }
+        // Input time responded
+        message.timeResponded = NSDate()
+        
+        // Change boolean to show that user has responded to request.
+        message.hasResponded = 1
+
+        
+               // Get message record and save values to CloudKit
+        guard let record = message.cloudKitRecord else {
+            // Change Local message properties back to what they were.
+            message.latitude = nil
+            message.longitude = nil
+            message.hasResponded = 0
+            message.timeResponded = nil
+            message.text = nil
+            print("No Message Record NSData or couldn't convert NSData to CKRecord")
+            return
+        }
+        
+        guard let text = message.text else {
+            return
+        }
+        
+        print("\(record.recordID.recordName)")
+        
+        record[Message.textKey] = text
+        record[Message.latitudeKey] = latitude
+        record[Message.longitudeKey] = longitude
+        record[Message.hasRespondedKey] = 1
+        record[Message.timeRespondedKey] = NSDate()
+        
+        CloudKitManager.cloudKitController.modifyRecords([record], perRecordCompletion: { (record, error) in
+            
+            }) { (records, error) in
+                if let error = error {
+                    print("Error saving record. Error: \(error.localizedDescription)")
+                    // Change Local message properties back to what they were.
+                    message.latitude = nil
+                    message.longitude = nil
+                    message.hasResponded = 0
+                    message.timeResponded = nil
+                    message.text = nil
+                    self.showErrorSendingAlert()
+                    return
+                } else {
+                    print("Saved and sent record")
+                }
+
+                
+        }
+        
+        
+//        CloudKitManager.cloudKitController.saveRecord(record) { (record, error) in
+//            if let error = error {
+//                print("Error saving record. Error: \(error.localizedDescription)")
+//                // Change Local message properties back to what they were.
+//                message.latitude = nil
+//                message.longitude = nil
+//                message.hasResponded = 0
+//                message.timeResponded = nil
+//                message.text = nil
+//                self.showErrorSendingAlert()
+//                return
+//            } else {
+//                print("Saved and sent record")
+//            }
+//            
+//        }
+        
+        // Change Button Title and Disable
+        self.sendButton.setTitle("Message Sent", forState: .Normal)
+        self.sendButton.setTitleColor(UIColor ( red: 0.5969, green: 1.0, blue: 0.2341, alpha: 1.0 ), forState: .Normal)
+        self.sendButton.enabled = false
+        
+        // Hide textview and show label
+        self.messageTextView.text = ""
+        self.messageTextView.hidden = true
+        self.messageLabel.text = ""
+        self.messageLabel.hidden = false
+        
+        // Put message text in label to show user what they sent.
+        if let text = message.text {
+            self.messageLabel.text = text
+        } else {
+            self.messageLabel.text = "Where\(loggedInUser.name)App"
+        }
+        
+        // Show the time you responded
+        self.timeDueLabel.text = "You responded at \(dateFormatter.stringFromDate(NSDate()))"
+        
+        // Go back to MessageListTableViewController
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
     
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popToRootViewControllerAnimated(true)
     }
+    
+    
+    
+    func showErrorSendingAlert() {
+        let alert = UIAlertController(title: "Had trouble Sending Message", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Resend Message?", style: .Default) { (_) in
+
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        alert.addAction(cancelAction)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
+        })
+
+    }
+
     
     // MARK: - TextView placeholder
     
