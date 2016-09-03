@@ -18,6 +18,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     var locationManager: CLLocationManager!
     let latSpan: CLLocationDegrees = 0.005
     let longSpan: CLLocationDegrees = 0.005
+    let tabBarView = UIView()
 
     
     @IBOutlet weak var sendButton: UIButton!
@@ -65,7 +66,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         messageTextView.delegate = self
+      //  setupTabBarView()
     }
     
     
@@ -98,10 +101,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         // Set title to the name of the loggedInUser's contact
         self.titleLabel.title = usersContact?.name
-            updateWithWaitingForReceiverResponse(message)
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
-            
+            updateWithWaitingForReceiverResponse(message)
         }
         // Receiver is looking at message that needs to be filled out and responded to
         else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
@@ -112,6 +114,18 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             updateWithAResponseMessage(message)
         }
     }
+    
+//    func setupTabBarView() {
+//        tabBarView.leftAnchor.isEqual(self.view?.leftAnchor)
+//        tabBarView.rightAnchor.isEqual(self.view?.rightAnchor)
+//        tabBarView.bottomAnchor.isEqual(self.view?.bottomAnchor)
+//        tabBarView.topAnchor.isEqual(self.messageTextView?.bottomAnchor)
+//        //let tabBarHeightContstraint = NSLayoutConstraint(item: tabBarView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1/8, constant: 0)
+//      //  tabBarView.addConstraint(tabBarHeightContstraint)
+//        tabBarView.backgroundColor = UIColor.redColor()
+//
+//        view.addSubview(tabBarView)
+//    }
     
     
     func updateWithWaitingForReceiverResponse(message: Message) {
@@ -197,7 +211,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         messageLabel.hidden = true
         
         // Set time due label
-        self.timeDueLabel.text = dateFormatter.stringFromDate(message.timeDue)
+        self.timeDueLabel.text = "\(usersContact!.name) requests to know WhereYouApp by \(dateFormatter.stringFromDate(message.timeDue))"
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
