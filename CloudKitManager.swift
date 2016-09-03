@@ -27,9 +27,10 @@ class CloudKitManager {
     init() {
         
         checkCloudKitAvailability()
+        
     }
     
-    
+
     
     // MARK: - User Info Discovery
     
@@ -276,6 +277,7 @@ class CloudKitManager {
         
         publicDatabase.addOperation(operation)
     }
+    
     
     
     // MARK: - Subscriptions
