@@ -168,6 +168,25 @@ class UserController {
         
     }
     
+    func checkIfContactHasAccount(newContact: User, completion: (record: CKRecord?) -> Void) {
+        
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [newContact.phoneNumber])
+        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            
+            }, completion: { (records, error) in
+                
+                guard let records = records else  {
+                    print("Couldn't find User Account with contact phone number")
+                    completion(record: nil)
+                    return
+                }
+                
+                completion(record: records.first)
+                
+                
+        })
+    }
+    
     // Saves the ManagedObject Context
     
     func saveContext() {

@@ -57,6 +57,7 @@ class User: NSManagedObject {
         self.phoneNumber = phoneNumber
         self.imageData = imageData
         self.timeCreated = NSDate()
+        
     
     }
     
