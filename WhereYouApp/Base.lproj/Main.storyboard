@@ -8,7 +8,7 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Contacts Table View Controller-->
+        <!--Contacts-->
         <scene sceneID="cub-Sd-BYW">
             <objects>
                 <tableViewController id="Xjd-by-bxG" customClass="ContactsTableViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -34,7 +34,7 @@
                             <outlet property="delegate" destination="Xjd-by-bxG" id="hAN-eN-EGt"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="JCR-8H-r6H">
+                    <navigationItem key="navigationItem" title="Contacts" id="JCR-8H-r6H">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="jNO-2O-ebr">
                             <connections>
                                 <action selector="addContactsButtonTapped:" destination="Xjd-by-bxG" id="f11-Rf-zMp"/>
@@ -68,6 +68,11 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Set time to check in..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Bk-9e-3tf">
+                                <rect key="frame" x="-4" y="406" width="328" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zTc-pg-VTu">
                                 <rect key="frame" x="96" y="72" width="204" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -117,11 +122,6 @@
                                     <outlet property="delegate" destination="BSJ-RI-4EC" id="2hV-3j-jEQ"/>
                                 </connections>
                             </tableView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Set time to check in..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Bk-9e-3tf">
-                                <rect key="frame" x="-4" y="406" width="328" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -775,6 +775,6 @@
         <image name="profile" width="363" height="363"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sQm-XH-vtG"/>
+        <segue reference="NFt-RW-uyj"/>
     </inferredMetricsTieBreakers>
 </document>

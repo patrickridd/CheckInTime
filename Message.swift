@@ -76,7 +76,9 @@ class Message: NSManagedObject {
         guard let data = self.ckRecordID else {
                 return nil
         }
-        let recordID =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
+        guard let recordID =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecordID else {
+            return nil
+        }
         
         let reference = CKReference(recordID: recordID, action: .DeleteSelf)
         return reference

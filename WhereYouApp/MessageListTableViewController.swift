@@ -46,8 +46,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
     }
     
-    
-    
     // Data Source Methods
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

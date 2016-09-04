@@ -17,6 +17,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
+
     }
     
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
@@ -84,23 +88,32 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             }
                     }
     }
+    
+    func newContactAdded(notification: NSNotification) {
+        self.tableView.reloadData()
+    }
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
+
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        guard let loggedInUser = UserController.sharedController.loggedInUser else {
+            return 0
+        }
+        return loggedInUser.contacts.count
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("contactCell", forIndexPath: indexPath)
-
+        guard let loggedInUser = UserController.sharedController.loggedInUser else {
+            return UITableViewCell()
+        }
+        
+        let contact = loggedInUser.contacts[indexPath.row]
+        cell.textLabel?.text = contact.name
         // Configure the cell...
 
         return cell

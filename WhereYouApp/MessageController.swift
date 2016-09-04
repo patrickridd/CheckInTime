@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 import CloudKit
-
+import UIKit
 
 class MessageController {
     
@@ -47,7 +47,9 @@ class MessageController {
         let record = CKRecord(recordType: Message.recordType)
         message.recordName = record.recordID.recordName
         message.record = record
-        message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record)
+        message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
+        
+        
         
         // Get CKRecord Data
         guard let senderData = sender.ckRecordID,
@@ -195,10 +197,13 @@ class MessageController {
             let fetchedMessage = messages.first else {
                 let message = Message(record: record)!
                 print("\(message.sender.name)")
+
+                scheduleLocalNotification(message)
                 
                 saveContext()
                 return
         }
+        
         
         self.deleteMessage(fetchedMessage)
         let message = Message(record: record)
@@ -206,16 +211,45 @@ class MessageController {
         saveContext()
     }
     
+    func scheduleLocalNotification(message: Message) {
+        
+        
+        let localNotification = UILocalNotification()
+        localNotification.alertTitle = "WhereYouApp"
+        localNotification.alertBody =   "\(message.sender.name) wants you to check in now"
+        localNotification.fireDate = message.timeDue
+        
+        localNotification.repeatInterval = NSCalendarUnit.Day
+        localNotification.category = "CheckInTime"
+        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+    }
+
+    
+    
     
     
     func deleteMessage(message: Message) {
         moc.deleteObject(message)
+        guard let messageRecord = message.cloudKitRecord else {
+            print("Couldn't get messages record to delete it.")
+            saveContext()
+            return
+        }
+        CloudKitManager.cloudKitController.deleteRecordWithID(messageRecord.recordID) { (recordID, error) in
+            if let error = error {
+                print("Error Deleting Message. Error: \(error.localizedDescription)")
+            } else {
+                print("Successfully Deleted Message Record.")
+            }
+        }
+        
         saveContext()
     }
     
     func saveContext() {
         do {
             try moc.save()
+            print("Saved to context")
         } catch let error as NSError{
             print("Couldn't save to context: Error: \(error.localizedDescription)")
         }

@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
@@ -46,6 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             MessageController.sharedController.updateOrAddRemoteNotification(record)
         }
             completionHandler(UIBackgroundFetchResult.NewData)
+    }
+    
+    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        let alert = UIAlertController(title: "Time's up", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }
     
 }

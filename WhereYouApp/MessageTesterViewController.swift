@@ -53,17 +53,32 @@ class MessageTesterViewController: UIViewController {
                     guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {
                         return
                     }
-                    UserController.sharedController.saveContext()
                     loggedInUser.contacts.append(receiver)
+
+                    UserController.sharedController.saveContext()
                     
-                    guard let data = user.ckRecordID, loggedInUserRecord = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
-                        print("Couldn't get CKRecord from NSData")
+                    guard let receiverRecord = receiver.record, loggedInUserRecord = loggedInUser.record else {
+                    print("Couldn't get CKRecord from NSData")
                         return
                     }
-                    let reference = CKReference(recordID: record.recordID, action: .None)
+                    let reference = CKReference(recordID: receiverRecord.recordID, action: .None)
                     
-                    user.contactReferences.append(reference)
-                    loggedInUserRecord[User.contactsKey] = user.contactReferences
+                    loggedInUser.contactReferences.append(reference)
+                    loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
+                    receiver.contactReferences.append(loggedInUser.cloudKitReference!)
+                    receiverRecord[User.contactsKey] = receiver.contactReferences
+                    CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord,receiverRecord], perRecordCompletion: { (record, error) in
+                        
+                        
+                        }, completion: { (records, error) in
+                            if let error = error {
+                                print("Error adding contact to user record. Error: \(error.localizedDescription)")
+                            } else {
+                                print("Successfully added Contact to user record")
+                            }
+                            
+                    })
+                   
                     
                     
                     

@@ -11,6 +11,7 @@ import CoreData
 import UIKit
 import CloudKit
 
+
 class UserController {
     
     static let sharedController = UserController()
@@ -18,7 +19,7 @@ class UserController {
     
     let moc = Stack.sharedStack.managedObjectContext
     
-    var users = [User]()
+   
     
     
     

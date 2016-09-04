@@ -11,6 +11,8 @@ import CoreData
 import UIKit
 import CloudKit
 
+let NewContactAdded = "NewContactAdded"
+
 
 class User: NSManagedObject {
 
@@ -25,7 +27,8 @@ class User: NSManagedObject {
     var messageReferences: [CKReference] = []
     var contacts = [User]() {
         didSet {
-            
+            let nc = NSNotificationCenter.defaultCenter()
+            nc.postNotificationName(NewContactAdded, object: nil)
         }
     }
     
@@ -34,6 +37,13 @@ class User: NSManagedObject {
             return nil
         }
         return ckRecord
+    }
+    var cloudKitReference: CKReference? {
+        guard let record = self.record else {
+            return nil
+        }
+        let reference = CKReference(recordID: record.recordID, action: .DeleteSelf)
+        return reference
     }
 
 // Insert code here to add functionality to your managed object subclass
