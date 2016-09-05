@@ -10,6 +10,7 @@ import UIKit
 import CloudKit
 import Contacts
 import ContactsUI
+import MessageUI
 
 class ContactsTableViewController: UITableViewController, CNContactPickerDelegate  {
     
@@ -28,11 +29,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         requestForAccess { (accessGranted) in
             if accessGranted {
-            let contactPickerViewController = CNContactPickerViewController()
-            contactPickerViewController.delegate = self
-            contactPickerViewController.displayedPropertyKeys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactImageDataKey, CNContactPhoneNumbersKey]
-            
-            self.presentViewController(contactPickerViewController, animated: true, completion: nil)
+                let contactPickerViewController = CNContactPickerViewController()
+                contactPickerViewController.delegate = self
+                contactPickerViewController.displayedPropertyKeys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactImageDataKey, CNContactPhoneNumbersKey]
+                
+                self.presentViewController(contactPickerViewController, animated: true, completion: nil)
             }
         }
         
@@ -93,8 +94,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             var phoneNumbers = [String]()
             
             if contact.phoneNumbers.count > 0 {
-               phoneNumbers = getMobileFormatedNumber(contact.phoneNumbers)
+                phoneNumbers = getMobileFormatedNumber(contact.phoneNumbers)
             } else {
+                self.presentContactHasNoMobilePhone(newContact)
                 print("no phone number")
                 return
             }
@@ -116,8 +118,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             guard let  loggedInUser = UserController.sharedController.loggedInUser,
                 loggedInUserRecord = loggedInUser.cloudKitRecord else {
-                print("Couldn't get logged in user and/or record")
-                return
+                    print("Couldn't get logged in user and/or record")
+                    return
             }
             
             // Add contact to Logged In User's contact
@@ -138,7 +140,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
                 loggedInUser.contactReferences.append(contactReference)
                 loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
-
+                
                 // Add user to contact's contacts.
                 newContact.contactReferences.append(loggedInUser.cloudKitReference!)
                 contactRecord[User.contactsKey] = newContact.contactReferences
@@ -166,7 +168,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func getMobileFormatedNumber(numbers: [CNLabeledValue]) -> [String] {
         
         var phoneNumbers = [String]()
-
+        
         // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
         for phoneNumberLabel in numbers {
             if phoneNumberLabel.label != CNLabelPhoneNumberMobile {
@@ -181,31 +183,47 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             phoneNumbers.append(noSpaces)
             
         }
-
-        
-        
         return phoneNumbers
     }
     
     func presentNoUserAccount(newContact: User) {
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
+        
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in
             
+            let messageVC = MFMessageComposeViewController()
+            if MFMessageComposeViewController.canSendText() == true {
+                messageVC.body = "I'd like you to download WhereYouApp so I can know WhereYouApp"
+                messageVC.recipients = [newContact.phoneNumber]
+                //  messageVC.messageComposeDelegate = self
+                messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+                messageVC.navigationBar.translucent = false // TODO: - GET THE NAVBAR TO FREAKING BE SOLID.
+                self.presentViewController(messageVC, animated: true, completion: {
+                      noUserAccountAlert.view.tintColor = UIColor ( red: 0.5004, green: 1.0, blue: 0.556, alpha: 1.0 )
+                })
+            } else {
+                
+            }
         }
         noUserAccountAlert.addAction(dismissAction)
         noUserAccountAlert.addAction(recommendAction)
+        
         dispatch_async(dispatch_get_main_queue(), {
-            self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
-            
+        self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
+
         })
+    
     }
     
     func presentUserHasAccount(newContact: User) {
         let alert = UIAlertController(title: "Success" , message: "\(newContact.name) has WhereYouApp", preferredStyle: .Alert)
         let action = UIAlertAction(title: "dismiss", style: .Cancel, handler: nil)
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        })
         
     }
     
@@ -214,9 +232,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
         alert.addAction(action)
         
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert, animated: true, completion: nil)
-
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+            
         })
     }
     
@@ -231,7 +249,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-       
+        
         return UserController.sharedController.contacts.count
     }
     
@@ -242,7 +260,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let contact = UserController.sharedController.contacts[indexPath.row]
         if contact.hasAppAccount == false {
             cell.userInteractionEnabled = false
-
+            
         }
         cell.textLabel?.text = contact.name
         // Configure the cell...
