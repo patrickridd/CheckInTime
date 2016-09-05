@@ -52,17 +52,9 @@ class MessageController {
         message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         
         
-        
-        // Get CKRecord Data
-        guard let senderData = sender.ckRecordID,
-            receiverData = receiver.ckRecordID else {
-                print("CKRecord NSData was nil")
-                return
-        }
-        
         // Convert Data back to CKRecord so you can create users reference
-        guard let senderRecord = NSKeyedUnarchiver.unarchiveObjectWithData(senderData) as? CKRecord,
-            receiverRecord = NSKeyedUnarchiver.unarchiveObjectWithData(receiverData) as? CKRecord else {
+        guard let senderRecord = sender.cloudKitRecord,
+            receiverRecord = receiver.cloudKitRecord else {
                 print("Couldn't get back CKRecords from NSData")
                 return
         }

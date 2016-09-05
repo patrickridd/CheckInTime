@@ -30,30 +30,31 @@ class User: NSManagedObject {
     var contacts = [User]() 
         
     // User Record
-    var cloudKitRecord: CKRecord? {
-        guard let data = self.ckRecordID else {
-            return nil
-        }
-        let recordID = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
-        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
-        
-        return CKRecord(recordType: Message.recordType, recordID: recordID)
-    }
+//    var cloudKitRecord: CKRecord? {
+//        guard let data = self.ckRecordID else {
+//            return nil
+//        }
+//        let recordID = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
+//        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
+//        
+//        return CKRecord(recordType: Message.recordType, recordID: recordID)
+//    }
     
-    // User CKReference
+    var cloudKitRecord: CKRecord? {
+        let recordID = CKRecordID(recordName: phoneNumber)
+        let ckr = CKRecord(recordType: User.recordType, recordID: recordID)
+        return ckr
+
+    }
+
     var cloudKitReference: CKReference? {
-        guard let data = self.ckRecordID else {
+        guard let record = self.cloudKitRecord else {
+            print("No record found for Reference in User Model")
             return nil
         }
-        guard let recordID =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecordID else {
-            return nil
-        }
-        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
-        
-        let reference = CKReference(recordID: recordID, action: .DeleteSelf)
+        let reference = CKReference(record: record, action: .DeleteSelf)
         return reference
     }
-    
 
 // Insert code here to add functionality to your managed object subclass
     convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
