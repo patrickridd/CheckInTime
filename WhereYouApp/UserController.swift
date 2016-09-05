@@ -63,6 +63,7 @@ class UserController {
                 if let error = error {
                     print("Error saving to cloudkit. Error: \(error.localizedDescription)")
                 }
+                user.hasAppAccount = true
                 self.saveContext()
                 completion()
             })
@@ -98,11 +99,13 @@ class UserController {
         
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
+            self.checkIfContactsHaveSignedUpForApp(contacts)
             completion(hasAccount: true)
             
         }
     }
     
+    // Fetches all users in core data except the Logged In User
     func fetchContactsFromCoreData(completion: (contacts: [User]) -> Void) {
         let contactRequest = NSFetchRequest(entityName: "User")
         
@@ -111,9 +114,15 @@ class UserController {
                 print("No Users saved")
                 return
         }
-        
         let contacts = users.filter({$0.phoneNumber != loggedInUser.phoneNumber})
         completion(contacts: contacts)
+        
+    }
+    
+    // Check by user phone number if contacts who didn't have account now do have an account with the app.
+    func checkIfContactsHaveSignedUpForApp(contacts: [User]) {
+        
+        
         
     }
     

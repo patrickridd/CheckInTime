@@ -32,6 +32,8 @@ class User: NSManagedObject {
         }
     }
     
+    var hasAppAccount: Bool = false
+    
     var record: CKRecord? {
         guard let data = ckRecordID, let ckRecord = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
             return nil

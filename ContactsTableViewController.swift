@@ -89,64 +89,83 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 newContact.imageData = imageData
             }
             
-            
-            
             var phoneNumbers = [String]()
-    
+            
             if contact.phoneNumbers.count > 0 {
                 
-            for phoneNumberLabel in contact.phoneNumbers {
-                let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
-                let stringPhoneNumber = phoneNumber.stringValue
-                let noPunc =  stringPhoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
-                let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
-
-                phoneNumbers.append(noSpaces)
-                
-            }
+                // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
+                for phoneNumberLabel in contact.phoneNumbers {
+                    if phoneNumberLabel.label != CNLabelPhoneNumberMobile {
+                        break
+                    }
+                    let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
+                    let stringPhoneNumber = phoneNumber.stringValue
+                    let noPunc =  stringPhoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
+                    let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
+                    
+                    phoneNumbers.append(noSpaces)
+                    
+                }
             } else {
                 print("no phone number")
                 return
             }
-            
-            
-            newContact.phoneNumber = phoneNumbers[0]
-
-            
-            guard let  loggedInUser = UserController.sharedController.loggedInUser, loggedInUserRecord = loggedInUser.record else {
-                
+            if phoneNumbers.count < 1 {
+                presentContactHasNoMobilePhone(newContact)
                 return
             }
             
+            var contactPhoneNumber = phoneNumbers[0]
+            // If number has a 1 before the area code and phone number remove it.
+            if contactPhoneNumber.characters.count > 10 {
+                contactPhoneNumber.removeAtIndex(contactPhoneNumber.startIndex)
+            }
+            
+            // Add phone number to new contact.
+            newContact.phoneNumber = contactPhoneNumber
+            
+            guard let  loggedInUser = UserController.sharedController.loggedInUser,
+                loggedInUserRecord = loggedInUser.record else {
+                print("Couldn't get logged in user and/or record")
+                return
+            }
+            
+            // Add contact to Logged In User's contact
             loggedInUser.contacts.append(newContact)
+            
+            // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
             UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
                 guard let contactRecord = record else {
+                    newContact.hasAppAccount = false
                     self.presentNoUserAccount(newContact)
                     UserController.sharedController.saveContext()
                     return
                     
                 }
                 
-                    let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
-                    loggedInUser.contactReferences.append(contactReference)
-                    newContact.contactReferences.append(loggedInUser.cloudKitReference!)
-                    contactRecord[User.contactsKey] = newContact.contactReferences
-                    loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
+                // If User has account add contact reference to User's CKrecord
+                let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
+                loggedInUser.contactReferences.append(contactReference)
+                loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
+
+                // Add user to contact's contacts.
+                newContact.contactReferences.append(loggedInUser.cloudKitReference!)
+                contactRecord[User.contactsKey] = newContact.contactReferences
                 
-                    CloudKitManager.cloudKitController.modifyRecords([contactRecord,loggedInUserRecord], perRecordCompletion: { (record, error) in
-                        
-                        }, completion: { (records, error) in
-                            if let error = error {
-                                print("Error modifying Contacts. Error: \(error.localizedDescription)")
-                                UserController.sharedController.saveContext()
-                            } else {
-                                self.presentUserHasAccount(newContact)
-                                UserController.sharedController.saveContext()
-                            }
-                            
-                    })
-            
-                
+                // Modify both user's records.
+                CloudKitManager.cloudKitController.modifyRecords([contactRecord,loggedInUserRecord], perRecordCompletion: { (record, error) in
+                    
+                    }, completion: { (records, error) in
+                        if let error = error {
+                            print("Error modifying Contacts. Error: \(error.localizedDescription)")
+                            UserController.sharedController.saveContext()
+                        } else {
+                            // If modifying records are successful present success alert to user.
+                            self.presentUserHasAccount(newContact)
+                            newContact.hasAppAccount = true
+                            UserController.sharedController.saveContext()
+                        }
+                })
             })
             
         }
@@ -164,7 +183,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         noUserAccountAlert.addAction(recommendAction)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
-
+            
         })
     }
     
@@ -173,6 +192,19 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let action = UIAlertAction(title: "dismiss", style: .Cancel, handler: nil)
         alert.addAction(action)
         self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
+    func presentContactHasNoMobilePhone(newContact: User) {
+        let alert = UIAlertController(title: "No Mobile Number Found", message: "\(newContact.name)'s number in your Contact's needs to be in mobile field.", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
+        alert.addAction(action)
+        
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
+
+        })
+
         
     }
     
