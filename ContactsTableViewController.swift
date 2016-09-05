@@ -27,12 +27,13 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
         
         requestForAccess { (accessGranted) in
+            if accessGranted {
             let contactPickerViewController = CNContactPickerViewController()
             contactPickerViewController.delegate = self
             contactPickerViewController.displayedPropertyKeys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactImageDataKey, CNContactPhoneNumbersKey]
             
             self.presentViewController(contactPickerViewController, animated: true, completion: nil)
-            
+            }
         }
         
         
@@ -92,21 +93,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             var phoneNumbers = [String]()
             
             if contact.phoneNumbers.count > 0 {
-                
-                // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
-                for phoneNumberLabel in contact.phoneNumbers {
-                    if phoneNumberLabel.label != CNLabelPhoneNumberMobile {
-                        break
-                    }
-                    let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
-                    let stringPhoneNumber = phoneNumber.stringValue
-                     let phoneWhite = stringPhoneNumber.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).joinWithSeparator(" ")
-                    let noPunc =  phoneWhite.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
-                    let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
-                    
-                    phoneNumbers.append(noSpaces)
-                    
-                }
+               phoneNumbers = getMobileFormatedNumber(contact.phoneNumbers)
             } else {
                 print("no phone number")
                 return
@@ -128,7 +115,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             newContact.phoneNumber = contactPhoneNumber
             
             guard let  loggedInUser = UserController.sharedController.loggedInUser,
-                loggedInUserRecord = loggedInUser.record else {
+                loggedInUserRecord = loggedInUser.cloudKitRecord else {
                 print("Couldn't get logged in user and/or record")
                 return
             }
@@ -175,7 +162,30 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
-    
+    // Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
+    func getMobileFormatedNumber(numbers: [CNLabeledValue]) -> [String] {
+        
+        var phoneNumbers = [String]()
+
+        // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
+        for phoneNumberLabel in numbers {
+            if phoneNumberLabel.label != CNLabelPhoneNumberMobile {
+                break
+            }
+            let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
+            let stringPhoneNumber = phoneNumber.stringValue
+            let phoneWhite = stringPhoneNumber.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).joinWithSeparator(" ")
+            let noPunc =  phoneWhite.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
+            let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
+            
+            phoneNumbers.append(noSpaces)
+            
+        }
+
+        
+        
+        return phoneNumbers
+    }
     
     func presentNoUserAccount(newContact: User) {
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)

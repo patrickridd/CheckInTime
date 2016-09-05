@@ -166,7 +166,7 @@ class MessageController {
      "users" property.
      */
     func subscribeToMessages() {
-        guard let userRecord = UserController.sharedController.loggedInUser?.record else {
+        guard let userRecord = UserController.sharedController.loggedInUser?.cloudKitRecord else {
             print("No ckrecord to subscribe")
             return
         }

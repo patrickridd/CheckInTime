@@ -30,9 +30,6 @@ class UserController {
     }
     
     
-    
-    
-    
     func createUser(name: String, phoneNumber: String, image: UIImage, completion: () -> Void) {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
@@ -159,7 +156,7 @@ class UserController {
             return
         }
         
-        guard let record = loggedInUser.record,
+        guard let record = loggedInUser.cloudKitRecord,
             references = record[User.contactsKey] as? [CKReference] else {
                 completion(hasUsers: false)
                 return

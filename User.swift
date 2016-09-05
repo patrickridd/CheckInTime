@@ -29,19 +29,31 @@ class User: NSManagedObject {
     
     var contacts = [User]() 
         
-    var record: CKRecord? {
-        guard let data = ckRecordID, let ckRecord = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
+    // User Record
+    var cloudKitRecord: CKRecord? {
+        guard let data = self.ckRecordID else {
             return nil
         }
-        return ckRecord
+        let recordID = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
+        
+        return CKRecord(recordType: Message.recordType, recordID: recordID)
     }
+    
+    // User CKReference
     var cloudKitReference: CKReference? {
-        guard let record = self.record else {
+        guard let data = self.ckRecordID else {
             return nil
         }
-        let reference = CKReference(recordID: record.recordID, action: .DeleteSelf)
+        guard let recordID =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecordID else {
+            return nil
+        }
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
+        
+        let reference = CKReference(recordID: recordID, action: .DeleteSelf)
         return reference
     }
+    
 
 // Insert code here to add functionality to your managed object subclass
     convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {

@@ -68,6 +68,8 @@ class Message: NSManagedObject {
             return nil
         }
         let recordID = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
+
         return CKRecord(recordType: Message.recordType, recordID: recordID)
     }
     
@@ -79,6 +81,7 @@ class Message: NSManagedObject {
         guard let recordID =  NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecordID else {
             return nil
         }
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
         
         let reference = CKReference(recordID: recordID, action: .DeleteSelf)
         return reference
