@@ -100,7 +100,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     }
                     let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
                     let stringPhoneNumber = phoneNumber.stringValue
-                    let noPunc =  stringPhoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
+                     let phoneWhite = stringPhoneNumber.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).joinWithSeparator(" ")
+                    let noPunc =  phoneWhite.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
                     let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
                     
                     phoneNumbers.append(noSpaces)
@@ -110,6 +111,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 print("no phone number")
                 return
             }
+            
+            // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
                 presentContactHasNoMobilePhone(newContact)
                 return
@@ -132,6 +135,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             // Add contact to Logged In User's contact
             loggedInUser.contacts.append(newContact)
+            UserController.sharedController.contacts.append(newContact)
             
             // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
             UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
@@ -204,8 +208,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     self.presentViewController(alert, animated: true, completion: nil)
 
         })
-
-        
     }
     
     
@@ -219,20 +221,19 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        guard let loggedInUser = UserController.sharedController.loggedInUser else {
-            return 0
-        }
-        return loggedInUser.contacts.count
+       
+        return UserController.sharedController.contacts.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("contactCell", forIndexPath: indexPath)
-        guard let loggedInUser = UserController.sharedController.loggedInUser else {
-            return UITableViewCell()
-        }
         
-        let contact = loggedInUser.contacts[indexPath.row]
+        let contact = UserController.sharedController.contacts[indexPath.row]
+        if contact.hasAppAccount == false {
+            cell.userInteractionEnabled = false
+
+        }
         cell.textLabel?.text = contact.name
         // Configure the cell...
         

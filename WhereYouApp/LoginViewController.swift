@@ -11,7 +11,6 @@ import CloudKit
 
 class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
-    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var numberTextField: UITextField!
@@ -45,11 +44,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 }
             })
         }
-        
     }
-        
         numberTextField.delegate = self
-        
     }
 
     @IBAction func submitButtonTapped(sender: AnyObject) {
@@ -62,10 +58,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 return
         }
         
-        UserController.sharedController.createUser(name, phoneNumber: phoneNumber, image: image) { 
-            
+        UserController.sharedController.createUser(name, phoneNumber: phoneNumber, image: image) {
             self.dismissViewControllerAnimated(true, completion: nil)
- 
         }
     }
     
@@ -79,14 +73,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         alert.addAction(photoLibraryAction)
         alert.addAction(cancelAction)
-        
-        self.presentViewController(alert, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
 
-        
-        
+        })
     }
-    
-    
     
     func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool) -> Void) {
         let alert = UIAlertController(title: "You have an existing User account in CloudKit, would you like to restore it on this device?", message: nil
@@ -119,15 +110,12 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         alert.addAction(cancelAction)
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(alert, animated: true, completion: nil)
-
         })
 
     }
     
-    
     func presentICloudAlert() {
-        
-        
+
         let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
         let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
@@ -139,43 +127,32 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         alert.addAction(settingsAction)
         alert.addAction(dismissAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
-        
-        
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         return numberTextField.resignFirstResponder()
-        
     }
-    
-    
+
     func presentNameAlert() {
         let alert = UIAlertController(title: nil, message: "Name needs one character or more", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     func presentNumberAlert() {
-        let alert = UIAlertController(title: nil, message: "Phone Number needs 10 digits or more", preferredStyle: .Alert)
+        let alert = UIAlertController(title: nil, message: "Phone Number needs to be 10 digits", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
-        
-
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }

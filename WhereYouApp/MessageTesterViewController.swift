@@ -79,9 +79,6 @@ class MessageTesterViewController: UIViewController {
                             
                     })
                    
-                    
-                    
-                    
                     MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
                     
                 }) { (records, error) in

@@ -16,9 +16,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet weak var tableView: UITableView!
    
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
@@ -30,20 +27,14 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 return
             }
         })
-        
-        
     }
     
-    
     func presentLoginScreen() {
-        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let loginVC = storyBoard.instantiateViewControllerWithIdentifier("loginScreen")
                 dispatch_async(dispatch_get_main_queue(), {
                     self.presentViewController(loginVC, animated: true, completion: nil)
         })
-
-        
     }
     
     // Data Source Methods
@@ -66,8 +57,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
         
         cell.updateWith(message)
-        
-        
         return cell
     }
     
@@ -95,13 +84,9 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         } else {
             return "People want to Know WhereYouApp"
         }
-        
-        
     }
     
     // MARK: NSFetchedResultsControllerDelegate
-    
-    
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         tableView.beginUpdates()
@@ -144,10 +129,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }
-    
-    
-    
-    
+
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation

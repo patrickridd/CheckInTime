@@ -38,6 +38,8 @@ class MessageController {
      */
     
     func createMessage(sender: User, receiver: User, timeDue: NSDate) {
+        sender.hasAppAccount = true
+        sender.hasAppAccount = true
         
         // create new Message
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)

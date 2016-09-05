@@ -11,6 +11,7 @@ import CoreData
 import UIKit
 import CloudKit
 
+let NewContactAdded = "NewContactAdded"
 
 class UserController {
     
@@ -19,7 +20,16 @@ class UserController {
     
     let moc = Stack.sharedStack.managedObjectContext
     
-   
+    
+    
+    var contacts: [User] = [] {
+        didSet {
+            let nc = NSNotificationCenter.defaultCenter()
+            nc.postNotificationName(NewContactAdded, object: nil)
+        }
+    }
+    
+    
     
     
     
@@ -49,7 +59,7 @@ class UserController {
             customUserRecord["identifier"] = reference
             
             // Save Custom Record's Record ID into core data by converting it to NSData
-            user.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(customUserRecord)
+            user.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(customUserRecord.recordID)
             // Save Original record's record id as reference in core data.
             user.originalRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
             
@@ -99,6 +109,7 @@ class UserController {
         
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
+            self.contacts = contacts
             self.checkIfContactsHaveSignedUpForApp(contacts)
             completion(hasAccount: true)
             
@@ -148,9 +159,8 @@ class UserController {
             return
         }
         
-        guard let data = loggedInUser.ckRecordID,
-            record = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord,
-               references = record[User.contactsKey] as? [CKReference] else {
+        guard let record = loggedInUser.record,
+            references = record[User.contactsKey] as? [CKReference] else {
                 completion(hasUsers: false)
                 return
         }
@@ -163,16 +173,17 @@ class UserController {
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
             if let user = User(record: record) {
                 loggedInUser.contacts.append(user)
+                UserController.sharedController.contacts.append(user)
             }
             
-            }) { (records, error) in
-                if let error = error {
-                    print("Error fetching contacts: Error: \(error.localizedDescription)")
-                    completion(hasUsers: false)
-                    return
-                }
+        }) { (records, error) in
+            if let error = error {
+                print("Error fetching contacts: Error: \(error.localizedDescription)")
+                completion(hasUsers: false)
+                return
+            }
             completion(hasUsers: true)
-                
+            
         }
         
     }

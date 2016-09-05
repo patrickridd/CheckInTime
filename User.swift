@@ -11,7 +11,6 @@ import CoreData
 import UIKit
 import CloudKit
 
-let NewContactAdded = "NewContactAdded"
 
 
 class User: NSManagedObject {
@@ -25,15 +24,11 @@ class User: NSManagedObject {
     
     var contactReferences: [CKReference] = []
     var messageReferences: [CKReference] = []
-    var contacts = [User]() {
-        didSet {
-            let nc = NSNotificationCenter.defaultCenter()
-            nc.postNotificationName(NewContactAdded, object: nil)
-        }
-    }
-    
+
     var hasAppAccount: Bool = false
     
+    var contacts = [User]() 
+        
     var record: CKRecord? {
         guard let data = ckRecordID, let ckRecord = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? CKRecord else {
             return nil
@@ -62,8 +57,6 @@ class User: NSManagedObject {
         
     
     }
-    
-    
     
     var photo: UIImage {
            guard let image = UIImage(data: imageData) else {
@@ -111,7 +104,7 @@ class User: NSManagedObject {
         
         self.name = name
         self.phoneNumber = phoneNumber
-        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record)
+        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {
             self.imageData = NSData()
             return
