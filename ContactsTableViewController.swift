@@ -86,6 +86,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             if  let name = CNContactFormatter.stringFromContact(contact, style: .FullName) {
                 newContact.name = name
                 print(name)
+                
+                
             }
             if let imageData = contact.imageData {
                 newContact.imageData = imageData
@@ -115,7 +117,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             // Add phone number to new contact.
             newContact.phoneNumber = contactPhoneNumber
-            
+            // Save Contact to CoreData
+            MessageController.sharedController.saveContext()
             guard let  loggedInUser = UserController.sharedController.loggedInUser,
                 loggedInUserRecord = loggedInUser.cloudKitRecord else {
                     print("Couldn't get logged in user and/or record")
@@ -125,13 +128,13 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             // Add contact to Logged In User's contact
             loggedInUser.contacts.append(newContact)
             UserController.sharedController.contacts.append(newContact)
+            UserController.sharedController.saveContext()
             
             // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
             UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
                 guard let contactRecord = record else {
                     newContact.hasAppAccount = false
                     self.presentNoUserAccount(newContact)
-                    UserController.sharedController.saveContext()
                     return
                     
                 }
@@ -156,6 +159,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             // If modifying records are successful present success alert to user.
                             self.presentUserHasAccount(newContact)
                             newContact.hasAppAccount = true
+                            UserController.sharedController.contacts = loggedInUser.contacts
                             UserController.sharedController.saveContext()
                         }
                 })
@@ -198,7 +202,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 messageVC.recipients = [newContact.phoneNumber]
                 //  messageVC.messageComposeDelegate = self
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
-                messageVC.navigationBar.translucent = false // TODO: - GET THE NAVBAR TO FREAKING BE SOLID.
+                messageVC.navigationBar.translucent = false
                 self.presentViewController(messageVC, animated: true, completion: {
                       noUserAccountAlert.view.tintColor = UIColor ( red: 0.5004, green: 1.0, blue: 0.556, alpha: 1.0 )
                 })

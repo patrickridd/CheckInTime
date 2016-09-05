@@ -30,26 +30,10 @@ class User: NSManagedObject {
     var contacts = [User]() 
         
     // User Record
-//    var cloudKitRecord: CKRecord? {
-//        guard let data = self.ckRecordID else {
-//            return nil
-//        }
-//        let recordID = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! CKRecordID
-//        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(recordID)
-//        
-//        return CKRecord(recordType: Message.recordType, recordID: recordID)
-//    }
-    
-    var cloudKitRecord: CKRecord? {
-        let recordID = CKRecordID(recordName: phoneNumber)
-        let ckr = CKRecord(recordType: User.recordType, recordID: recordID)
-        return ckr
-
-    }
+    var cloudKitRecord: CKRecord?
 
     var cloudKitReference: CKReference? {
         guard let record = self.cloudKitRecord else {
-            print("No record found for Reference in User Model")
             return nil
         }
         let reference = CKReference(record: record, action: .DeleteSelf)
@@ -67,8 +51,6 @@ class User: NSManagedObject {
         self.phoneNumber = phoneNumber
         self.imageData = imageData
         self.timeCreated = NSDate()
-        
-    
     }
     
     var photo: UIImage {

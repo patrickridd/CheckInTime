@@ -68,23 +68,21 @@ class MessageTesterViewController: UIViewController {
                     receiver.contactReferences.append(loggedInUser.cloudKitReference!)
                     receiverRecord[User.contactsKey] = receiver.contactReferences
                     CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord,receiverRecord], perRecordCompletion: { (record, error) in
-                        
-                        
                         }, completion: { (records, error) in
                             if let error = error {
                                 print("Error adding contact to user record. Error: \(error.localizedDescription)")
                             } else {
                                 print("Successfully added Contact to user record")
                             }
-                            
                     })
-                   
                     MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
                     
                 }) { (records, error) in
                     self.dismissViewControllerAnimated(true, completion: nil)
                 }
-            } else {
+            }
+            
+            else {
                 guard let receiver = contacts.first else { return }
                 UserController.sharedController.fetchContactsFromCoreData({_ in 
                     

@@ -50,6 +50,7 @@ class UserController {
             user.recordName = record.recordID.recordName
             let recordID = CKRecordID(recordName: user.phoneNumber)
             let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
+            user.cloudKitRecord = customUserRecord
             
             // create reference to Current User's cloudkit ID to be able to fetch Custom Record.
             let reference = CKReference(recordID: record.recordID, action: .None)
@@ -93,6 +94,11 @@ class UserController {
         }
         
         self.loggedInUser = users.first
+        guard let loggedInUser = self.loggedInUser else {
+            print("No user")
+            completion(hasAccount: false)
+            return
+        }
         
         // Subscribe to Message Changes.
         CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
@@ -101,14 +107,19 @@ class UserController {
                 MessageController.sharedController.subscribeToMessages()
                 return
             }
-            print("You are subscribed to received messages)")
+            print("You are subscribed to received messages")
         }
         
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
             self.contacts = contacts
             self.checkIfContactsHaveSignedUpForApp(contacts)
-            completion(hasAccount: true)
+            MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
+            self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
+                
+                completion(hasAccount: true)
+
+            })
             
         }
     }
@@ -131,6 +142,21 @@ class UserController {
     func checkIfContactsHaveSignedUpForApp(contacts: [User]) {
         
         
+        
+    }
+    
+    func fetchUsersCloudKitRecord(user: User, completion: (record: CKRecord?) ->Void) {
+        let recordID = CKRecordID(recordName: user.phoneNumber)
+        
+        CloudKitManager.cloudKitController.fetchRecordWithID(recordID) { (record, error) in
+            guard let record = record else {
+                print("No record found for user in cloudkit")
+                completion(record: nil)
+                return
+            }
+            user.cloudKitRecord = record
+            completion(record: record)
+        }
         
     }
     

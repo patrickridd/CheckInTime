@@ -30,7 +30,7 @@ class MessageController {
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
         
         _ = try? fetchedResultsController.performFetch()
-        fetchUnsyncedMessagesFromCloudKitToCoreData()
+      
         
     }
     
@@ -38,49 +38,60 @@ class MessageController {
      */
     
     func createMessage(sender: User, receiver: User, timeDue: NSDate) {
-        sender.hasAppAccount = true
-        sender.hasAppAccount = true
+       
         
         // create new Message
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
         
         // Create CKRecord and give your model the record and recordName
         // recordName can then be fetched from core data
-        let record = CKRecord(recordType: Message.recordType)
-        message.recordName = record.recordID.recordName
-        message.record = record
-        message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
+        let messageRecord = CKRecord(recordType: Message.recordType)
+        message.recordName = messageRecord.recordID.recordName
+        message.record = messageRecord
+        message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(messageRecord.recordID)
         
         
-        // Convert Data back to CKRecord so you can create users reference
-        guard let senderRecord = sender.cloudKitRecord,
-            receiverRecord = receiver.cloudKitRecord else {
-                print("Couldn't get back CKRecords from NSData")
+        // Get records From Sender and Receiver
+        
+        UserController.sharedController.fetchUsersCloudKitRecord(sender) { (record) in
+            guard let record = record else {
+                print("No sender record found")
                 return
+            }
+            sender.cloudKitRecord = record
+            UserController.sharedController.fetchUsersCloudKitRecord(receiver, completion: { (record) in
+                guard let record = record else {
+                    print("No Receiver record found")
+                    return
+                }
+                receiver.cloudKitRecord = record
+            
+                guard let senderRecord = sender.cloudKitRecord,
+                    receiverRecord = receiver.cloudKitRecord else {
+                        print("Couldn't get back CKRecords from NSData")
+                        return
+                }
+                // Save message to CloudKit
+                
+                messageRecord[Message.senderIDKey] = sender.phoneNumber
+                messageRecord[Message.receiverIDKey] = receiver.phoneNumber
+                messageRecord[Message.hasRespondedKey] = message.hasResponded
+                let senderReference = CKReference(recordID: senderRecord.recordID, action: .None)
+                let receiverReference = CKReference(recordID: receiverRecord.recordID, action: .None)
+                messageRecord[Message.users] = [senderReference, receiverReference]
+                
+                messageRecord[Message.timeDueKey] = message.timeDue
+                messageRecord[Message.timeSentKey] = message.timeSent
+                
+                CloudKitManager.cloudKitController.saveRecord(record) { (record, error) in
+                    // self.addSubscriptionToMessage(message, alertBody: "New WhereYouApp Update")
+                    //     self.messages.append(message)
+                    print("Saved message to cloudkit")
+                }
+            })
+            
         }
         
-        // Save message to CloudKit
-        
-        record[Message.senderIDKey] = sender.phoneNumber
-        record[Message.receiverIDKey] = receiver.phoneNumber
-        record[Message.hasRespondedKey] = message.hasResponded
-        let senderReference = CKReference(recordID: senderRecord.recordID, action: .None)
-        let receiverReference = CKReference(recordID: receiverRecord.recordID, action: .None)
-        record[Message.users] = [senderReference, receiverReference]
-        
-        
-        // record[Message.latitudeKey] = message.latitude
-        // record[Message.longitudeKey] = message.longitude
-        // record[Message.textKey] = message.text
-        record[Message.timeDueKey] = message.timeDue
-        record[Message.timeSentKey] = message.timeSent
-        // record[Message.timeRespondedKey] = message.timeResponded
-        
-        CloudKitManager.cloudKitController.saveRecord(record) { (record, error) in
-            // self.addSubscriptionToMessage(message, alertBody: "New WhereYouApp Update")
-            //     self.messages.append(message)
-            print("Saved message to cloudkit")
-        }
     }
     
     /* Fetches all messages in cloudkit that the loggedInUser is associated with
@@ -114,11 +125,12 @@ class MessageController {
         }
     }
     
+    
     /*
      Fetches Messages from cloudkit that havent been saved to core data yet.
      */
     
-    func fetchUnsyncedMessagesFromCloudKitToCoreData() {
+    func fetchUnsyncedMessagesFromCloudKitToCoreData(user: User) {
         
         let request = NSFetchRequest(entityName: "Message")
         
@@ -127,13 +139,15 @@ class MessageController {
             return
         }
         
+        
         // Get the Message References for predicate for CloudKit
         let messageReferences = coreDataMessages.flatMap({$0.cloudKitReference})
+        let messagePredicate = NSPredicate(format: "NOT(recordID IN %@)", argumentArray: [messageReferences])
         // The predicate will fetch for any Message that doesn't have a recordID associated with a message CoreData already has
-        let predicate = NSPredicate(format: "NOT(recordID IN %@)", argumentArray: [messageReferences])
+        let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [user.phoneNumber])
+        let compoundPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [predicate,messagePredicate])
         
-        CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-            
+        CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: compoundPredicate, recordFetchedBlock: { (record) in
             
         }) { (records, error) in
             guard let records = records else {
@@ -149,8 +163,6 @@ class MessageController {
             }
             self.saveContext()
         }
-        
-        
     }
     
     
@@ -249,7 +261,5 @@ class MessageController {
         }
         
     }
-    
-    
-    
+
 }
