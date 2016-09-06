@@ -83,7 +83,7 @@ class MessageController {
                 messageRecord[Message.timeDueKey] = message.timeDue
                 messageRecord[Message.timeSentKey] = message.timeSent
                 
-                CloudKitManager.cloudKitController.saveRecord(record) { (record, error) in
+                CloudKitManager.cloudKitController.saveRecord(messageRecord) { (record, error) in
                     // self.addSubscriptionToMessage(message, alertBody: "New WhereYouApp Update")
                     //     self.messages.append(message)
                     print("Saved message to cloudkit")
@@ -139,7 +139,6 @@ class MessageController {
             return
         }
         
-        
         // Get the Message References for predicate for CloudKit
         let messageReferences = coreDataMessages.flatMap({$0.cloudKitReference})
         let messagePredicate = NSPredicate(format: "NOT(recordID IN %@)", argumentArray: [messageReferences])
@@ -184,7 +183,6 @@ class MessageController {
             } else {
                 print("Error saving subscription. Error: \(error?.localizedDescription)")
             }
-            
         }
     }
     

@@ -98,15 +98,7 @@ class UserController {
             return
         }
         
-        // Subscribe to Message Changes.
-        CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
-            guard let _ = subscription else {
-                print("Trying to subscribe to My Messages")
-                MessageController.sharedController.subscribeToMessages()
-                return
-            }
-            print("You are subscribed to received messages")
-        }
+  
         
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
@@ -114,7 +106,15 @@ class UserController {
             self.checkIfContactsHaveSignedUpForApp(contacts)
             MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
             self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
-                
+                // Subscribe to Message Changes.
+                CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
+                    guard let _ = subscription else {
+                        print("Trying to subscribe to My Messages")
+                        MessageController.sharedController.subscribeToMessages()
+                        return
+                    }
+                    print("You are subscribed to received messages")
+                }
                 completion(hasAccount: true)
 
             })
