@@ -18,7 +18,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
     }
@@ -119,21 +119,31 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     return
             }
             
-            // Add contact to Logged In User's contact
-            loggedInUser.contacts.append(newContact)
-            UserController.sharedController.contacts.append(newContact)
-            UserController.sharedController.saveContext()
             
             // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
             UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
                 guard let contactRecord = record else {
                     newContact.hasAppAccount = false
+                    // Add contact to Logged In User's contact
+                    loggedInUser.contacts.append(newContact)
+                    UserController.sharedController.contacts.append(newContact)
+                    UserController.sharedController.saveContext()
+                    
                     self.presentNoUserAccount(newContact)
                     return
                     
                 }
+                
+                newContact.hasAppAccount = true
+                // Add contact to Logged In User's contact
+                loggedInUser.contacts.append(newContact)
+                UserController.sharedController.contacts.append(newContact)
+                UserController.sharedController.saveContext()
+                
+                
                 // If User has account add contact reference to User's CKrecord
                 let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
+                
                 loggedInUser.contactReferences.append(contactReference)
                 loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
                 
@@ -196,7 +206,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
                 messageVC.navigationBar.translucent = false
                 self.presentViewController(messageVC, animated: true, completion: {
-                      noUserAccountAlert.view.tintColor = UIColor ( red: 0.5004, green: 1.0, blue: 0.556, alpha: 1.0 )
+                    noUserAccountAlert.view.tintColor = UIColor ( red: 0.5004, green: 1.0, blue: 0.556, alpha: 1.0 )
                 })
             } else {
                 
@@ -206,10 +216,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         noUserAccountAlert.addAction(recommendAction)
         
         dispatch_async(dispatch_get_main_queue(), {
-        self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
-
+            self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
+            
         })
-    
+        
     }
     
     func presentUserHasAccount(newContact: User) {
@@ -236,7 +246,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     
     func newContactAdded(notification: NSNotification) {
-        self.tableView.reloadData()
+        dispatch_async(dispatch_get_main_queue(), {
+            self.tableView.reloadData()
+            
+        })
+        
     }
     
     // MARK: - Table view data source
@@ -273,17 +287,17 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
      }
      */
     
-    /*
-     // Override to support editing the table view.
-     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-     if editingStyle == .Delete {
-     // Delete the row from the data source
-     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-     } else if editingStyle == .Insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
+    
+    // Override to support editing the table view.
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // Delete the row from the data source
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        } else if editingStyle == .Insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
     
     /*
      // Override to support rearranging the table view.

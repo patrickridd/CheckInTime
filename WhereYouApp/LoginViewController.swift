@@ -32,12 +32,17 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                         if hasUsers {
                             MessageController.sharedController.fetchAllMessagesFromCloudKit({
                                 print("Messages restored")
-                                self.dismissViewControllerAnimated(true, completion: nil)
-                                
+                                        dispatch_async(dispatch_get_main_queue(), {
+                                            self.dismissViewControllerAnimated(true, completion: nil)
+
+                                        })
                             })
                             
                         } else {
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                            dispatch_async(dispatch_get_main_queue(), {
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                                
+                            })
                         }
                 
                     })

@@ -223,12 +223,11 @@ class UserController {
                     completion(record: nil)
                     return
                 }
-                
                 completion(record: records.first)
-                
-                
         })
     }
+    
+    // Delete
     
     // Saves the ManagedObject Context
     
