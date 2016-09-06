@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */; };
 		21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AEA87B1D736770005EF030 /* AppDelegate.swift */; };
 		21AEA8811D736770005EF030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA87F1D736770005EF030 /* Main.storyboard */; };
 		21AEA8831D736770005EF030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA8821D736770005EF030 /* Assets.xcassets */; };
@@ -28,10 +29,10 @@
 		21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D477431D767DD40094FCBC /* CloudKit.framework */; };
 		21D4777B1D7775990094FCBC /* MessageTesterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */; };
 		21F8FA691D78C264002F99DB /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */; };
-		21F8FA6B1D78E97C002F99DB /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F8FA6A1D78E97C002F99DB /* User+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21AEA8781D736770005EF030 /* WhereYouApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhereYouApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21AEA87B1D736770005EF030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21AEA8801D736770005EF030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -56,7 +57,6 @@
 		21D477431D767DD40094FCBC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTesterViewController.swift; sourceTree = "<group>"; };
 		21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		21F8FA6A1D78E97C002F99DB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +74,7 @@
 		21AEA86F1D736770005EF030 = {
 			isa = PBXGroup;
 			children = (
+				219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */,
 				21D477431D767DD40094FCBC /* CloudKit.framework */,
 				21AEA87A1D736770005EF030 /* WhereYouApp */,
 				21AEA8791D736770005EF030 /* Products */,
@@ -124,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */,
-				21F8FA6A1D78E97C002F99DB /* User+CoreDataProperties.swift */,
 				21D477091D75FD390094FCBC /* Stack.swift */,
 				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,
 			);
@@ -238,9 +238,9 @@
 				21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */,
 				21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */,
 				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
+				219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */,
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
 				21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */,
-				21F8FA6B1D78E97C002F99DB /* User+CoreDataProperties.swift in Sources */,
 				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,
 				21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */,
 				21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */,

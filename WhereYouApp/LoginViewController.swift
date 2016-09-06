@@ -90,6 +90,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 return
             }
             UserController.sharedController.loggedInUser = user
+            UserController.sharedController.loggedInUser?.cloudKitRecord = record
             UserController.sharedController.saveContext()
             print("Restored User")
             CloudKitManager.cloudKitController.fetchSubscription("My Messages", completion: { (subscription, error) in

@@ -24,8 +24,6 @@ class User: NSManagedObject {
     
     var contactReferences: [CKReference] = []
     var messageReferences: [CKReference] = []
-
-    var hasAppAccount: Bool = false
     
     var contacts = [User]() 
         
@@ -41,7 +39,7 @@ class User: NSManagedObject {
     }
 
 // Insert code here to add functionality to your managed object subclass
-    convenience init(name: String , phoneNumber: String, imageData: NSData, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
+    convenience init(name: String , phoneNumber: String, imageData: NSData, hasAppAccount: Bool, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
         let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: context)!
         
@@ -51,6 +49,7 @@ class User: NSManagedObject {
         self.phoneNumber = phoneNumber
         self.imageData = imageData
         self.timeCreated = NSDate()
+        self.hasAppAccount = hasAppAccount
     }
     
     var photo: UIImage {

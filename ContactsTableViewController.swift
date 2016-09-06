@@ -18,15 +18,12 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
-        
     }
     
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
-        
         requestForAccess { (accessGranted) in
             if accessGranted {
                 let contactPickerViewController = CNContactPickerViewController()
@@ -36,8 +33,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 self.presentViewController(contactPickerViewController, animated: true, completion: nil)
             }
         }
-        
-        
     }
     
     func requestForAccess(completionHandler: (accessGranted: Bool) -> Void) {
@@ -82,11 +77,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.isKeyAvailable(CNContactImageDataKey) {
             
-            let newContact = User(name: "", phoneNumber: "", imageData: NSData())
+            let newContact = User(name: "", phoneNumber: "", imageData: NSData(), hasAppAccount: false)
             if  let name = CNContactFormatter.stringFromContact(contact, style: .FullName) {
                 newContact.name = name
                 print(name)
-                
                 
             }
             if let imageData = contact.imageData {
@@ -138,7 +132,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     return
                     
                 }
-                
                 // If User has account add contact reference to User's CKrecord
                 let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
                 loggedInUser.contactReferences.append(contactReference)
@@ -164,7 +157,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         }
                 })
             })
-            
         }
     }
     

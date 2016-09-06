@@ -44,7 +44,7 @@ class UserController {
                 return
             }
             
-            let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData)
+            let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: true)
             /* Create Custom User Record with a recordID made from the users phone number so we can use the phone number to fetch him/her from coredata */
             
             user.recordName = record.recordID.recordName
