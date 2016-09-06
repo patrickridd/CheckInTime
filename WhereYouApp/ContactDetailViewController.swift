@@ -7,10 +7,23 @@
 //
 
 import UIKit
+import CoreData
 
-class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
 
+    
     var contact: User?
+    var fetchedResultsController: NSFetchedResultsController!
+    let moc = Stack.sharedStack.managedObjectContext
+    
+    
+    let dateFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .ShortStyle
+        formatter.doesRelativeDateFormatting = true
+        formatter.timeStyle = .ShortStyle
+        return formatter
+    }()
     
     @IBOutlet weak var contactImage: UIImageView!
     @IBOutlet weak var dateTextField: UITextField!
@@ -24,10 +37,15 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         guard let contact = contact else {
             return
         }
+        setupFetchController(contact)
+        
         dateTextField.inputView = dueDatePicker
         updateWith(contact)
 
     }
+    
+    
+    
 
     func updateWith(contact: User) {
         self.contactImage.image = contact.photo
@@ -38,23 +56,50 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     
+    func setupFetchController(contact: User) {
+        
+        let request = NSFetchRequest(entityName: "Message")
+        let descriptor = NSSortDescriptor(key: "timeSent", ascending: true)
+        request.sortDescriptors = [descriptor]
+        let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
+        let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
+        request.predicate = compoundPredicate
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "receiver", cacheName: nil  )
+        
+        let _ = try? fetchedResultsController.performFetch()
+        
+        
+    }
+    
     @IBAction func whereYouAppButtonTapped(sender: AnyObject) {
     }
 
+    @IBAction func screenTapped(sender: AnyObject) {
+        dateTextField.resignFirstResponder()
+        dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
+    }
+    
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        return 1
+        guard let sections = fetchedResultsController.sections else {
+            return 1
+        }
+        return sections.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return 1
+        guard let sections = fetchedResultsController.sections else {
+            return 1
+        }
+        return sections[section].numberOfObjects
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath)
-        
-        
+        guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? MessageTableViewCell, let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
+            return UITableViewCell()
+        }
+        cell.updateWith(message)
         
         return cell
     }

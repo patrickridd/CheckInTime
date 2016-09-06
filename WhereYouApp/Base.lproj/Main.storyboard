@@ -125,7 +125,7 @@
                                     <constraint firstAttribute="height" constant="267" id="t0T-TL-zFO"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" id="qPD-cW-tmy">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" id="qPD-cW-tmy" customClass="MessageTableViewCell" customModule="WhereYouApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="328" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qPD-cW-tmy" id="2d5-F0-EOO">
@@ -257,7 +257,11 @@
                         <!--2016-08-28 21:09:15 +0000-->
                     </date>
                 </datePicker>
-                <tapGestureRecognizer id="2Lf-EH-HaW"/>
+                <tapGestureRecognizer id="2Lf-EH-HaW">
+                    <connections>
+                        <action selector="screenTapped:" destination="BSJ-RI-4EC" id="Not-g2-YRh"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1314" y="1190"/>
         </scene>
