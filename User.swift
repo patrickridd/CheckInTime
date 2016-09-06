@@ -34,7 +34,7 @@ class User: NSManagedObject {
         guard let record = self.cloudKitRecord else {
             return nil
         }
-        let reference = CKReference(record: record, action: .DeleteSelf)
+        let reference = CKReference(recordID: record.recordID, action: .DeleteSelf)
         return reference
     }
 

@@ -20,8 +20,6 @@ class UserController {
     
     let moc = Stack.sharedStack.managedObjectContext
     
-    
-    
     var contacts: [User] = [] {
         didSet {
             let nc = NSNotificationCenter.defaultCenter()
@@ -175,7 +173,7 @@ class UserController {
         
     }
     
-    // Fetches the loggedInUsers Contacts From Cloudkit in they get deleted. //
+    // Fetches the loggedInUsers Contacts From Cloudkit if they get deleted. //
     func fetchCloudKitContacts(completion: (hasUsers: Bool)->Void) {
         guard let loggedInUser = loggedInUser else {
             print("No user logged in yet")
@@ -227,13 +225,95 @@ class UserController {
         })
     }
     
-    // Delete
+    // Delete Contact
+    
+    func deleteContact(contact: User) {
+        guard let index = self.contacts.indexOf(contact) else {
+            print("Couldn't find index for Contact")
+            return
+        }
+    
+        self.contacts.removeAtIndex(index)
+        fetchUsersCloudKitRecord(contact) { (record) in
+            guard let record = record else {
+                print("Couldn't find Contact's record to delete his reference")
+                return
+            }
+            let reference = CKReference(record: record, action: .None)
+            contact.cloudKitRecord = record
+            
+           // guard let reference = contact.cloudKitReference,
+          guard let loggedInUser = self.loggedInUser else {
+                return
+            }
+            
+            if let record = loggedInUser.cloudKitRecord {
+                guard var references = record[User.contactsKey] as? [CKReference] else {
+                    print("No references in CloudKit")
+                    return
+                }
+                
+                loggedInUser.contactReferences = references
+                self.moc.deleteObject(contact)
+                self.saveContext()
+                guard let index = references.indexOf(reference) else {
+                    return
+                }
+                
+                references.removeAtIndex(index)
+                
+                record[User.contactsKey] = references
+                loggedInUser.contactReferences = references
+                CloudKitManager.cloudKitController.modifyRecords([record], perRecordCompletion: { (record, error) in
+                    
+                    }, completion: { (records, error) in
+                        if let error = error {
+                            print("Error Deleting Contact Reference. Error: \(error.localizedDescription)")
+                        } else {
+                            print("Successfully deleted contact reference")
+                        }
+                        self.saveContext()
+                })
+                
+            } else {
+                
+                self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
+                    guard let record = record else {
+                        return
+                    }
+                    guard var references = record[User.contactsKey] as? [CKReference] else {
+                        print("No references in CloudKit")
+                        return
+                    }
+                    loggedInUser.contactReferences = references
+                    guard let index = references.indexOf(reference) else {
+                        return
+                    }
+                    
+                    references.removeAtIndex(index)
+                    
+                    record[User.contactsKey] = references
+                    CloudKitManager.cloudKitController.modifyRecords([record], perRecordCompletion: { (record, error) in
+                        
+                        }, completion: { (records, error) in
+                            if let error = error {
+                                print("Error Deleting Contact Reference. Error: \(error.localizedDescription)")
+                            } else {
+                                print("Successfully deleted contact reference")
+                            }
+                            self.saveContext()
+                    })
+                })
+            }
+        }   
+    }
     
     // Saves the ManagedObject Context
     
     func saveContext() {
         do{
             try moc.save()
+            print("Saved to context")
         }catch let error as NSError {
             print("Error saving to context. Error: \(error.localizedDescription)")
         }
