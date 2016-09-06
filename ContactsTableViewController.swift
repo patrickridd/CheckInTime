@@ -131,7 +131,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     
                     self.presentNoUserAccount(newContact)
                     return
-                    
                 }
                 
                 newContact.hasAppAccount = true
@@ -306,8 +305,20 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "contactSegue" {
         // Get the new view controller using segue.destinationViewController.
+        guard let contactDetailVC = segue.destinationViewController as? ContactDetailViewController,
+            let indexPath = tableView.indexPathForSelectedRow else {
+                return
+            }
+            
+            let contact = UserController.sharedController.contacts[indexPath.row]
+            
+            contactDetailVC.contact = contact
+        contactDetailVC.hidesBottomBarWhenPushed = true
         // Pass the selected object to the new view controller.
+        }
     }
     
     

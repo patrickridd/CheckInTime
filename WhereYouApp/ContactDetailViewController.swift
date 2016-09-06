@@ -10,21 +10,33 @@ import UIKit
 
 class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    var contact: User?
+    
     @IBOutlet weak var contactImage: UIImageView!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet var dueDatePicker: UIDatePicker!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        guard let contact = contact else {
+            return
+        }
+        dateTextField.inputView = dueDatePicker
+        updateWith(contact)
+
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func updateWith(contact: User) {
+        self.contactImage.image = contact.photo
+        self.nameLabel.text = contact.name
+        self.numberLabel.text = contact.phoneNumber
+        
+        
     }
+    
     
     @IBAction func whereYouAppButtonTapped(sender: AnyObject) {
     }
