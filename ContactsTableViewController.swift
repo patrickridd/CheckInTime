@@ -21,6 +21,15 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
+        UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
+            if newAppAcctUsers {
+                self.presentNewAppAcctUsers(updatedUsers!)
+            } else {
+                print("no new app users from contacts")
+            }
+            
+        }
+        
     }
     
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
@@ -61,6 +70,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             completionHandler(accessGranted: false)
         }
     }
+    
+    
     
     
     func showMessage(alert: String) {
@@ -116,9 +127,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     // Create Contact and Save Contact to CoreData
                     let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
                     MessageController.sharedController.saveContext()
-                    guard let  loggedInUser = UserController.sharedController.loggedInUser,
-                        loggedInUserRecord = loggedInUser.cloudKitRecord else {
-                            print("Couldn't get logged in user and/or record")
+                    guard let  loggedInUser = UserController.sharedController.loggedInUser else {                            print("Couldn't get logged in user and/or record")
                             return
                     }
                     
@@ -135,38 +144,13 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             return
                         }
                         
-                        newContact.hasAppAccount = true
-                        // Add contact to Logged In User's contact
-                        loggedInUser.contacts.append(newContact)
-                        UserController.sharedController.contacts.append(newContact)
-                        UserController.sharedController.saveContext()
-                        
-                        
-                        // If User has account add contact reference to User's CKrecord
-                        let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
-                        
-                        loggedInUser.contactReferences.append(contactReference)
-                        loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
-                        
-                        // Add user to contact's contacts.
-                        newContact.contactReferences.append(loggedInUser.cloudKitReference!)
-                        contactRecord[User.contactsKey] = newContact.contactReferences
-                        
-                        // Modify both user's records.
-                        CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
+                        UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
+                            if savedSuccessfully {
+                                self.presentUserHasAccount(newContact)
+                            }
                             
-                            }, completion: { (records, error) in
-                                if let error = error {
-                                    print("Error modifying Contacts. Error: \(error.localizedDescription)")
-                                    UserController.sharedController.saveContext()
-                                } else {
-                                    // If modifying records are successful present success alert to user.
-                                    self.presentUserHasAccount(newContact)
-                                    newContact.hasAppAccount = true
-                                    UserController.sharedController.contacts = loggedInUser.contacts
-                                    UserController.sharedController.saveContext()
-                                }
                         })
+             
                     })
                 }
             })
@@ -197,6 +181,14 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
         }
         return phoneNumbers
+    }
+    
+    func presentNewAppAcctUsers(updatedUsers: [User]) {
+        
+        
+        
+        
+        
     }
     
     // Tells user that the Contact they are tyring to add is already in their contacts list.
@@ -308,7 +300,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         if editingStyle == .Delete {
             // Delete the row from the data source
             let contact = UserController.sharedController.contacts[indexPath.row]
-            UserController.sharedController.deleteContact(contact)
+            UserController.sharedController.deleteContactFromCloudKit(contact)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
         } else if editingStyle == .Insert {

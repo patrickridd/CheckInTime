@@ -34,7 +34,7 @@
 
 /* Begin PBXFileReference section */
 		216B8AF61D7F83E700FB33CF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
-		219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21AEA8781D736770005EF030 /* WhereYouApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhereYouApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21AEA87B1D736770005EF030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21AEA8801D736770005EF030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -76,7 +76,6 @@
 		21AEA86F1D736770005EF030 = {
 			isa = PBXGroup;
 			children = (
-				219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */,
 				21D477431D767DD40094FCBC /* CloudKit.framework */,
 				21AEA87A1D736770005EF030 /* WhereYouApp */,
 				21AEA8791D736770005EF030 /* Products */,
@@ -127,6 +126,7 @@
 		21D476BA1D74D1070094FCBC /* CoreData Model */ = {
 			isa = PBXGroup;
 			children = (
+				219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */,
 				21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */,
 				21D477091D75FD390094FCBC /* Stack.swift */,
 				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,

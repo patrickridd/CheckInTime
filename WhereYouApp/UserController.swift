@@ -100,7 +100,7 @@ class UserController {
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
             self.contacts = contacts
-            self.checkIfContactsHaveSignedUpForApp(contacts)
+            
             self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
                 // Subscribe to Message Changes.
                 MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
@@ -135,8 +135,45 @@ class UserController {
     }
     
     // Check by user phone number if contacts who didn't have account now do have an account with the app.
-    func checkIfContactsHaveSignedUpForApp(contacts: [User]) {
+    func checkIfContactsHaveSignedUpForApp(completion: (newAppAcctUsers: Bool, updatedUsers: [User]?)->Void) {
+        let request = NSFetchRequest(entityName: "User")
+        let predicate = NSPredicate(format: "hasAppAccount == 0")
+        request.predicate = predicate
         
+        guard let users = (try? moc.executeFetchRequest(request) as! [User]) else {
+            return
+        }
+        let phoneNumbers = users.flatMap({$0.phoneNumber})
+        let cloudPredicate = NSPredicate(format: "phoneNumber CONTAINS %@", argumentArray: [phoneNumbers])
+        
+        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: cloudPredicate, recordFetchedBlock: { (record) in
+            
+            
+            }) { (records, error) in
+                guard let records = records else {
+                    print("reords are nil")
+                    completion(newAppAcctUsers: false, updatedUsers: nil)
+                    return
+                }
+                let newUsers = records.flatMap({User(record: $0)})
+                
+                if newUsers.isEmpty {
+                    completion(newAppAcctUsers: false, updatedUsers: nil)
+                    return
+                }
+                var updatedUsers: [User] = []
+                
+                for user in users {
+                    let newUser = newUsers.filter{$0.phoneNumber == user.phoneNumber}
+                    if newUser.count > 0 {
+                        self.updateContactsAppStatus(user)
+                        updatedUsers.append(user)
+                    }
+                }
+               
+                self.deleteContactsFromCoreData(newUsers)
+                completion(newAppAcctUsers: true, updatedUsers: updatedUsers)
+        }
         
         
     }
@@ -245,7 +282,7 @@ class UserController {
     
     // Delete Contact
     
-    func deleteContact(contact: User) {
+    func deleteContactFromCloudKit(contact: User) {
         guard let index = self.contacts.indexOf(contact) else {
             print("Couldn't find index for Contact")
             return
@@ -328,6 +365,54 @@ class UserController {
                 })
             }
         }
+    }
+    
+    
+    
+    func updateContactsAppStatus(contact: User) {
+        
+    }
+    
+    func deleteContactsFromCoreData(users: [User]) {
+        
+    }
+
+    
+    func saveNewContactToCloudKit(newContact: User, contactRecord: CKRecord, completion: (savedSuccessfully: Bool)-> Void) {
+        newContact.hasAppAccount = true
+        // Add contact to Logged In User's contact
+        guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else { return }
+        loggedInUser.contacts.append(newContact)
+        UserController.sharedController.contacts.append(newContact)
+        UserController.sharedController.saveContext()
+        
+        // If User has account add contact reference to User's CKrecord
+        let contactReference = CKReference(recordID: contactRecord.recordID, action: .None)
+        loggedInUser.contactReferences.append(contactReference)
+        loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
+        
+        // Add user to contact's contacts.
+        newContact.contactReferences.append(loggedInUser.cloudKitReference!)
+        contactRecord[User.contactsKey] = newContact.contactReferences
+        
+        // Modify both user's records.
+        CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
+            
+            }, completion: { (records, error) in
+                if let error = error {
+                    print("Error modifying Contacts. Error: \(error.localizedDescription)")
+                    UserController.sharedController.saveContext()
+                    completion(savedSuccessfully: false)
+                } else {
+                    // If modifying records are successful present success alert to user.
+                    newContact.hasAppAccount = true
+                    UserController.sharedController.contacts = loggedInUser.contacts
+                    UserController.sharedController.saveContext()
+                    completion(savedSuccessfully: true)
+                }
+        })
+
+    
     }
     
     // Saves the ManagedObject Context
