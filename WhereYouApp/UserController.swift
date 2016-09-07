@@ -148,7 +148,6 @@ class UserController {
         
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: cloudPredicate, recordFetchedBlock: { (record) in
             
-            
             }) { (records, error) in
                 guard let records = records else {
                     print("reords are nil")
@@ -157,7 +156,7 @@ class UserController {
                 }
                 let newUsers = records.flatMap({User(record: $0)})
                 
-                if newUsers.isEmpty {
+                if newUsers.count < 1 {
                     completion(newAppAcctUsers: false, updatedUsers: nil)
                     return
                 }
@@ -370,11 +369,15 @@ class UserController {
     
     
     func updateContactsAppStatus(contact: User) {
-        
+        contact.hasAppAccount = true
     }
     
     func deleteContactsFromCoreData(users: [User]) {
-        
+    
+        for user in users {
+            moc.deleteObject(user)
+        }
+        saveContext()
     }
 
     

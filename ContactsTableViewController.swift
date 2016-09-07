@@ -24,6 +24,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
             if newAppAcctUsers {
                 self.presentNewAppAcctUsers(updatedUsers!)
+                UserController.sharedController.contacts = UserController.sharedController.contacts
             } else {
                 print("no new app users from contacts")
             }
@@ -185,6 +186,18 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     func presentNewAppAcctUsers(updatedUsers: [User]) {
         
+        let names = updatedUsers.flatMap({$0.name})
+        
+       let newAppAcctsAlert = UIAlertController(title: "\(names) have downloaded CheckInTime", message: "You can now set CheckIn Times for them or Check In Time with them.", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Sounds Good", style: .Cancel, handler: nil)
+        newAppAcctsAlert.addAction(action)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(newAppAcctsAlert, animated: true, completion: nil)
+        })
+    }
+    
+    // Takes in an array and formats it grammatically to present to user.
+    func formatNames(names: [String] -> String) {
         
         
         
