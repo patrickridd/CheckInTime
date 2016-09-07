@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import MessageUI
+
 
 class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate {
     
@@ -39,6 +41,11 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         guard let contact = contact else {
             return
         }
+        if contact.hasAppAccount == false {
+            self.presentNoUserAccount(contact)
+        }
+        
+        
         setupFetchController(contact)
         
         dateTextField.inputView = dueDatePicker
@@ -60,6 +67,37 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         
     }
+    
+    func presentNoUserAccount(newContact: User) {
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
+        
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
+        let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in
+            
+            let messageVC = MFMessageComposeViewController()
+            if MFMessageComposeViewController.canSendText() == true {
+                messageVC.body = "I'd like you to download WhereYouApp so I can know WhereYouApp"
+                messageVC.recipients = [newContact.phoneNumber]
+                //  messageVC.messageComposeDelegate = self
+                messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+                messageVC.navigationBar.translucent = false
+                self.presentViewController(messageVC, animated: true, completion: {
+                    noUserAccountAlert.view.tintColor = UIColor ( red: 0.5004, green: 1.0, blue: 0.556, alpha: 1.0 )
+                })
+            } else {
+                
+            }
+        }
+        noUserAccountAlert.addAction(dismissAction)
+        noUserAccountAlert.addAction(recommendAction)
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
+            
+        })
+        
+    }
+
     
     
     func setupFetchController(contact: User) {

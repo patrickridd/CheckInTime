@@ -272,9 +272,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     // MARK: - Table view data source
-    
-    
-    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
@@ -287,8 +284,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         let contact = UserController.sharedController.contacts[indexPath.row]
         if contact.hasAppAccount == false {
-            cell.userInteractionEnabled = false
-            
+
+            cell.textLabel?.textColor = UIColor.darkGrayColor()
         }
         cell.textLabel?.text = contact.name
         // Configure the cell...
