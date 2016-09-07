@@ -236,7 +236,7 @@ class UserController {
                 print("Couldn't find Contact's record to delete his reference")
                 return
             }
-            let reference = CKReference(record: record, action: .None)
+            let contactRecordName = record.recordID.recordName
             contact.cloudKitRecord = record
             
            // guard let reference = contact.cloudKitReference,
@@ -252,9 +252,10 @@ class UserController {
                 }
                 
                 loggedInUser.contactReferences = references
+                let names = references.flatMap({$0.recordID.recordName})
                 self.moc.deleteObject(contact)
                 self.saveContext()
-                guard let index = references.indexOf(reference) else {
+                guard let index = names.indexOf(contactRecordName) else {
                     print("No index")
                     return
                 }
@@ -285,7 +286,10 @@ class UserController {
                         return
                     }
                     loggedInUser.contactReferences = references
-                    guard let index = references.indexOf(reference) else {
+                    let recordNames = references.flatMap({$0.recordID.recordName})
+                    
+                    
+                    guard let index = recordNames.indexOf(contactRecordName) else {
                         return
                     }
                     references.removeAtIndex(index)
