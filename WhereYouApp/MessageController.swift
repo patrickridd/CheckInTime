@@ -227,12 +227,6 @@ class MessageController {
             let fetchedMessage = messages.first else {
                 
                 let message = Message(record: record)!
-                let sender = message.sender
-                let user = UserController.sharedController.contacts.filter{$0.phoneNumber == sender.phoneNumber  }
-                
-                if user.isEmpty {
-                    createUserContactFromNewMessage(sender)
-                }
                 
                 scheduleLocalNotification(message)
                 

@@ -115,13 +115,26 @@ class Message: NSManagedObject {
         self.recordName = record.recordID.recordName
 
         
-        guard let fetchedSender = UserController.sharedController.fetchCoreDataUserWithNumber(senderID), fetchedReceiver = UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) else {
+        UserController.sharedController.fetchCoreDataUserWithNumber(senderID, completion: { (user) in
+            if let sender = user  {
+                self.sender = sender
+            } else {
+                self.recordName = ""
+            }
+        
+        })
+        UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) { (user) in
+            if let receiver = user {
+                self.receiver = receiver
+            } else {
+                self.recordName = ""
+            }
+            
+        }
+        
+        if self.recordName == "" {
             return nil
         }
-        self.sender = fetchedSender
-        self.receiver = fetchedReceiver
-        
-        
         
         
         // Only Apply for the when the receiver responds.

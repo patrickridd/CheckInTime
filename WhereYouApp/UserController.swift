@@ -66,7 +66,8 @@ class UserController {
                 if let error = error {
                     print("Error saving to cloudkit. Error: \(error.localizedDescription)")
                 }
-                user.hasAppAccount = true
+                user.hasAppAccount = 1
+                MessageController.sharedController.subscribeToMessages()
                 self.saveContext()
                 completion()
             })
@@ -140,6 +141,11 @@ class UserController {
         guard let users = (try? moc.executeFetchRequest(request) as! [User]) else {
             return
         }
+        if users.count < 1 {
+            print("No users to Check for App status")
+            completion(newAppAcctUsers: false, updatedUsers: nil)
+            return
+        }
         let phoneNumbers = users.flatMap({$0.phoneNumber})
         let cloudPredicate = NSPredicate(format: "phoneNumber IN %@", argumentArray: [phoneNumbers])
         
@@ -162,8 +168,11 @@ class UserController {
             for user in users {
                 let newUser = newUsers.filter{$0.phoneNumber == user.phoneNumber}
                 if newUser.count > 0 {
-                    self.updateContactsAppStatus(user)
-                    updatedUsers.append(user)
+                    self.updateContactsAppStatus(user, completion: { (wasSaved) in
+                        if wasSaved {
+                            updatedUsers.append(user)
+                        }
+                    })
                 }
             }
             
@@ -193,19 +202,44 @@ class UserController {
     }
 
 // Fetches One User from CoreData by using their phone number //
-func fetchCoreDataUserWithNumber(recordName: String) -> User? {
+    func fetchCoreDataUserWithNumber(number: String, completion: (user: User?) -> Void) {
     
     let request = NSFetchRequest(entityName: "User")
-    let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [recordName])
+    let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
     request.predicate = predicate
     guard let fetchedUsers = (try? moc.executeFetchRequest(request) as? [User]),
         let users = fetchedUsers, user = users.first else {
             print("Couldn't fetch user")
-            return nil
+            self.fetchCloudKitUserWithNumber(number, completion: { (contact) in
+                guard let contact = contact else {
+                    completion(user: nil)
+                    return
+                }
+                completion(user: contact)
+            })
+            return
     }
-    return user
+    completion(user: user)
     
 }
+ // Fetches Contact with number
+    func fetchCloudKitUserWithNumber(number: String, completion: (contact: User?) -> Void) {
+        
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
+        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            let contact = User(record: record)
+            contact?.cloudKitRecord = record
+            completion(contact: contact)
+            self.saveContext()
+            }) { (records, error) in
+                if let error = error {
+                    print("Couldn't fetch user in fetchCloudKitUserWithNumber. Error: \(error.localizedDescription)")
+                    completion(contact: nil)
+                } else {
+                    print("Fetched user in fetchCloudKitUserWithNumber")
+                }
+        }
+    }
 
 // Fetches the loggedInUsers Contacts From Cloudkit if they get deleted. //
 func fetchCloudKitContacts(completion: (hasUsers: Bool)->Void) {
@@ -259,7 +293,7 @@ func checkIfContactHasAccount(newContact: User, completion: (record: CKRecord?) 
     })
 }
 
-func checkForDuplicateContact(phoneNumber: String, completion: (hasContactAlready: Bool) -> Void) {
+    func checkForDuplicateContact(phoneNumber: String, completion: (hasContactAlready: Bool, isCKContact: Bool) -> Void) {
     
     let request = NSFetchRequest(entityName: "User")
     let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [phoneNumber])
@@ -269,16 +303,47 @@ func checkForDuplicateContact(phoneNumber: String, completion: (hasContactAlread
     
     if let users = users {
         if users.count > 0 {
-            completion(hasContactAlready: true)
+            checkIfContactIsInUsersCloudKitContacts(phoneNumber, completion: { (isCKContact) in
+                if isCKContact {
+                    completion(hasContactAlready: true, isCKContact: isCKContact)
+                } else {
+                    completion(hasContactAlready: true, isCKContact: isCKContact)
+                }
+                
+            })
         } else {
-            completion(hasContactAlready: false)
+            completion(hasContactAlready: false, isCKContact: false)
         }
     } else {
-        completion(hasContactAlready: false)
+        completion(hasContactAlready: false, isCKContact: false)
     }
     
 }
 
+    func checkIfContactIsInUsersCloudKitContacts(number: String, completion: (isCKContact: Bool) -> Void) {
+        
+        fetchCloudKitUserWithNumber(number) { (contact) in
+            guard let contact = contact,
+                contactReference = contact.cloudKitReference,
+                loggedInUser = self.loggedInUser,
+                loggedInUserRecord = loggedInUser.cloudKitRecord,
+                 loggedInUserReferences = loggedInUserRecord[User.contactsKey] as? [CKReference]   else {
+                    completion(isCKContact: false)
+                    return
+            }
+            
+            for loggedInUserReference in loggedInUserReferences {
+                if loggedInUserReference == contactReference {
+                    self.deleteContactsFromCoreData([contact])
+                    completion(isCKContact: true)
+                    return
+                }
+            }
+            self.deleteContactsFromCoreData([contact])
+            completion(isCKContact: false)
+        }
+    }
+    
 // Delete Contact
 
 func deleteContactFromCloudKit(contact: User) {
@@ -328,6 +393,7 @@ func deleteContactFromCloudKit(contact: User) {
                     } else {
                         print("Successfully deleted contact reference")
                     }
+                    self.deleteContactsFromCoreData([contact])
                     self.saveContext()
             })
             
@@ -360,6 +426,8 @@ func deleteContactFromCloudKit(contact: User) {
                             print("Successfully deleted contact reference")
                         }
                         self.saveContext()
+                        self.deleteContactsFromCoreData([contact])
+
                 })
             })
         }
@@ -368,8 +436,37 @@ func deleteContactFromCloudKit(contact: User) {
 
 
 
-func updateContactsAppStatus(contact: User) {
+    func updateContactsAppStatus(contact: User, completion: (wasSaved: Bool) -> Void) {
     contact.hasAppAccount = true
+    fetchUsersCloudKitRecord(contact) { (record) in
+        guard let record = record, loggedInUser = self.loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
+            print("Couldn't fetch Contact's Record to add to User's Contacts in CK")
+            return
+        }
+        
+        contact.cloudKitRecord = record
+        guard let contactReference = contact.cloudKitReference else {
+            print("no contact reference available in updateContactsAppStatus ")
+            return
+        }
+        
+        // save contact to loggedInUser record's contacts property
+        loggedInUser.contactReferences.append(contactReference)
+        loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
+        CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
+            
+            
+            }, completion: { (records, error) in
+                if let error = error {
+                    print("Error saving Contact to User's Cloudkit contacts field. Error: \(error.localizedDescription)")
+                    completion(wasSaved: false)
+                } else {
+                    print("Saved Contact to Cloudkit")
+                    completion(wasSaved: true)
+                }
+            
+        })
+    }
 }
 
 func deleteContactsFromCoreData(users: [User]) {

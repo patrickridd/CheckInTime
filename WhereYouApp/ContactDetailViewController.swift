@@ -135,6 +135,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
         
         MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: dueDatePicker.date)
+        
     }
     
     @IBAction func screenTapped(sender: AnyObject) {
