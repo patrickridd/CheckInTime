@@ -79,7 +79,7 @@ class MessageController {
                 let senderReference = CKReference(recordID: senderRecord.recordID, action: .None)
                 let receiverReference = CKReference(recordID: receiverRecord.recordID, action: .None)
                 messageRecord[Message.users] = [senderReference, receiverReference]
-                
+            
                 messageRecord[Message.timeDueKey] = message.timeDue
                 messageRecord[Message.timeSentKey] = message.timeSent
                 
@@ -111,7 +111,6 @@ class MessageController {
                 let message = Message(record: record)
                 print("\(message?.sender.name)")
                 
-                
             }) { (records, error) in
                 if let error = error {
                     print("No messages. Error: \(error.localizedDescription)")
@@ -131,8 +130,12 @@ class MessageController {
     
     func fetchUnsyncedMessagesFromCloudKitToCoreData(user: User) {
         
-        let request = NSFetchRequest(entityName: "Message")
         
+        let request = NSFetchRequest(entityName: "Message")
+        guard let reference = user.cloudKitReference else {
+            print("No user reference to fetch unsynced records")
+            return
+        }
         // Get messages in CoreData
         guard let coreDataMessages = (try? moc.executeFetchRequest(request) as! [Message]) else {
             return
@@ -142,8 +145,8 @@ class MessageController {
         let messageReferences = coreDataMessages.flatMap({$0.cloudKitReference})
         let messagePredicate = NSPredicate(format: "NOT(recordID IN %@)", argumentArray: [messageReferences])
         // The predicate will fetch for any Message that doesn't have a recordID associated with a message CoreData already has
-        let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [user.phoneNumber])
-        let compoundPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [predicate,messagePredicate])
+        let usersPredicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [messagePredicate,usersPredicate])
         
         CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: compoundPredicate, recordFetchedBlock: { (record) in
             
@@ -206,8 +209,6 @@ class MessageController {
                 saveContext()
                 return
         }
-        
-        
         self.deleteMessage(fetchedMessage)
         let message = Message(record: record)
         print("\(message?.sender.name)")

@@ -89,8 +89,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @IBAction func whereYouAppButtonTapped(sender: AnyObject) {
-        
-        
         guard let sender = UserController.sharedController.loggedInUser,
             receiver = contact else {
                 print("No logged in user or contact")

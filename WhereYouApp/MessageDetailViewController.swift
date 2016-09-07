@@ -266,7 +266,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
         // Get current location
         
-        checkCoreLocationPermission()
         guard let location = location else {
             print("Couldn't get Current Location")
             return

@@ -97,16 +97,14 @@ class UserController {
             completion(hasAccount: false)
             return
         }
-        
-  
-        
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
             self.contacts = contacts
             self.checkIfContactsHaveSignedUpForApp(contacts)
-            MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
             self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
                 // Subscribe to Message Changes.
+                MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
+
                 CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
                     guard let _ = subscription else {
                         print("Trying to subscribe to My Messages")
@@ -232,7 +230,6 @@ class UserController {
             print("Couldn't find index for Contact")
             return
         }
-    
         self.contacts.removeAtIndex(index)
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record else {
@@ -244,6 +241,7 @@ class UserController {
             
            // guard let reference = contact.cloudKitReference,
           guard let loggedInUser = self.loggedInUser else {
+                print("no logged In user")
                 return
             }
             
@@ -257,6 +255,7 @@ class UserController {
                 self.moc.deleteObject(contact)
                 self.saveContext()
                 guard let index = references.indexOf(reference) else {
+                    print("No index")
                     return
                 }
                 
@@ -289,7 +288,6 @@ class UserController {
                     guard let index = references.indexOf(reference) else {
                         return
                     }
-                    
                     references.removeAtIndex(index)
                     
                     record[User.contactsKey] = references
