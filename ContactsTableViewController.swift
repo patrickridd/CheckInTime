@@ -71,10 +71,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             completionHandler(accessGranted: false)
         }
     }
-    
-    
-    
-    
+
     func showMessage(alert: String) {
         let alertController = UIAlertController(title: "WhereYouApp", message: alert, preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -119,6 +116,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             // Add phone number to new contact.
             let phoneNumber = contactPhoneNumber
+            if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
+                self.presentTryingToAddYourselfAlert()
+                return
+            }
             
             UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready) in
                 if hasContactAlready {
@@ -215,6 +216,18 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
     }
     
+    // Tells User that they can't add themselves as a Contact.
+    func presentTryingToAddYourselfAlert() {
+        let alert = UIAlertController(title: "You have selected yourself as a Contact", message: "You cant add yourself at this time", preferredStyle: .Alert)
+        
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(alert, animated: true, completion: nil)
+        })
+
+        
+    }
     func presentNoUserAccount(newContact: User) {
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
         
