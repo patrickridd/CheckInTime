@@ -104,7 +104,7 @@ class UserController {
             self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
                 // Subscribe to Message Changes.
                 MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
-
+                
                 CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
                     guard let _ = subscription else {
                         print("Trying to subscribe to My Messages")
@@ -114,7 +114,7 @@ class UserController {
                     print("You are subscribed to received messages")
                 }
                 completion(hasAccount: true)
-
+                
             })
             
         }
@@ -223,6 +223,26 @@ class UserController {
         })
     }
     
+    func checkForDuplicateContact(phoneNumber: String, completion: (hasContactAlready: Bool) -> Void) {
+        
+        let request = NSFetchRequest(entityName: "User")
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [phoneNumber])
+        request.predicate = predicate
+        
+        let users = (try? moc.executeFetchRequest(request)) as? [User]
+        
+        if let users = users {
+            if users.count > 0 {
+                completion(hasContactAlready: true)
+            } else {
+                completion(hasContactAlready: false)
+            }
+        } else {
+            completion(hasContactAlready: false)
+        }
+        
+    }
+    
     // Delete Contact
     
     func deleteContact(contact: User) {
@@ -239,8 +259,8 @@ class UserController {
             let contactRecordName = record.recordID.recordName
             contact.cloudKitRecord = record
             
-           // guard let reference = contact.cloudKitReference,
-          guard let loggedInUser = self.loggedInUser else {
+            // guard let reference = contact.cloudKitReference,
+            guard let loggedInUser = self.loggedInUser else {
                 print("no logged In user")
                 return
             }
@@ -307,7 +327,7 @@ class UserController {
                     })
                 })
             }
-        }   
+        }
     }
     
     // Saves the ManagedObject Context

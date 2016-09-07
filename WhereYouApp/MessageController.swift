@@ -189,6 +189,30 @@ class MessageController {
     }
     
     
+    
+    
+    func createUserContactFromNewMessage(messageSender: User) {
+        
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [messageSender.phoneNumber])
+        
+        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            let user = User(record: record)
+            self.saveContext()
+            
+            }) { (records, error) in
+                if let error = error {
+                    print("Error finding sender of message to add to contacts. Error: \(error.localizedDescription)")
+                } else {
+                    print("Saved to contact to core data")
+                }
+                
+        
+        }
+        
+        
+    }
+    
+    
     /* This method takes a record obtained from a remote notification and discerns if it is a new message or an updated one.
      If it is a new message it will simply create a new one and save it to the context. If it is an updated message then it deletes the original message from core data and creates the new updated one and saves it to core data.
      */
@@ -201,9 +225,15 @@ class MessageController {
         guard let fetchedMessages = try? moc.executeFetchRequest(request) as? [Message],
             messages = fetchedMessages where messages.count > 0,
             let fetchedMessage = messages.first else {
+                
                 let message = Message(record: record)!
-                print("\(message.sender.name)")
-
+                let sender = message.sender
+                let user = UserController.sharedController.contacts.filter{$0.phoneNumber == sender.phoneNumber  }
+                
+                if user.isEmpty {
+                    createUserContactFromNewMessage(sender)
+                }
+                
                 scheduleLocalNotification(message)
                 
                 saveContext()
@@ -211,6 +241,7 @@ class MessageController {
         }
         self.deleteMessage(fetchedMessage)
         let message = Message(record: record)
+        
         print("\(message?.sender.name)")
         saveContext()
     }

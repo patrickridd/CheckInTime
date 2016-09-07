@@ -50,7 +50,11 @@ class MessageTableViewCell: UITableViewCell {
             } else {
                 self.userContact = message.sender
             }
+            if userContact == nil {
+                
+            }
             guard let userContact = self.userContact else {
+                
                 print("No contact in MessageTableViewCell")
                 return
             }
