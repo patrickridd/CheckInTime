@@ -316,7 +316,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             let contact = UserController.sharedController.contacts[indexPath.row]
             
             contactDetailVC.contact = contact
-        contactDetailVC.hidesBottomBarWhenPushed = true
         // Pass the selected object to the new view controller.
         }
     }

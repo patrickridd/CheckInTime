@@ -84,9 +84,8 @@ class MessageController {
                 messageRecord[Message.timeSentKey] = message.timeSent
                 
                 CloudKitManager.cloudKitController.saveRecord(messageRecord) { (record, error) in
-                    // self.addSubscriptionToMessage(message, alertBody: "New WhereYouApp Update")
-                    //     self.messages.append(message)
                     print("Saved message to cloudkit")
+                    self.saveContext()
                 }
             })
             

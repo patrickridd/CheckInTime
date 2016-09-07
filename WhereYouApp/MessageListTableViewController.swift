@@ -141,7 +141,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             let indexPath = tableView.indexPathForSelectedRow else {
                 return
             }
-        messageDetailVC.hidesBottomBarWhenPushed = true
         let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message
         messageDetailVC.message = message
         
