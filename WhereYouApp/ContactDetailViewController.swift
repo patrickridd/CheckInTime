@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate {
     
     
     var contact: User?
@@ -46,6 +46,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
+    
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         // self.navigationController?.tabBarController?.
@@ -74,6 +76,16 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let _ = try? fetchedResultsController.performFetch()
         
         
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
+        dateTextField.resignFirstResponder()
+        if gestureRecognizer is UITapGestureRecognizer {
+            let location = touch.locationInView(tableView)
+            return (tableView.indexPathForRowAtPoint(location) == nil)
+        }
+        return true
     }
     
     @IBAction func whereYouAppButtonTapped(sender: AnyObject) {
