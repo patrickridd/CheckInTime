@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		216B8AF71D7F83E700FB33CF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8AF61D7F83E700FB33CF /* ContactTableViewCell.swift */; };
+		216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8B161D81084100FB33CF /* CustomImageView.swift */; };
 		219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */; };
 		21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AEA87B1D736770005EF030 /* AppDelegate.swift */; };
 		21AEA8811D736770005EF030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA87F1D736770005EF030 /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		216B8AF61D7F83E700FB33CF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
+		216B8B161D81084100FB33CF /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomImageView.swift; path = "../../../DevMt/Unit 6/Day 2/NewAnimations/NewAnimations/CustomImageView.swift"; sourceTree = "<group>"; };
 		219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21AEA8781D736770005EF030 /* WhereYouApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhereYouApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21AEA87B1D736770005EF030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				21D476FD1D75FC580094FCBC /* User.swift */,
 				21D477011D75FC580094FCBC /* Message.swift */,
+				216B8B161D81084100FB33CF /* CustomImageView.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */,
 				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
 				219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */,
+				216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */,
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
 				21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */,
 				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,

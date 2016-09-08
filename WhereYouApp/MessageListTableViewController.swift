@@ -27,6 +27,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 return
             }
         })
+        setupView()
+    
     }
     
     func presentLoginScreen() {
@@ -35,6 +37,14 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 dispatch_async(dispatch_get_main_queue(), {
                     self.presentViewController(loginVC, animated: true, completion: nil)
         })
+    }
+    
+    
+    func setupView() {
+     //   guard let user = UserController.sharedController.loggedInUser else { return }
+
+       // UINavigationBar.appearance().barTintColor = UIColor ( red: 0.8205, green: 0.1151, blue: 0.6333, alpha: 1.0 )
+        UINavigationBar.appearance().tintColor = UIColor ( red: 0.0024, green: 0.7478, blue: 0.8426, alpha: 1.0 )
     }
     
     // Data Source Methods
@@ -145,6 +155,14 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         messageDetailVC.message = message
         
      // Pass the selected object to the new view controller.
+            
+        } else if segue.identifier == "profileSegue" {
+            guard let profileVC = segue.destinationViewController as? ProfileViewController,
+                let user = UserController.sharedController.loggedInUser else {
+                    return
+            }
+            
+            profileVC.loggedInUser = user
             
         }
      }
