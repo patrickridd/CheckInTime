@@ -84,8 +84,7 @@ class User: NSManagedObject {
     
  
     convenience init?(record: CKRecord) {
-        guard let name = record[User.nameKey] as? String,
-            phoneNumber = record[User.phoneNumberKey] as? String,
+        guard let phoneNumber = record[User.phoneNumberKey] as? String,
             image = record[User.imageKey] as? CKAsset else {
                 return nil
         }
@@ -96,7 +95,6 @@ class User: NSManagedObject {
         
         self.init(entity: entity, insertIntoManagedObjectContext: context)
         
-        self.name = name
         self.phoneNumber = phoneNumber
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {

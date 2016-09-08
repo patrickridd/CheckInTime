@@ -33,68 +33,67 @@ class MessageTesterViewController: UIViewController {
     
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        
     }
 
-    @IBAction func sendButtonTapped(sender: AnyObject) {
-        
-        dueDateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
-
-        
-        guard let user = UserController.sharedController.loggedInUser else {
-            return
-        }
-        
-        UserController.sharedController.fetchContactsFromCoreData { (contacts) in
-            if contacts.count == 0 {
-                let predicate = NSPredicate(format: "name != %@", argumentArray: [user.name])
-                
-                CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
-                    guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {
-                        return
-                    }
-                    loggedInUser.contacts.append(receiver)
-
-                    UserController.sharedController.saveContext()
-                    
-                    guard let receiverRecord = receiver.cloudKitRecord,
-                        loggedInUserRecord = loggedInUser.cloudKitRecord else {
-                    print("Couldn't get CKRecord from NSData")
-                        return
-                    }
-                    let reference = CKReference(recordID: receiverRecord.recordID, action: .None)
-                    
-                    loggedInUser.contactReferences.append(reference)
-                    loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
-                    receiver.contactReferences.append(loggedInUser.cloudKitReference!)
-                    receiverRecord[User.contactsKey] = receiver.contactReferences
-                    CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord,receiverRecord], perRecordCompletion: { (record, error) in
-                        }, completion: { (records, error) in
-                            if let error = error {
-                                print("Error adding contact to user record. Error: \(error.localizedDescription)")
-                            } else {
-                                print("Successfully added Contact to user record")
-                            }
-                    })
-                    MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
-                    
-                }) { (records, error) in
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                }
-            }
-            
-            else {
-                guard let receiver = contacts.first else { return }
-                UserController.sharedController.fetchContactsFromCoreData({_ in 
-                    
-                })
-                
-                MessageController.sharedController.createMessage(user, receiver: receiver, timeDue: NSDate())
-                self.dismissViewControllerAnimated(true, completion: nil)
-            }
-            
-        }
-    }
+//    @IBAction func sendButtonTapped(sender: AnyObject) {
+//        
+//        dueDateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
+//
+//        
+//        guard let user = UserController.sharedController.loggedInUser else {
+//            return
+//        }
+//        
+//        UserController.sharedController.fetchContactsFromCoreData { (contacts) in
+//            if contacts.count == 0 {
+//                let predicate = NSPredicate(format: "name != %@", argumentArray: [user.name])
+//                
+//                CloudKitManager.cloudKitController.fetchRecordsWithType("User", predicate: predicate, recordFetchedBlock: { (record) in
+//                    guard let receiver = User(record: record), let loggedInUser =  UserController.sharedController.loggedInUser else {
+//                        return
+//                    }
+//                    loggedInUser.contacts.append(receiver)
+//
+//                    UserController.sharedController.saveContext()
+//                    
+//                    guard let receiverRecord = receiver.cloudKitRecord,
+//                        loggedInUserRecord = loggedInUser.cloudKitRecord else {
+//                    print("Couldn't get CKRecord from NSData")
+//                        return
+//                    }
+//                    let reference = CKReference(recordID: receiverRecord.recordID, action: .None)
+//                    
+//                    loggedInUser.contactReferences.append(reference)
+//                    loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
+//                    receiver.contactReferences.append(loggedInUser.cloudKitReference!)
+//                    receiverRecord[User.contactsKey] = receiver.contactReferences
+//                    CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord,receiverRecord], perRecordCompletion: { (record, error) in
+//                        }, completion: { (records, error) in
+//                            if let error = error {
+//                                print("Error adding contact to user record. Error: \(error.localizedDescription)")
+//                            } else {
+//                                print("Successfully added Contact to user record")
+//                            }
+//                    })
+//                    MessageController.sharedController.createMessage(loggedInUser, receiver: receiver, timeDue: self.dueDatePicker.date)
+//                    
+//                }) { (records, error) in
+//                    self.dismissViewControllerAnimated(true, completion: nil)
+//                }
+////            }
+////            
+//      //      else {
+//                guard let receiver = contacts.first else { return }
+//                UserController.sharedController.fetchContactsFromCoreData({_ in 
+//                    
+//             
+//                
+//                MessageController.sharedController.createMessage(user, receiver: receiver, timeDue: NSDate())
+//                self.dismissViewControllerAnimated(true, completion: nil)
+//            }
+//            
+//        }
+//        }
     
     @IBAction func screenTapped(sender: AnyObject) {
         dueDateTextField.resignFirstResponder()

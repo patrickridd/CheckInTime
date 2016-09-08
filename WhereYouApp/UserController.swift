@@ -58,7 +58,7 @@ class UserController {
             user.originalRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
             
             // Save user properties to cloudkit
-            customUserRecord[User.nameKey] = user.name
+            customUserRecord[User.nameKey] = user.name ?? user.phoneNumber
             customUserRecord[User.phoneNumberKey] = user.phoneNumber
             customUserRecord[User.imageKey] = user.imageAsset
             self.loggedInUser = user

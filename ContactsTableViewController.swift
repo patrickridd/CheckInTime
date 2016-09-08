@@ -270,7 +270,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
     }
     func presentNoUserAccount(newContact: User) {
-        let noUserAccountAlert = UIAlertController(title: "\(newContact.name) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in
@@ -300,7 +300,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     func presentUserHasAccount(newContact: User) {
-        let alert = UIAlertController(title: "Success" , message: "\(newContact.name) has WhereYouApp", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Success" , message: "\(newContact.name ?? newContact.phoneNumber) has WhereYouApp", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Awesome", style: .Cancel, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
@@ -344,7 +344,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             cell.textLabel?.textColor = UIColor.lightGrayColor()
         }
-        cell.textLabel?.text = contact.name
+        cell.textLabel?.text = contact.name ?? contact.phoneNumber
         // Configure the cell...
         
         return cell

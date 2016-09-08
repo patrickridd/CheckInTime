@@ -80,7 +80,7 @@ class ContactTableViewCell: UITableViewCell {
             return
         }
         
-        hasRespondedLabel.text = "Waiting for \(userContact.name)'s Response"
+        hasRespondedLabel.text = "Waiting for \(userContact.name ?? userContact.phoneNumber)'s Response"
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
         shouldRespondByLabel.text = "Should respond by \(dateFormatter.stringFromDate(message.timeDue))"
         
@@ -92,9 +92,9 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.text = "\(userContact.name) wants to know WhereYouApp"
+        hasRespondedLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know WhereYouApp"
         timeSentLabel.text = ""
-        shouldRespondByLabel.text = "\(userContact.name) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
     }
     
     // Cell tells User that user's contact responded to WhereYouApp request
@@ -103,7 +103,7 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.text = "\(userContact.name) responded to WhereYouApp request"
+        hasRespondedLabel.text = "\(userContact.name ?? userContact.phoneNumber) responded to WhereYouApp request"
         shouldRespondByLabel.text = ""
         
         guard let timeResponded = message.timeResponded else {
@@ -120,7 +120,7 @@ class ContactTableViewCell: UITableViewCell {
             return
         }
         
-        hasRespondedLabel.text = "You let \(userContact.name) know WhereYouApp"
+        hasRespondedLabel.text = "You let \(userContact.name ?? userContact.phoneNumber) know WhereYouApp"
         timeSentLabel.text = "You responded at \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
     }

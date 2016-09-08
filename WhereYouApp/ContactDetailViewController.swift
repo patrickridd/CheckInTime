@@ -62,14 +62,14 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     func updateWith(contact: User) {
         self.contactImage.image = contact.photo
-        self.nameLabel.text = contact.name
+        self.nameLabel.text = contact.name ?? contact.phoneNumber
         self.numberLabel.text = contact.phoneNumber
         
         
     }
     
     func presentNoUserAccount(newContact: User) {
-        let noUserAccountAlert = UIAlertController(title: "\(newContact.name) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in

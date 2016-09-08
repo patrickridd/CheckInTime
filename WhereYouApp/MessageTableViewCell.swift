@@ -60,7 +60,8 @@ class MessageTableViewCell: UITableViewCell {
             }
         
             // Set contactlabel and image to the name of the loggedInUser's contact
-            self.contactName.text = userContact.name
+            self.contactName.text = userContact.name ?? userContact.phoneNumber
+           
             self.profileImage.image = userContact.photo
             
             // Sender is looking at message that has not been responded to
@@ -91,7 +92,7 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
 
-        hasRespondedLabel.text = "Waiting for \(userContact.name)'s Response"
+        hasRespondedLabel.text = "Waiting for \(userContact.name ?? userContact.phoneNumber)'s Response"
         timeMessageSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
         shouldRespondByLabel.text = "Should respond by \(dateFormatter.stringFromDate(message.timeDue))"
         
@@ -103,9 +104,9 @@ class MessageTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.text = "\(userContact.name) wants to know WhereYouApp"
+        hasRespondedLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know WhereYouApp"
         timeMessageSentLabel.text = ""
-        shouldRespondByLabel.text = "\(userContact.name) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
     }
     
     // Cell tells User that user's contact responded to WhereYouApp request
@@ -114,7 +115,7 @@ class MessageTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.text = "\(userContact.name) responded to WhereYouApp request"
+        hasRespondedLabel.text = "\(userContact.name ?? userContact.phoneNumber) responded to WhereYouApp request"
         shouldRespondByLabel.text = ""
 
         guard let timeResponded = message.timeResponded else {
@@ -131,7 +132,7 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         
-        hasRespondedLabel.text = "You let \(userContact.name) know WhereYouApp"
+        hasRespondedLabel.text = "You let \(userContact.name ?? userContact.phoneNumber) know WhereYouApp"
         timeMessageSentLabel.text = "You responded at \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
     }

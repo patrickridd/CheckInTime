@@ -13,9 +13,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var loggedInUser: User?
     
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var usernameTextField: UITextField!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,10 +49,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         
         loggedInUser.imageData = newImageData
-        
-        if let newName = usernameTextField.text where newName.characters.count > 0{
-            loggedInUser.name = newName
-        }
         
         CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
             
@@ -136,5 +129,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         imageView.image = image
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
     
 }

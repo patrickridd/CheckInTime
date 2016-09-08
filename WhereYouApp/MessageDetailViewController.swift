@@ -43,11 +43,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             mapView.setRegion(region, animated: true)
             
             let myAnnotation = MKPointAnnotation()
-            myAnnotation.title = loggedInUser?.name
+            myAnnotation.title = loggedInUser?.name ?? loggedInUser?.phoneNumber
             
             if let text = messageTextView.text where text != self.defaultMessage {
                 myAnnotation.subtitle = text
-            } else if let loggedInName = loggedInUser?.name {
+            } else if let loggedInName = loggedInUser?.name ?? loggedInUser?.phoneNumber {
                 myAnnotation.subtitle = "Where \(loggedInName) App"
             }
             myAnnotation.coordinate = coordinate
@@ -91,7 +91,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         self.message = message
         // Put the Name of whoever isn't the loggedInUser in the titleLabel
         
-        if message.sender.name == user.name {
+        if message.sender.name ?? message.sender.phoneNumber == user.name ?? user.phoneNumber {
             self.usersContact = message.receiver
         } else {
             self.usersContact = message.sender
@@ -106,7 +106,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func updateWith(message: Message) {
         
         // Set title to the name of the loggedInUser's contact
-        self.titleLabel.title = usersContact?.name
+        self.titleLabel.title = usersContact?.name ?? usersContact?.phoneNumber
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
@@ -136,7 +136,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     
     func updateWithWaitingForReceiverResponse(message: Message) {
         // Update the send button title
-            sendButton.setTitle("Waiting For \(usersContact!.name) to Respond", forState: .Normal)
+            sendButton.setTitle("Waiting For \(usersContact!.name ?? usersContact!.phoneNumber) to Respond", forState: .Normal)
     
         self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
         // Hide TextView
@@ -190,7 +190,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         myAnnotation.coordinate = coordinate
         
-        myAnnotation.title = self.usersContact?.name
+        myAnnotation.title = self.usersContact?.name ?? usersContact?.phoneNumber
         // If the Contact decides to send a text message put it in the annotation else give it the defaultMessage
         if let messageText = message.text {
             myAnnotation.subtitle = messageText
@@ -217,7 +217,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         messageLabel.hidden = true
         
         // Set time due label
-        self.timeDueLabel.text = "\(usersContact!.name) requests to know WhereYouApp by \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "\(usersContact!.name ?? usersContact!.phoneNumber) requests to know WhereYouApp by \(dateFormatter.stringFromDate(message.timeDue))"
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -282,7 +282,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if messageTextView.text != defaultMessage {
             message.text = messageTextView.text
         } else {
-            message.text = "Where \(loggedInUser.name) App"
+            message.text = "Where \(loggedInUser.name ?? loggedInUser.phoneNumber) App"
         }
         // Input time responded
         message.timeResponded = NSDate()
@@ -351,12 +351,12 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if let text = message.text {
             self.messageLabel.text = text
             let annotation = MKPointAnnotation()
-            annotation.title = loggedInUser.name
+            annotation.title = loggedInUser.name ?? loggedInUser.phoneNumber
             annotation.subtitle = text
             
             mapView.addAnnotation(annotation)
         } else {
-            self.messageLabel.text = "Where\(loggedInUser.name)App"
+            self.messageLabel.text = "Where\(loggedInUser.name ?? loggedInUser.phoneNumber)App"
         }
         
         // Show the time you responded
@@ -373,6 +373,13 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
+    
+    @IBAction func reportButtonTapped(sender: AnyObject) {
+        
+        
+        
     }
     
     

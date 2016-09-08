@@ -16,7 +16,7 @@ extension User {
 
     @NSManaged var ckRecordID: NSData
     @NSManaged var imageData: NSData
-    @NSManaged var name: String
+    @NSManaged var name: String?
     @NSManaged var originalRecordID: NSData
     @NSManaged var phoneNumber: String
     @NSManaged var recordName: String

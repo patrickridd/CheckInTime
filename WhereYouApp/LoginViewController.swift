@@ -54,16 +54,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
 
     @IBAction func submitButtonTapped(sender: AnyObject) {
-        guard let image = imageView.image, let name = nameTextField.text where name.characters.count > 0 else {
-            self.presentNameAlert()
+        guard let image = imageView.image else {
             return
         }
+        
             guard let phoneNumber = numberTextField.text where phoneNumber.characters.count >= 10 else {
                 self.presentNumberAlert()
                 return
         }
         
-        UserController.sharedController.createUser(name, phoneNumber: phoneNumber, image: image) {
+        UserController.sharedController.createUser("", phoneNumber: phoneNumber, image: image) {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }

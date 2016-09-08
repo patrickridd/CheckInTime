@@ -123,8 +123,7 @@ class MessageController {
             let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
             
             CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-                let message = Message(record: record)
-                print("\(message?.sender.name)")
+                let _ = Message(record: record)
                 
             }) { (records, error) in
                 if let error = error {
@@ -251,7 +250,6 @@ class MessageController {
         self.deleteMessagesFromCoreData([fetchedMessage])
         let message = Message(record: record)
         
-        print("\(message?.sender.name)")
         saveContext()
     }
     
@@ -260,7 +258,7 @@ class MessageController {
         
         let localNotification = UILocalNotification()
         localNotification.alertTitle = "WhereYouApp"
-        localNotification.alertBody =   "\(message.sender.name) wants you to check in now"
+        localNotification.alertBody =   "\(message.sender.name ?? message.sender.phoneNumber) wants you to check in now"
         localNotification.fireDate = message.timeDue
         
         localNotification.repeatInterval = NSCalendarUnit.Day
@@ -273,6 +271,7 @@ class MessageController {
         for message in messages {
             moc.deleteObject(message)
         }
+        saveContext()
     }
     
     
