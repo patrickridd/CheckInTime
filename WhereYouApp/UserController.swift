@@ -118,6 +118,17 @@ class UserController {
         }
     }
     
+    // Adds contact to Contacts and then orders the contacts with the new Contact alphabetically. 
+    func addContactAndOrderList(contact: User) {
+        var contactList = UserController.sharedController.contacts
+        contactList.append(contact)
+        
+        let orderedList = contactList.sort{$0.0.name < $0.1.name}
+        UserController.sharedController.contacts = orderedList
+        
+    }
+
+    
     // Fetches all users in core data except the Logged In User
     func fetchContactsFromCoreData(completion: (contacts: [User]) -> Void) {
         let contactRequest = NSFetchRequest(entityName: "User")
@@ -128,7 +139,8 @@ class UserController {
                 return
         }
         let contacts = users.filter({$0.phoneNumber != loggedInUser.phoneNumber})
-        completion(contacts: contacts)
+        let contactsInOrder = contacts.sort{$0.0.name < $0.1.name}
+        completion(contacts: contactsInOrder)
         
     }
     
@@ -216,6 +228,7 @@ class UserController {
                     return
                 }
                 completion(user: contact)
+                return
             })
             return
     }
@@ -232,11 +245,11 @@ class UserController {
             completion(contact: contact)
             self.saveContext()
             }) { (records, error) in
-                if let error = error {
-                    print("Couldn't fetch user in fetchCloudKitUserWithNumber. Error: \(error.localizedDescription)")
-                    completion(contact: nil)
+                if let _ = error {
+
                 } else {
-                    print("Fetched user in fetchCloudKitUserWithNumber")
+                    print("Couldn't fetch CKRecord in fetchCloudKitUserWithNumber")
+                    completion(contact: nil)
                 }
         }
     }

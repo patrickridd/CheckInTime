@@ -50,6 +50,7 @@ class ContactTableViewCell: UITableViewCell {
             self.userContact = message.sender
         }
    
+   
         
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {

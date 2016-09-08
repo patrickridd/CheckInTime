@@ -138,6 +138,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                 return
                             } else {
                                 print("Failed to save contact to cloudkit. Try again.")
+                                self.presentFailedToAddContact()
                                 return
                             }
                         })
@@ -158,7 +159,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             newContact.hasAppAccount = false
                             // Add contact to Logged In User's contact
                             loggedInUser.contacts.append(newContact)
-                            UserController.sharedController.contacts.append(newContact)
+                            
+                            UserController.sharedController.addContactAndOrderList(newContact)
                             UserController.sharedController.saveContext()
                             
                             self.presentNoUserAccount(newContact)
@@ -178,7 +180,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
-
+    
     // Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
     func getMobileFormatedNumber(numbers: [CNLabeledValue]) -> [String] {
         
@@ -235,19 +237,19 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     // Tell user that they Successfully Added Contact
     func presentAddedContactSuccessfully() {
-        let alert = UIAlertController(title: "Success Fully Added Contact", message: nil, preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Successfully Added Contact", message: nil, preferredStyle: .Alert)
         let action = UIAlertAction(title: "Sweet", style: .Cancel, handler: nil)
         alert.addAction(action)
-                dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
-
+        
     }
     
     // Tells user that the Contact they are tyring to add is already in their contacts list.
     func presenthasContactAlreadyAlert(name: String) {
         let alert = UIAlertController(title: "You already have \(name) in your contacts", message: nil, preferredStyle: .Alert)
-        let action = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
@@ -319,11 +321,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
     }
     
-    
-    func newContactAdded(notification: NSNotification) {
+    func newContactAdded(notification: NSNotification){
         dispatch_async(dispatch_get_main_queue(), {
             self.tableView.reloadData()
-            
         })
         
     }

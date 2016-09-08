@@ -103,13 +103,13 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func setupFetchController(contact: User) {
         
         let request = NSFetchRequest(entityName: "Message")
-        let descriptor = NSSortDescriptor(key: "timeSent", ascending: true)
+        let descriptor = NSSortDescriptor(key: "timeSent", ascending: false)
         request.sortDescriptors = [descriptor]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
         request.predicate = compoundPredicate
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "receiver", cacheName: nil  )
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded" , cacheName: nil  )
         
         let _ = try? fetchedResultsController.performFetch()
         
@@ -132,10 +132,18 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 print("No logged in user or contact")
                 return
         }
+        if receiver.hasAppAccount == 0 {
+            self.presentNoUserAccount(receiver)
+            return
+        }
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
         
         MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: dueDatePicker.date)
         
+            dispatch_async(dispatch_get_main_queue(), {
+            
+        })
+
     }
     
     @IBAction func screenTapped(sender: AnyObject) {
@@ -161,6 +169,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? ContactTableViewCell, let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
             return UITableViewCell()
+        }
+        if message.hasResponded == 1 {
+            cell.backgroundColor = UIColor.lightGrayColor()
         }
         cell.updateWith(message)
         
