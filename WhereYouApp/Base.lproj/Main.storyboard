@@ -481,54 +481,64 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EI3-ja-iMV">
-                                <rect key="frame" x="6" y="324" width="308" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="enter name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EI3-ja-iMV">
+                                <rect key="frame" x="6" y="331" width="308" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LY2-nd-Ubl">
-                                <rect key="frame" x="135" y="420" width="49" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LY2-nd-Ubl">
+                                <rect key="frame" x="135" y="407" width="49" height="30"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
                                     <action selector="submitButtonTapped:" destination="kgn-wK-eCI" eventType="touchUpInside" id="7Ki-O2-Tqi"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k4k-2i-PyO">
-                                <rect key="frame" x="86" y="281" width="148" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your 10 digit Mobile Phone (e.g. 0123456789)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ohH-Gz-OES">
+                                <rect key="frame" x="6" y="372" width="308" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ZKF-PA-3Xv" customClass="CustomImageView" customModule="WhereYouApp">
+                                <rect key="frame" x="36" y="74" width="248" height="248"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ZKF-PA-3Xv" secondAttribute="height" multiplier="1:1" id="3n8-Ld-6vF"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="104"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k4k-2i-PyO">
+                                <rect key="frame" x="86" y="291" width="148" height="41"/>
                                 <state key="normal" title="Tap To Change Photo"/>
                                 <connections>
                                     <action selector="changePhotoButtonTapped:" destination="kgn-wK-eCI" eventType="touchUpInside" id="7lH-0C-wmJ"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your 10 digit Mobile Phone (e.g. 0123456789)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ohH-Gz-OES">
-                                <rect key="frame" x="6" y="365" width="308" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ZKF-PA-3Xv" customClass="CustomImageView" customModule="WhereYouApp">
-                                <rect key="frame" x="38" y="92" width="241" height="227"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="197"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="ohH-Gz-OES" secondAttribute="trailing" constant="-10" id="0km-US-gaN"/>
+                            <constraint firstItem="ZKF-PA-3Xv" firstAttribute="top" secondItem="zna-nf-KBf" secondAttribute="bottom" constant="10" id="1EY-Hm-1H2"/>
                             <constraint firstItem="ZKF-PA-3Xv" firstAttribute="centerX" secondItem="VYl-fw-L3a" secondAttribute="centerX" id="2en-a4-09f"/>
+                            <constraint firstItem="LY2-nd-Ubl" firstAttribute="top" secondItem="ohH-Gz-OES" secondAttribute="bottom" constant="5" id="F1O-rq-31A"/>
                             <constraint firstItem="EI3-ja-iMV" firstAttribute="leading" secondItem="VYl-fw-L3a" secondAttribute="leadingMargin" constant="-10" id="Ffn-Gc-Wto"/>
+                            <constraint firstItem="EI3-ja-iMV" firstAttribute="top" secondItem="k4k-2i-PyO" secondAttribute="bottom" constant="-1" id="GVx-Xe-KJa"/>
+                            <constraint firstItem="ohH-Gz-OES" firstAttribute="height" secondItem="EI3-ja-iMV" secondAttribute="height" id="HJB-SC-vRl"/>
                             <constraint firstItem="ZKF-PA-3Xv" firstAttribute="top" secondItem="zna-nf-KBf" secondAttribute="bottom" constant="10" id="L3w-YR-khN"/>
+                            <constraint firstItem="k4k-2i-PyO" firstAttribute="top" secondItem="zna-nf-KBf" secondAttribute="bottom" constant="227" id="MaD-mU-c3u"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EI3-ja-iMV" secondAttribute="trailing" constant="-10" id="Oir-l1-8ev"/>
+                            <constraint firstItem="k4k-2i-PyO" firstAttribute="centerX" secondItem="EI3-ja-iMV" secondAttribute="centerX" id="PtU-TJ-8Lw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ZKF-PA-3Xv" secondAttribute="trailing" constant="20" id="R8F-Kz-gxT"/>
                             <constraint firstItem="ohH-Gz-OES" firstAttribute="leading" secondItem="VYl-fw-L3a" secondAttribute="leadingMargin" constant="-10" id="RLl-f8-oPE"/>
                             <constraint firstItem="ZKF-PA-3Xv" firstAttribute="height" secondItem="VYl-fw-L3a" secondAttribute="height" multiplier="1/2" id="RgC-Pe-O4I"/>
                             <constraint firstItem="k4k-2i-PyO" firstAttribute="centerX" secondItem="ZKF-PA-3Xv" secondAttribute="centerX" id="Ro9-uW-cAA"/>
                             <constraint firstItem="EI3-ja-iMV" firstAttribute="top" secondItem="ZKF-PA-3Xv" secondAttribute="bottom" constant="10" id="SA4-s8-Ya2"/>
                             <constraint firstItem="ohH-Gz-OES" firstAttribute="top" secondItem="EI3-ja-iMV" secondAttribute="bottom" constant="11" id="jZh-50-WH7"/>
-                            <constraint firstItem="5sg-3o-7OL" firstAttribute="top" secondItem="LY2-nd-Ubl" secondAttribute="bottom" constant="30" id="oU2-I2-Qmk"/>
                             <constraint firstItem="k4k-2i-PyO" firstAttribute="top" secondItem="ZKF-PA-3Xv" secondAttribute="bottom" constant="-33" id="sjh-Kj-05o"/>
                             <constraint firstItem="LY2-nd-Ubl" firstAttribute="centerX" secondItem="VYl-fw-L3a" secondAttribute="centerX" id="vnh-E0-WH2"/>
+                            <constraint firstItem="ZKF-PA-3Xv" firstAttribute="leading" secondItem="VYl-fw-L3a" secondAttribute="leadingMargin" constant="20" id="wHl-Xm-bv1"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">

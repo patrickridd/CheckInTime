@@ -57,7 +57,8 @@ class MessageTesterViewController: UIViewController {
 
                     UserController.sharedController.saveContext()
                     
-                    guard let receiverRecord = receiver.cloudKitRecord, loggedInUserRecord = loggedInUser.cloudKitRecord else {
+                    guard let receiverRecord = receiver.cloudKitRecord,
+                        loggedInUserRecord = loggedInUser.cloudKitRecord else {
                     print("Couldn't get CKRecord from NSData")
                         return
                     }

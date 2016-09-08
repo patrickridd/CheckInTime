@@ -69,6 +69,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
+        imagePicker.delegate = self
         let alert = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .ActionSheet)
         
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
@@ -83,6 +84,19 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
 
         })
     }
+    
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            print("Couldn't Get Image from imagePicker 'info'")
+            return
+        }
+        
+        imageView.image = image
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+
+
     
     func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool) -> Void) {
         let alert = UIAlertController(title: "You have an existing User account in CloudKit, would you like to restore it on this device?", message: nil
@@ -119,8 +133,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
 
     }
-    
-    
     
     func presentICloudAlert() {
 

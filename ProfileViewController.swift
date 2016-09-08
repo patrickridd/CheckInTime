@@ -78,7 +78,23 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    
     @IBAction func deleteAccountButtonTapped(sender: AnyObject) {
+        let alert = UIAlertController(title: "Are you sure you want to Delete your Account?", message: "All Contacts and Messages will be deleted.", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let deleteAccountAction = UIAlertAction(title: "Yes I'm Sure", style: .Default) { (_) in
+            self.deleteAccount()
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAccountAction)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
+    }
+    
+    
+    func deleteAccount() {
         guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
             return
         }
@@ -88,14 +104,28 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("Error Deleting User Record. Error: \(error.localizedDescription)")
             } else {
                 print("Successfully Deleted User Profile")
-                UserController.sharedController.moc.deleteObject(loggedInUser)
+                UserController.sharedController.fetchContactsFromCoreData({ (contacts) in
+                    var contactsToDelete = contacts
+                    contactsToDelete.append(loggedInUser)
+                    UserController.sharedController.deleteContactsFromCoreData(contactsToDelete)
+                    MessageController.sharedController.fetchMessagesFromCoreData({ (messages) in
+                        MessageController.sharedController.deleteMessagesFromCoreData(messages)
+                        UserController.sharedController.saveContext()
+                        self.presentLoginScreen()
+                    })
+                    
+                })
             }
-            
-            
         }
-        
     }
     
+    func presentLoginScreen() {
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let loginVC = storyBoard.instantiateViewControllerWithIdentifier("loginScreen")
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(loginVC, animated: true, completion: nil)
+        })
+    }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
@@ -106,15 +136,5 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         imageView.image = image
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }

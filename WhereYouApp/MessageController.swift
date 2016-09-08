@@ -15,12 +15,17 @@ class MessageController {
     
     static let sharedController = MessageController()
     let moc = Stack.sharedStack.managedObjectContext
-    let fetchedResultsController: NSFetchedResultsController
+    var fetchedResultsController: NSFetchedResultsController!
     
     
     
     init() {
         
+        setupFetchController()
+        
+    }
+    
+    func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
         let sortDescriptor = NSSortDescriptor(key: "timeSent", ascending: false)
         let sortDescriptorBool = NSSortDescriptor(key: "hasResponded", ascending: false)
@@ -28,9 +33,19 @@ class MessageController {
         request.sortDescriptors = [sortDescriptor, sortDescriptorBool]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
+        let _ = try? fetchedResultsController.performFetch()
+       
+    }
+    
+    func fetchMessagesFromCoreData(completion: (messages: [Message])->Void) {
+        let request = NSFetchRequest(entityName: "Message")
         
-        _ = try? fetchedResultsController.performFetch()
-      
+        guard let fetchedMessages = (try? moc.executeFetchRequest(request) as? [Message]), messages = fetchedMessages else {
+            completion(messages: [])
+            return
+        }
+        
+        completion(messages: messages)
         
     }
     
@@ -233,7 +248,7 @@ class MessageController {
                 saveContext()
                 return
         }
-        self.deleteMessage(fetchedMessage)
+        self.deleteMessagesFromCoreData([fetchedMessage])
         let message = Message(record: record)
         
         print("\(message?.sender.name)")
@@ -254,10 +269,15 @@ class MessageController {
     }
 
     
+    func deleteMessagesFromCoreData(messages: [Message]) {
+        for message in messages {
+            moc.deleteObject(message)
+        }
+    }
     
     
     
-    func deleteMessage(message: Message) {
+    func deleteMessageFromCoreDataAndCloudKit(message: Message) {
         moc.deleteObject(message)
         guard let messageRecord = message.cloudKitRecord else {
             print("Couldn't get messages record to delete it.")

@@ -101,7 +101,7 @@ class UserController {
             
             self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
                 // Subscribe to Message Changes.
-                MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
+               // MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
                 
                 CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
                     guard let _ = subscription else {

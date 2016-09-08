@@ -186,7 +186,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             guard let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
                 return
             }
-            MessageController.sharedController.deleteMessage(message)
+            MessageController.sharedController.deleteMessagesFromCoreData([message])
             
             //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
