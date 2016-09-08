@@ -134,6 +134,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                             if savedSuccessfully {
                                 print("Saved Contact Successfully to CloudKit")
+                                self.presentAddedContactSuccessfully()
                                 return
                             } else {
                                 print("Failed to save contact to cloudkit. Try again.")
@@ -177,10 +178,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
-    
-    
-    
-    
+
     // Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
     func getMobileFormatedNumber(numbers: [CNLabeledValue]) -> [String] {
         
@@ -222,6 +220,28 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         
         
+    }
+    
+    // Tell user that something went wrong when adding Contact
+    func presentFailedToAddContact() {
+        let alert = UIAlertController(title: "Something Went Wrong When Adding Contact. Please Try Again.", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
+    // Tell user that they Successfully Added Contact
+    func presentAddedContactSuccessfully() {
+        let alert = UIAlertController(title: "Success Fully Added Contact", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Sweet", style: .Cancel, handler: nil)
+        alert.addAction(action)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
     }
     
     // Tells user that the Contact they are tyring to add is already in their contacts list.
@@ -279,7 +299,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     func presentUserHasAccount(newContact: User) {
         let alert = UIAlertController(title: "Success" , message: "\(newContact.name) has WhereYouApp", preferredStyle: .Alert)
-        let action = UIAlertAction(title: "dismiss", style: .Cancel, handler: nil)
+        let action = UIAlertAction(title: "Awesome", style: .Cancel, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
