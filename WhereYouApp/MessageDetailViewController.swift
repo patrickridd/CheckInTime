@@ -77,7 +77,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
       //  setupTabBarView()
     }
     
-    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
     
     
     override func viewDidAppear(animated: Bool) {
@@ -372,7 +374,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     
     
     @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     

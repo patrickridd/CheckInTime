@@ -47,7 +47,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         
         setupFetchController(contact)
-        
+        fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
         updateWith(contact)
         
@@ -138,10 +138,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
         
-        MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: dueDatePicker.date)
+        
         
             dispatch_async(dispatch_get_main_queue(), {
-            
+            MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: self.dueDatePicker.date)
         })
 
     }

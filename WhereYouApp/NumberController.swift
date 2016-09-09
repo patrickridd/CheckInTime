@@ -22,7 +22,7 @@ class NumberController {
         // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
         for phoneNumberLabel in numbers {
             if phoneNumberLabel.label != CNLabelPhoneNumberiPhone {
-                break
+                continue
             }
             let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
             let stringPhoneNumber = phoneNumber.stringValue

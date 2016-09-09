@@ -45,7 +45,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tn8-Ll-I2f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="895" y="1161"/>
+            <point key="canvasLocation" x="873" y="1009"/>
         </scene>
         <!--Contact Detail View Controller-->
         <scene sceneID="rgT-dW-tjE">
@@ -318,7 +318,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1351" y="1158"/>
+            <point key="canvasLocation" x="1381" y="1016"/>
         </scene>
         <!--title-->
         <scene sceneID="Pir-8o-8Tv">
@@ -832,10 +832,10 @@
                                 </connections>
                             </button>
                             <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="rMw-gD-37y" customClass="CustomImageView" customModule="WhereYouApp" customModuleProvider="target">
-                                <rect key="frame" x="36" y="120" width="248" height="240"/>
+                                <rect key="frame" x="40" y="120" width="240" height="240"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="rMw-gD-37y" secondAttribute="height" multiplier="31:30" id="iJm-1r-liq"/>
+                                    <constraint firstAttribute="width" secondItem="rMw-gD-37y" secondAttribute="height" multiplier="1/1" id="iJm-1r-liq"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -957,9 +957,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="profile" width="363" height="363"/>
+        <image name="profile" width="454" height="454"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sQm-XH-vtG"/>
+        <segue reference="NFt-RW-uyj"/>
     </inferredMetricsTieBreakers>
 </document>
