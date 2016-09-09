@@ -55,9 +55,16 @@ class NumberController {
         }
         
         
-        
     }
     
+    func formatPhoneForDisplay(number: String) -> String {
+        var formattedNumber = number
+        
+        formattedNumber.insert("-" as Character, atIndex: formattedNumber.startIndex.advancedBy(3))
+        formattedNumber.insert("-", atIndex: formattedNumber.startIndex.advancedBy(7))
+        
+        return formattedNumber
+    }
     
     
 }

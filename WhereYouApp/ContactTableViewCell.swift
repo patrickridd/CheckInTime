@@ -79,8 +79,9 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        
-        hasRespondedLabel.text = "Waiting for \(userContact.name ?? userContact.phoneNumber)'s Response"
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+
+        hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber)'s Response"
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
         shouldRespondByLabel.text = "Should respond by \(dateFormatter.stringFromDate(message.timeDue))"
         
@@ -92,9 +93,11 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know WhereYouApp"
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+
+        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) wants to know WhereYouApp"
         timeSentLabel.text = ""
-        shouldRespondByLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "\(userContact.name ?? formatedPhoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
     }
     
     // Cell tells User that user's contact responded to WhereYouApp request
@@ -103,7 +106,9 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.text = "\(userContact.name ?? userContact.phoneNumber) responded to WhereYouApp request"
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+
+        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) responded to WhereYouApp request"
         shouldRespondByLabel.text = ""
         
         guard let timeResponded = message.timeResponded else {
@@ -119,8 +124,8 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        
-        hasRespondedLabel.text = "You let \(userContact.name ?? userContact.phoneNumber) know WhereYouApp"
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+        hasRespondedLabel.text = "You let \(userContact.name ?? formatedPhoneNumber) know WhereYouApp"
         timeSentLabel.text = "You responded at \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
     }

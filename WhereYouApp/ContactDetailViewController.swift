@@ -61,10 +61,12 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func updateWith(contact: User) {
-        self.contactImage.image = contact.photo
-        self.nameLabel.text = contact.name ?? contact.phoneNumber
-        self.numberLabel.text = contact.phoneNumber
         
+        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
+        
+        self.contactImage.image = contact.photo
+        self.nameLabel.text = contact.name ?? formattedPhoneNumber
+        self.numberLabel.text = formattedPhoneNumber
         
     }
     

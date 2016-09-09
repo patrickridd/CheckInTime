@@ -43,7 +43,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             mapView.setRegion(region, animated: true)
             
             let myAnnotation = MKPointAnnotation()
-            myAnnotation.title = loggedInUser?.name ?? loggedInUser?.phoneNumber
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay((loggedInUser?.phoneNumber)!)
+            myAnnotation.title = loggedInUser?.name ?? formatedPhoneNumber
             
             if let text = messageTextView.text where text != self.defaultMessage {
                 myAnnotation.subtitle = text
@@ -108,7 +109,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func updateWith(message: Message) {
         
         // Set title to the name of the loggedInUser's contact
-        self.titleLabel.title = usersContact?.name ?? usersContact?.phoneNumber
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+
+        self.titleLabel.title = usersContact?.name ?? formatedPhoneNumber
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
@@ -138,7 +141,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     
     func updateWithWaitingForReceiverResponse(message: Message) {
         // Update the send button title
-            sendButton.setTitle("Waiting For \(usersContact!.name ?? usersContact!.phoneNumber) to Respond", forState: .Normal)
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+
+            sendButton.setTitle("Waiting For \(usersContact!.name ?? formatedPhoneNumber) to Respond", forState: .Normal)
     
         self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
         // Hide TextView
@@ -192,7 +197,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         myAnnotation.coordinate = coordinate
         
-        myAnnotation.title = self.usersContact?.name ?? usersContact?.phoneNumber
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+
+        myAnnotation.title = self.usersContact?.name ?? formatedPhoneNumber
         // If the Contact decides to send a text message put it in the annotation else give it the defaultMessage
         if let messageText = message.text {
             myAnnotation.subtitle = messageText
@@ -219,7 +226,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         messageLabel.hidden = true
         
         // Set time due label
-        self.timeDueLabel.text = "\(usersContact!.name ?? usersContact!.phoneNumber) requests to know WhereYouApp by \(dateFormatter.stringFromDate(message.timeDue))"
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+
+        self.timeDueLabel.text = "\(usersContact!.name ?? formatedPhoneNumber) requests to know WhereYouApp by \(dateFormatter.stringFromDate(message.timeDue))"
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -284,7 +293,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if messageTextView.text != defaultMessage {
             message.text = messageTextView.text
         } else {
-            message.text = "Where \(loggedInUser.name ?? loggedInUser.phoneNumber) App"
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
+
+            message.text = "Where \(loggedInUser.name ?? formatedPhoneNumber) App"
         }
         // Input time responded
         message.timeResponded = NSDate()
@@ -349,16 +360,20 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         self.messageLabel.text = ""
         self.messageLabel.hidden = false
         
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
+
         // Put message text in label to show user what they sent.
         if let text = message.text {
             self.messageLabel.text = text
             let annotation = MKPointAnnotation()
-            annotation.title = loggedInUser.name ?? loggedInUser.phoneNumber
+            
+
+            annotation.title = loggedInUser.name ?? formatedPhoneNumber
             annotation.subtitle = text
             
             mapView.addAnnotation(annotation)
         } else {
-            self.messageLabel.text = "Where\(loggedInUser.name ?? loggedInUser.phoneNumber)App"
+            self.messageLabel.text = "Where\(loggedInUser.name ?? formatedPhoneNumber)App"
         }
         
         // Show the time you responded
