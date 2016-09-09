@@ -250,7 +250,7 @@ class UserController {
         }) { (records, error) in
             guard let records = records,
                 record = records.first else {
-                    print("No record found for user in cloudkit")
+                    print("No record found for user in cloudkit. Error: \(error?.localizedDescription)")
                     completion(record: nil)
                     return
             }

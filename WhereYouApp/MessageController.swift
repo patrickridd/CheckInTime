@@ -108,7 +108,8 @@ class MessageController {
         
     }
     
-    /* Fetches all messages in cloudkit that the loggedInUser is associated with
+     /*
+     // Fetches all messages in cloudkit that the loggedInUser is associated with
      */
     
     func fetchAllMessagesFromCloudKit(completion: ()-> Void) {
@@ -210,7 +211,7 @@ class MessageController {
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [messageSender.phoneNumber])
         
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-            let user = User(record: record)
+            let _ = User(record: record)
             self.saveContext()
             
             }) { (records, error) in
@@ -248,7 +249,7 @@ class MessageController {
                 return
         }
         self.deleteMessagesFromCoreData([fetchedMessage])
-        let message = Message(record: record)
+        let _ = Message(record: record)
         
         saveContext()
     }

@@ -66,5 +66,12 @@ class NumberController {
         return formattedNumber
     }
     
+    func formatNumberFromLoginForRecordName(number: String) -> String {
+        let phoneWhite = number.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).joinWithSeparator(" ")
+        let noPunc =  phoneWhite.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
+        let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
+        
+        return noSpaces
+    }
     
 }

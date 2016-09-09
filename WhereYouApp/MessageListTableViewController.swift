@@ -19,13 +19,13 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-
+        UIApplication.sharedApplication().cancelAllLocalNotifications()
         MessageController.sharedController.fetchedResultsController.delegate = self
         UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount) in
             if !hasAccount {
                 self.presentLoginScreen()
                 return
-            }
+            } 
         })
         setupView()
     

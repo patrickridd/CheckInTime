@@ -103,6 +103,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     UserController.sharedController.deleteContactsFromCoreData(contactsToDelete)
                     MessageController.sharedController.fetchMessagesFromCoreData({ (messages) in
                         MessageController.sharedController.deleteMessagesFromCoreData(messages)
+                        UIApplication.sharedApplication().cancelAllLocalNotifications()
                         UserController.sharedController.saveContext()
                         self.presentLoginScreen()
                     })

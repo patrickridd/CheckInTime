@@ -10,62 +10,73 @@ import UIKit
 import CloudKit
 
 class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
-
+    
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var numberTextField: UITextField!
     let imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
                 self.presentICloudAlert()
             }
         }
         
-       CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
-        if hasCloudKitAccount {
-            self.presentRestoreUser(userRecord!, completion: { (restoredUser) in
-                if restoredUser {
-                    UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
-                        if hasUsers {
-                            MessageController.sharedController.fetchAllMessagesFromCloudKit({
-                                print("Messages restored")
-                                        dispatch_async(dispatch_get_main_queue(), {
-                                            self.dismissViewControllerAnimated(true, completion: nil)
-
-                                        })
-                            })
-                            
-                        } else {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                self.dismissViewControllerAnimated(true, completion: nil)
+        CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
+            if hasCloudKitAccount {
+                self.presentRestoreUser(userRecord!, completion: { (restoredUser) in
+                    if restoredUser {
+                        UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
+                            if hasUsers {
+                                MessageController.sharedController.fetchAllMessagesFromCloudKit({
+                                    print("Messages restored")
+                                    dispatch_async(dispatch_get_main_queue(), {
+                                        self.dismissViewControllerAnimated(true, completion: nil)
+                                        
+                                    })
+                                })
                                 
-                            })
-                        }
-                
-                    })
-                }
-            })
+                            } else {
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                    
+                                })
+                            }
+                            
+                        })
+                    }
+                })
+            }
         }
-    }
         numberTextField.delegate = self
     }
-
+    
     @IBAction func submitButtonTapped(sender: AnyObject) {
         guard let image = imageView.image else {
             return
         }
         
-            guard let phoneNumber = numberTextField.text where phoneNumber.characters.count >= 10 else {
-                self.presentNumberAlert()
-                return
+        guard let phoneNumber = numberTextField.text else {
+            self.presentNumberAlert()
+            return
         }
         
-        UserController.sharedController.createUser("", phoneNumber: phoneNumber, image: image) {
-            self.dismissViewControllerAnimated(true, completion: nil)
+        var formatedNumber = NumberController.sharedController.formatNumberFromLoginForRecordName(phoneNumber)
+        NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
+            if isFormattedCorrectly {
+                UserController.sharedController.createUser("", phoneNumber: phoneNumber, image: image) {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+            } else {
+                self.presentNumberAlert()
+            }
+            
+            
         }
+        
+        
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
@@ -79,9 +90,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         alert.addAction(photoLibraryAction)
         alert.addAction(cancelAction)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert, animated: true, completion: nil)
-
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+            
         })
     }
     
@@ -95,12 +106,60 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         imageView.image = image
         dismissViewControllerAnimated(true, completion: nil)
     }
-
-
+    
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool
+    {
+        if (textField == numberTextField)
+        {
+            let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
+            let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            
+            let decimalString = components.joinWithSeparator("") as NSString
+            let length = decimalString.length
+            let hasLeadingOne = length > 0 && decimalString.characterAtIndex(0) == (1 as unichar)
+            
+            if length == 0 || (length > 10 && !hasLeadingOne) || length > 11
+            {
+                let newLength = (textField.text! as NSString).length + (string as NSString).length - range.length as Int
+                
+                return (newLength > 10) ? false : true
+            }
+            var index = 0 as Int
+            let formattedString = NSMutableString()
+            
+            if hasLeadingOne
+            {
+                formattedString.appendString("1 ")
+                index += 1
+            }
+            if (length - index) > 3
+            {
+                let areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
+                formattedString.appendFormat("(%@)", areaCode)
+                index += 3
+            }
+            if length - index > 3
+            {
+                let prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
+                formattedString.appendFormat("%@-", prefix)
+                index += 3
+            }
+            
+            let remainder = decimalString.substringFromIndex(index)
+            formattedString.appendString(remainder)
+            textField.text = formattedString as String
+            return false
+        }
+        else
+        {
+            return true
+        }
+    }
     
     func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool) -> Void) {
         let alert = UIAlertController(title: "You have an existing User account in CloudKit, would you like to restore it on this device?", message: nil
-        , preferredStyle: .Alert)
+            , preferredStyle: .Alert)
         
         let restoreAction = UIAlertAction(title: "Restore", style: .Default) { (_) in
             guard let user = User(record: record) else {
@@ -120,7 +179,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 }
                 print("Subcribed to Subscription: \(subscription)")
                 completion(restoredUser: true)
-
+                
             })
         }
         let cancelAction = UIAlertAction(title: "Create New User", style: .Cancel) { (_) in
@@ -128,15 +187,15 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         alert.addAction(restoreAction)
         alert.addAction(cancelAction)
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
         })
-
+        
     }
     
     /// Alerts to User that they need to sign into iCloud
     func presentICloudAlert() {
-
+        
         let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
         let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
@@ -148,21 +207,21 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         alert.addAction(settingsAction)
         alert.addAction(dismissAction)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
         })
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         return numberTextField.resignFirstResponder()
     }
-
+    
     func presentNameAlert() {
         let alert = UIAlertController(title: nil, message: "Name needs one character or more", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
         })
     }
     
@@ -170,10 +229,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let alert = UIAlertController(title: nil, message: "Phone Number needs to be 10 digits", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
         })
     }
-
+    
     
 }
