@@ -21,6 +21,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
+        
         UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
             if newAppAcctUsers {
                 UserController.sharedController.contacts = UserController.sharedController.contacts
