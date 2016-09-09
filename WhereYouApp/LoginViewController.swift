@@ -134,6 +134,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
 
     }
     
+    /// Alerts to User that they need to sign into iCloud
     func presentICloudAlert() {
 
         let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)

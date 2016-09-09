@@ -98,34 +98,31 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             var phoneNumbers = [String]()
             
             if contact.phoneNumbers.count > 0 {
-                phoneNumbers = getMobileFormatedNumber(contact.phoneNumbers)
+                phoneNumbers = NumberController.sharedController.getiPhoneNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
-                self.presentContactHasNoMobilePhone(name)
+                self.presentContactHasNoiPhone(name)
                 print("no phone number")
                 return
             }
-            
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
-                presentContactHasNoMobilePhone(name)
+                presentContactHasNoiPhone(name)
                 return
             }
-            
             var contactPhoneNumber = phoneNumbers[0]
-            // If number has a 1 before the area code and phone number remove it.
-            if contactPhoneNumber.characters.count > 10 {
-                contactPhoneNumber.removeAtIndex(contactPhoneNumber.startIndex)
-            }
-            
+            NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
+                if !isFormattedCorrectly {
+                    self.presentContactHasNoiPhone(name)
+                    return
+                }
+            })
             // Add phone number to new contact.
             let phoneNumber = contactPhoneNumber
             if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
                 self.presentTryingToAddYourselfAlert()
                 return
             }
-            
             UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
-                
                 if hasContactAlready && isCKContact {
                     self.presenthasContactAlreadyAlert(name)
                     return
@@ -155,7 +152,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     guard let  loggedInUser = UserController.sharedController.loggedInUser else {                            print("Couldn't get logged in user and/or record")
                         return
                     }
-                    
                     // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
                     UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
                         guard let contactRecord = record else {
@@ -174,9 +170,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             if savedSuccessfully {
                                 self.presentUserHasAccount(newContact)
                             }
-                            
                         })
-                        
                     })
                 }
             })
@@ -199,27 +193,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
     }
     
-    /// Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
-    func getMobileFormatedNumber(numbers: [CNLabeledValue]) -> [String] {
-        
-        var phoneNumbers = [String]()
-        
-        // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
-        for phoneNumberLabel in numbers {
-            if phoneNumberLabel.label != CNLabelPhoneNumberMobile {
-                break
-            }
-            let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber
-            let stringPhoneNumber = phoneNumber.stringValue
-            let phoneWhite = stringPhoneNumber.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).joinWithSeparator(" ")
-            let noPunc =  phoneWhite.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
-            let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
-            
-            phoneNumbers.append(noSpaces)
-        }
-        return phoneNumbers
-    }
-    
+      
     ///
     func presentNewAppAcctUsers(updatedUsers: [User]) {
         
@@ -233,6 +207,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             self.presentViewController(newAppAcctsAlert, animated: true, completion: nil)
         })
     }
+    
+    
+    
     
     // Takes in an array and formats it grammatically to present to user.
     func formatNames(names: [String] -> String) {
@@ -328,8 +305,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
     }
     
-    func presentContactHasNoMobilePhone(name: String) {
-        let alert = UIAlertController(title: "No Mobile Number Found", message: "\(name)'s number in your Contact's needs to be in mobile field.", preferredStyle: .Alert)
+    func presentContactHasNoiPhone(name: String) {
+        let alert = UIAlertController(title: "No iPhone Number Found", message: "\(name)'s number in your Contact's needs to be in iPhone field and needs to be no more than 11 numbers long.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
         alert.addAction(action)
         
