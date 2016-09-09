@@ -194,8 +194,8 @@ class UserController {
         
         
     }
-    
-    func checkIfUsersHaveDeletedApp(completion: (haveDeletedApp: Bool, updatedUsers: [User]?) -> Void) {
+    /// Checks if current user's contacts have deleted their by checking for their records in CloudKit.
+    func checkIfContactsHaveDeletedApp(completion: (haveDeletedApp: Bool, updatedUsers: [User]?) -> Void) {
         guard let loggedInUser = loggedInUser else {
             return
         }
@@ -207,7 +207,7 @@ class UserController {
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, predicateUser])
         request.predicate = compoundPredicate
         
-        guard var users = (try? moc.executeFetchRequest(request) as! [User]) else {
+        guard let users = (try? moc.executeFetchRequest(request) as! [User]) else {
             completion(haveDeletedApp: false, updatedUsers: nil)
             return
         }
@@ -217,39 +217,30 @@ class UserController {
             completion(haveDeletedApp: false, updatedUsers: nil)
             return
         }
-        
-        // Fetch records of all user's contacts who have app
-        let phoneNumbers = users.flatMap({$0.phoneNumber})
-        let cloudPredicate = NSPredicate(format: "phoneNumber IN %@", argumentArray: [phoneNumbers])
-        CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: cloudPredicate, recordFetchedBlock: { (record) in
-            
-        }) { (records, error) in
-            if records?.count < 1 {
-                completion(haveDeletedApp: true, updatedUsers: users)
-                return
-            }
-            guard let records = records else {
-                completion(haveDeletedApp: true, updatedUsers: users)
-                return
-            }
-            
-            let usersWhoHaveRecords = records.flatMap({User(record: $0)})
-            for user in users {
-                let userStillHasApp = usersWhoHaveRecords.filter{$0.phoneNumber == user.phoneNumber}
-                if let userStillHasApp = userStillHasApp.first {
-                    if let index = users.indexOf(userStillHasApp) {
-                        users.removeAtIndex(index)
-                    }
+        var deletedUsers = [User]()
+        for user in users {
+            checkIfContactHasAccount(user, completion: { (record) in
+                if record == nil {
+                    deletedUsers.append(user)
                 }
-            }
-            if users.count < 1 {
+            })
+            
+            if deletedUsers.count < 1 {
                 completion(haveDeletedApp: false, updatedUsers: nil)
             } else {
-                completion(haveDeletedApp: true, updatedUsers: users)
+                for deletedUser in deletedUsers {
+                    updateContactsAppStatus(deletedUser, completion: { (wasSaved) in
+                    
+                    
+                    })
+                }
+                completion(haveDeletedApp: true, updatedUsers: deletedUsers)
             }
         }
     }
     
+    
+    /// Fetches Any User with their phone number from CloudKit
     func fetchUsersCloudKitRecord(user: User, completion: (record: CKRecord?) ->Void) {
         
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [user.phoneNumber])
@@ -268,7 +259,7 @@ class UserController {
         }
     }
     
-    // Fetches One User from CoreData by using their phone number //
+    /// Fetches One User from CoreData by using their phone number //
     func fetchCoreDataUserWithNumber(number: String, completion: (user: User?) -> Void) {
         
         let request = NSFetchRequest(entityName: "User")
@@ -290,7 +281,8 @@ class UserController {
         completion(user: user)
         
     }
-    // Fetches Contact with number
+    
+    /// Fetches Contact with number
     func fetchCloudKitUserWithNumber(number: String, completion: (contact: User?) -> Void) {
         
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
@@ -309,7 +301,7 @@ class UserController {
         }
     }
     
-    // Fetches the loggedInUsers Contacts From Cloudkit if they get deleted. //
+    /// Fetches the loggedInUsers Contacts From Cloudkit if they get deleted. //
     func fetchCloudKitContacts(completion: (hasUsers: Bool)->Void) {
         guard let loggedInUser = loggedInUser else {
             print("No user logged in yet")
@@ -505,7 +497,12 @@ class UserController {
     
     
     func updateContactsAppStatus(contact: User, completion: (wasSaved: Bool) -> Void) {
-        contact.hasAppAccount = true
+        if contact.hasAppAccount == 1 {
+            contact.hasAppAccount = 0
+        } else {
+            contact.hasAppAccount = 1
+        }
+
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record, loggedInUser = self.loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
                 print("Couldn't fetch Contact's Record to add to User's Contacts in CK")

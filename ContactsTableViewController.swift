@@ -21,7 +21,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
-        
+        UserController.sharedController.checkIfContactsHaveDeletedApp { (haveDeletedApp, updatedUsers) in
+            if haveDeletedApp {
+                self.presentContactsHaveDeletedApp(updatedUsers!)
+            }
+        }
         UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
             if newAppAcctUsers {
                 UserController.sharedController.contacts = UserController.sharedController.contacts
@@ -29,9 +33,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             } else {
                 print("no new app users from contacts")
             }
-            
         }
-        
     }
     
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
@@ -181,8 +183,23 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
+   
+    func presentContactsHaveDeletedApp(deletedContacts: [User]) {
+       
+        let names = deletedContacts.flatMap({$0.name})
+        let formatedNames = names.joinWithSeparator(" ")
+        
+        let alert = UIAlertController(title: "\(formatedNames) have deleted their account", message: nil, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style: .Cancel) { (_) in
+            self.tableView.reloadData()
+        }
+        alert.addAction(okAction)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
     
-    // Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
+    /// Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
     func getMobileFormatedNumber(numbers: [CNLabeledValue]) -> [String] {
         
         var phoneNumbers = [String]()
@@ -199,11 +216,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
             
             phoneNumbers.append(noSpaces)
-            
         }
         return phoneNumbers
     }
     
+    ///
     func presentNewAppAcctUsers(updatedUsers: [User]) {
         
         let names = updatedUsers.flatMap({$0.name})
