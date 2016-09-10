@@ -266,10 +266,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         locationManager.stopUpdatingLocation()
         
     }
-    
-    
 
-    
+    /// Sends Check In Notification to current contact. 
     @IBAction func sendButtonTapped(sender: AnyObject) {
         guard let message = message, loggedInUser = loggedInUser else {
             print("No message to send because it is nil")

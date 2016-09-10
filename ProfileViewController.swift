@@ -77,7 +77,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         let deleteAccountAction = UIAlertAction(title: "Yes I'm Sure", style: .Default) { (_) in
             UserController.sharedController.deleteAccount({ })
-            
+            self.presentLoginScreen()
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAccountAction)

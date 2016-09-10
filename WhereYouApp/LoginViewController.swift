@@ -60,7 +60,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         var formatedNumber = NumberController.sharedController.formatNumberFromLoginForRecordName(phoneNumber)
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
-                UserController.sharedController.createUser("", phoneNumber: phoneNumber, image: image) {
+                UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image) {
                     self.dismissViewControllerAnimated(true, completion: nil)
                 }
             } else {

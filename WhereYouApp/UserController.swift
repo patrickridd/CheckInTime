@@ -505,8 +505,8 @@ class UserController {
             } else {
                 print("Successfully Deleted User Profile")
                 UserController.sharedController.fetchContactsFromCoreData({ (contacts) in
-                    var contactsToDelete = contacts
-                    contactsToDelete.append(loggedInUser)
+                    let contactsToDelete = contacts
+                    self.deleteContactsFromCoreData([loggedInUser])
                     UserController.sharedController.deleteContactsFromCoreData(contactsToDelete)
                     MessageController.sharedController.fetchMessagesFromCoreData({ (messages) in
                         MessageController.sharedController.deleteMessagesFromCoreData(messages)
