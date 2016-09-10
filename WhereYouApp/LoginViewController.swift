@@ -158,7 +158,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 completion(restoredUser: false)
                 return
             }
-        
+            user.name = ""
             UserController.sharedController.loggedInUser = user
             UserController.sharedController.loggedInUser?.cloudKitRecord = record
             
