@@ -11,14 +11,14 @@ import CoreData
 
 class MessageListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate  {
     
-    
+    let rightProfileButtonImage = UIButton()
+
     static let sharedController = MessageListTableViewController()
     @IBOutlet weak var tableView: UITableView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.automaticallyAdjustsScrollViewInsets = false
         MessageController.sharedController.fetchedResultsController.delegate = self
         UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount, hasConnection) in
@@ -30,10 +30,17 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 self.presentCouldNotGetCKAccount()
             }
         })
-        setupView()
+        setupRightButton()
+        setupNavBar()
+        setupTabBar()
+      
     }
     
-    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+
+    }
     
     func presentCouldNotGetCKAccount() {
         let alert = UIAlertController(title: "We couldn't find your Check In Account on Our Server", message: "This could be a problem with your connection and you may want to restart the application. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
@@ -69,7 +76,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                     self.presentCouldNotGetCKAccount()
                 }
             })
-        }        
+        }
         alert.addAction(createNewOneAction)
         alert.addAction(tryToFindAgain)
         dispatch_async(dispatch_get_main_queue(), {
@@ -107,11 +114,36 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     
-    func setupView() {
-        //   guard let user = UserController.sharedController.loggedInUser else { return }
-        
-        // UINavigationBar.appearance().barTintColor = UIColor ( red: 0.8205, green: 0.1151, blue: 0.6333, alpha: 1.0 )
-        UINavigationBar.appearance().tintColor = UIColor ( red: 0.0024, green: 0.7478, blue: 0.8426, alpha: 1.0 )
+    func setupTabBar() {
+       let tabBar = tabBarController?.tabBar
+        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: UIColor ( red: 0.0, green: 1.0, blue: 0.9961, alpha: 1.0 )], forState:.Normal)
+        tabBar?.tintColor = UIColor ( red: 0.0, green: 1.0, blue: 0.9961, alpha: 1.0 )
+        tabBar?.barTintColor = UIColor ( red: 0.9961, green: 0.2431, blue: 0.4431, alpha: 1.0 )
+      
+    }
+    
+    func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+    }
+    
+    func setupRightButton() {
+        guard let user = UserController.sharedController.loggedInUser else {
+            return
+        }
+        rightProfileButtonImage.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
+        rightProfileButtonImage.layer.cornerRadius = 20
+        rightProfileButtonImage.layer.masksToBounds = true
+        rightProfileButtonImage.contentMode = .ScaleAspectFill
+        self.navigationItem.rightBarButtonItem?.customView = rightProfileButtonImage
+        rightProfileButtonImage.addTarget(self, action: #selector(presentProfilePage), forControlEvents: UIControlEvents.TouchUpInside)
+    }
+    
+    func presentProfilePage() {
+        let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
+        let profilePage = storyBoard.instantiateViewControllerWithIdentifier("profilePage")
+            self.presentViewController(profilePage, animated: true, completion: nil
+        )
     }
     
     // Data Source Methods

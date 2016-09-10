@@ -286,6 +286,7 @@ class MessageController {
     
     /// Deletes messages from CoreData.
     func deleteMessagesFromCoreData(messages: [Message]) {
+
         for message in messages {
             moc.deleteObject(message)
         }

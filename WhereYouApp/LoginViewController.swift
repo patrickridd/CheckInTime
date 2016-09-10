@@ -65,6 +65,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 }
             } else {
                 self.presentNumberAlert()
+                return
             }
         }
     }
@@ -157,8 +158,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 completion(restoredUser: false)
                 return
             }
+        
             UserController.sharedController.loggedInUser = user
             UserController.sharedController.loggedInUser?.cloudKitRecord = record
+            
             UserController.sharedController.saveContext()
             print("Restored User")
             CloudKitManager.cloudKitController.fetchSubscription("My Messages", completion: { (subscription, error) in

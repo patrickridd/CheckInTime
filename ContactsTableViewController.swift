@@ -115,7 +115,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     self.presentContactHasNoiPhone(name)
                     return
                 }
-            })
+            
             // Add phone number to new contact.
             let phoneNumber = contactPhoneNumber
             if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
@@ -173,6 +173,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         })
                     })
                 }
+            })
             })
         }
     }

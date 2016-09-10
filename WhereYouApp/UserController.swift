@@ -234,8 +234,8 @@ class UserController {
             } else {
                 for deletedUser in deletedUsers {
                     updateContactsAppStatus(deletedUser, completion: { (wasSaved) in
-                    
-                    
+                        
+                        
                     })
                 }
                 completion(haveDeletedApp: true, updatedUsers: deletedUsers)
@@ -496,39 +496,51 @@ class UserController {
     
     /// Deletes the Current User Account from CloudKit, CoreData, and Cancels all notifications.
     func deleteAccount(completion: ()->Void) {
-        guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
+        guard let loggedInUser = loggedInUser,
+            loggedInUserRecord = loggedInUser.cloudKitRecord else {
             return
         }
+        self.deleteAccountFromCoreData()
         CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
             if let error = error {
                 print("Error Deleting User Record. Error: \(error.localizedDescription)")
+                completion()
             } else {
                 print("Successfully Deleted User Profile")
-                UserController.sharedController.fetchContactsFromCoreData({ (contacts) in
-                    let contactsToDelete = contacts
-                    self.deleteContactsFromCoreData([loggedInUser])
-                    UserController.sharedController.deleteContactsFromCoreData(contactsToDelete)
-                    MessageController.sharedController.fetchMessagesFromCoreData({ (messages) in
-                        MessageController.sharedController.deleteMessagesFromCoreData(messages)
-                        UIApplication.sharedApplication().cancelAllLocalNotifications()
-                        UserController.sharedController.saveContext()
-                        completion()
-                    })
-                })
+                completion()
             }
         }
     }
     
+    func deleteAccountFromCoreData() {
+        let messageRequest = NSFetchRequest(entityName: "Message")
+        guard let messages = (try? moc.executeFetchRequest(messageRequest) as? [Message]),
+            messagesToDelete = messages else {
+                return
+        }
+        MessageController.sharedController.deleteMessagesFromCoreData(messagesToDelete)
+        
+        let usersRequest = NSFetchRequest(entityName: "User")
+        guard let users = (try? moc.executeFetchRequest(usersRequest) as? [User]),
+            deletedUsers = users else {
+                return
+        }
+        
+        self.deleteContactsFromCoreData(deletedUsers)
+        UIApplication.sharedApplication().cancelAllLocalNotifications()
+        
+    }
+    
     /* Updates Local Contact's hasAppAccount Bool. If Contact has App, Contact is saved into User's CK contacts property.
-    // If Contact doesn't have app. If will fail and return
-    */
+     // If Contact doesn't have app. If will fail and return
+     */
     func updateContactsAppStatus(contact: User, completion: (wasSaved: Bool) -> Void) {
         if contact.hasAppAccount == 1 {
             contact.hasAppAccount = 0
         } else {
             contact.hasAppAccount = 1
         }
-
+        
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record, loggedInUser = self.loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
                 print("Couldn't fetch Contact's Record to add to User's Contacts in CK")

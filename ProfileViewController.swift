@@ -16,10 +16,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let user = loggedInUser else {
+        guard let loggedInUser = UserController.sharedController.loggedInUser else {
             return
         }
-        imageView.image = user.photo
+        self.loggedInUser = loggedInUser
+        imageView.image = loggedInUser.photo
         
     }
     
@@ -44,7 +45,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
-        guard let newImage = imageView.image, loggedInUser = loggedInUser, newImageData = UIImagePNGRepresentation(newImage), loggedInUserRecord = loggedInUser.cloudKitRecord  else {
+        guard let newImage = imageView.image,
+            loggedInUser = loggedInUser,
+            newImageData = UIImagePNGRepresentation(newImage),
+            loggedInUserRecord = loggedInUser.cloudKitRecord  else {
             return
         }
         
@@ -76,8 +80,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let alert = UIAlertController(title: "Are you sure you want to Delete your Account?", message: "All Contacts and Messages will be deleted.", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         let deleteAccountAction = UIAlertAction(title: "Yes I'm Sure", style: .Default) { (_) in
-            UserController.sharedController.deleteAccount({ })
-            self.presentLoginScreen()
+            UserController.sharedController.deleteAccount({
+                self.presentLoginScreen()
+
+            })
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAccountAction)

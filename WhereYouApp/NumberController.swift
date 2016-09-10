@@ -41,17 +41,14 @@ class NumberController {
         // If number has a 1 before the area code and phone number remove it.
         if phoneNumber.characters.count > 10 {
             phoneNumber.removeAtIndex(phoneNumber.startIndex)
-        } else {
-            // Else the number is fine
-            completion(isFormattedCorrectly: true, formatedNumber: phoneNumber)
         }
         
         // If still not a 10 number digit then we don't accept it.
-        if phoneNumber.characters.count != 10 {
-            completion(isFormattedCorrectly: false, formatedNumber: phoneNumber)
+        if phoneNumber.characters.count == 10 {
+            completion(isFormattedCorrectly: true, formatedNumber: phoneNumber)
         } else {
             // If we formatted correctly then return true and the formated number
-            completion(isFormattedCorrectly: true, formatedNumber: phoneNumber)
+            completion(isFormattedCorrectly: false, formatedNumber: phoneNumber)
         }
         
         
