@@ -31,8 +31,9 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             }
         })
         setupView()
-        
     }
+    
+    
     
     func presentCouldNotGetCKAccount() {
         let alert = UIAlertController(title: "We couldn't find your Check In Account on Our Server", message: "This could be a problem with your connection and you may want to restart application. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
@@ -46,7 +47,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 UserController.sharedController.deleteAccount({
                     dispatch_async(dispatch_get_main_queue(), {
                         self.presentLoginScreen()
-                        
                     })
                 })
             })
@@ -68,10 +68,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 } else {
                     self.presentCouldNotGetCKAccount()
                 }
-                
             })
-        }
-        
+        }        
         alert.addAction(createNewOneAction)
         alert.addAction(tryToFindAgain)
         dispatch_async(dispatch_get_main_queue(), {

@@ -142,9 +142,7 @@ class MessageController {
             }
             
             let reference = CKReference(recordID: userRecord.recordID, action: .None)
-            
             let predicate = NSPredicate(format: "users CONTAINS %@", argumentArray: [reference])
-            
             CloudKitManager.cloudKitController.fetchRecordsWithType(Message.recordType, predicate: predicate, recordFetchedBlock: { (record) in
                 let _ = Message(record: record)
                 
@@ -265,29 +263,43 @@ class MessageController {
                 
                 let message = Message(record: record)!
                 
-                scheduleLocalNotification(message)
+                scheduleLocalNotificationToCheckIn(message)
                 
                 saveContext()
                 return
         }
         self.deleteMessagesFromCoreData([fetchedMessage])
-        let _ = Message(record: record)
-        
+        guard let message = Message(record: record) else {
+            return
+        }
+        self.scheduleLocalNotificationForResponseCheckIn(message)
         saveContext()
     }
     
-    func scheduleLocalNotification(message: Message) {
-        
-        
+    func scheduleLocalNotificationToCheckIn(message: Message) {
+        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.sender.phoneNumber)
         let localNotification = UILocalNotification()
         localNotification.alertTitle = "Time to Check In ⏰"
-        localNotification.alertBody =   "\(message.sender.name ?? message.sender.phoneNumber) wants you to check in now"
+        localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to check in now"
         localNotification.fireDate = message.timeDue
         
-        localNotification.category = "CheckInTime"
+        localNotification.category = "TimeToCheckIn"
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     }
     
+    func scheduleLocalNotificationForResponseCheckIn(message: Message) {
+        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.receiver.phoneNumber)
+
+        let localNotification = UILocalNotification()
+        localNotification.alertTitle = "Curfew Check In"
+        localNotification.alertBody =   "\(message.receiver.name ?? formattedPhoneNumber) checked in."
+        localNotification.fireDate = message.timeResponded
+        
+        localNotification.category = "ResponseToCheckIn"
+        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+
+        
+    }
     
     func deleteMessagesFromCoreData(messages: [Message]) {
         for message in messages {
