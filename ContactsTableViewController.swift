@@ -118,6 +118,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             // Add phone number to new contact.
             let phoneNumber = contactPhoneNumber
+        
             if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
                 self.presentTryingToAddYourselfAlert()
                 return
@@ -131,6 +132,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         guard let contact = contact else {
                             return
                         }
+                        contact.name = name
                         UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                             if savedSuccessfully {
                                 print("Saved Contact Successfully to CloudKit")

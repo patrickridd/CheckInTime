@@ -297,7 +297,7 @@ class UserController {
             self.saveContext()
         }) { (records, error) in
             if let _ = error {
-                
+            
             } else {
                 print("Couldn't fetch CKRecord in fetchCloudKitUserWithNumber")
                 completion(contact: nil)
@@ -372,9 +372,9 @@ class UserController {
                     if isCKContact {
                         completion(hasContactAlready: true, isCKContact: isCKContact)
                     } else {
+                        self.deleteContactsFromCoreData(users)
                         completion(hasContactAlready: true, isCKContact: isCKContact)
                     }
-                    
                 })
             } else {
                 completion(hasContactAlready: false, isCKContact: false)
@@ -397,14 +397,18 @@ class UserController {
             }
             
             for loggedInUserReference in loggedInUserReferences {
-                if loggedInUserReference == contactReference {
+                if loggedInUserReference.recordID.recordName == contactReference.recordID.recordName {
                     self.deleteContactsFromCoreData([contact])
+                    self.saveContext()
                     completion(isCKContact: true)
                     return
                 }
             }
+            
+            if loggedInUserReferences.count < 1 {
             self.deleteContactsFromCoreData([contact])
             completion(isCKContact: false)
+            }
         }
     }
     
