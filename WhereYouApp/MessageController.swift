@@ -34,7 +34,7 @@ class MessageController {
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
         let _ = try? fetchedResultsController.performFetch()
-       
+        
     }
     
     func fetchMessagesFromCoreData(completion: (messages: [Message])->Void) {
@@ -52,8 +52,8 @@ class MessageController {
     /* Creates a new message  with between two users and saves it both in cloudkit and core data.
      */
     
-    func createMessage(sender: User, receiver: User, timeDue: NSDate) {
-       
+    func createMessage(sender: User, receiver: User, timeDue: NSDate, completion: (messageSent: Bool, messageRecord: CKRecord)->Void) {
+        
         
         // create new Message
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
@@ -65,9 +65,7 @@ class MessageController {
         message.record = messageRecord
         message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(messageRecord.recordID)
         
-        
         // Get records From Sender and Receiver
-        
         UserController.sharedController.fetchUsersCloudKitRecord(sender) { (record) in
             guard let record = record else {
                 print("No sender record found")
@@ -80,7 +78,7 @@ class MessageController {
                     return
                 }
                 receiver.cloudKitRecord = record
-            
+                
                 guard let senderRecord = sender.cloudKitRecord,
                     receiverRecord = receiver.cloudKitRecord else {
                         print("Couldn't get back CKRecords from NSData")
@@ -94,13 +92,19 @@ class MessageController {
                 let senderReference = CKReference(recordID: senderRecord.recordID, action: .None)
                 let receiverReference = CKReference(recordID: receiverRecord.recordID, action: .None)
                 messageRecord[Message.users] = [senderReference, receiverReference]
-            
+                
                 messageRecord[Message.timeDueKey] = message.timeDue
                 messageRecord[Message.timeSentKey] = message.timeSent
                 
                 CloudKitManager.cloudKitController.saveRecord(messageRecord) { (record, error) in
-                    print("Saved message to cloudkit")
-                    self.saveContext()
+                    if let error = error {
+                        print("Error Saving Message. Error: \(error.localizedDescription)")
+                        completion(messageSent: false)
+                        return
+                    } else {
+                        print("Saved message to cloudkit")
+                        self.saveContext()
+                    }
                 }
             })
             
@@ -108,7 +112,24 @@ class MessageController {
         
     }
     
-     /*
+    
+    
+    func resaveMessageRecord(messageRecord: CKRecord, completion: (messageSent: Bool)->Void) {
+        CloudKitManager.cloudKitController.saveRecord(messageRecord) { (record, error) in
+            if let error = error {
+                print("Error Saving Message. Error: \(error.localizedDescription)")
+                completion(messageSent: false)
+                return
+            } else {
+                print("Saved message to cloudkit")
+                completion(messageSent: true)
+                self.saveContext()
+            }
+        }
+        
+    }
+    
+    /*
      // Fetches all messages in cloudkit that the loggedInUser is associated with
      */
     
@@ -214,20 +235,20 @@ class MessageController {
             let _ = User(record: record)
             self.saveContext()
             
-            }) { (records, error) in
-                if let error = error {
-                    print("Error finding sender of message to add to contacts. Error: \(error.localizedDescription)")
-                } else {
-                    print("Saved to contact to core data")
-                }
-                
-        
+        }) { (records, error) in
+            if let error = error {
+                print("Error finding sender of message to add to contacts. Error: \(error.localizedDescription)")
+            } else {
+                print("Saved to contact to core data")
+            }
+            
+            
         }
         
         
     }
     
-    
+      
     /* This method takes a record obtained from a remote notification and discerns if it is a new message or an updated one.
      If it is a new message it will simply create a new one and save it to the context. If it is an updated message then it deletes the original message from core data and creates the new updated one and saves it to core data.
      */
@@ -258,15 +279,14 @@ class MessageController {
         
         
         let localNotification = UILocalNotification()
-        localNotification.alertTitle = "WhereYouApp"
+        localNotification.alertTitle = "Time to Check In ⏰"
         localNotification.alertBody =   "\(message.sender.name ?? message.sender.phoneNumber) wants you to check in now"
         localNotification.fireDate = message.timeDue
         
-        localNotification.repeatInterval = NSCalendarUnit.Day
         localNotification.category = "CheckInTime"
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     }
-
+    
     
     func deleteMessagesFromCoreData(messages: [Message]) {
         for message in messages {
@@ -304,5 +324,5 @@ class MessageController {
         }
         
     }
-
+    
 }

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 import MessageUI
-
+import CloudKit
 
 class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate {
     
@@ -140,13 +140,36 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
         
-        
-        
             dispatch_async(dispatch_get_main_queue(), {
-            MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: self.dueDatePicker.date)
+            MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: self.dueDatePicker.date, completion: { (messageSent, messageRecord) in
+                
+                if !messageSent {
+                    self.presentMessageNotSent(messageRecord)
+                }
+            })
         })
 
     }
+    
+    func presentMessageNotSent(messageRecord: CKRecord) {
+        let alert = UIAlertController(title: "Failed to Send", message: "There might be something wrong with your connection", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let resendAction = UIAlertAction(title: "Resend?", style: .Default) { (_) in
+            
+            MessageController.sharedController.resaveMessageRecord(messageRecord, completion: { (messageSent) in
+                if !messageSent {
+                    self.presentMessageNotSent(messageRecord)
+                }
+            })
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(resendAction)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
+
     
     @IBAction func screenTapped(sender: AnyObject) {
         dateTextField.resignFirstResponder()
