@@ -14,7 +14,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     static let sharedController = MessageListTableViewController()
     @IBOutlet weak var tableView: UITableView!
-   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,21 +27,35 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 return
             }
             if !hasConnection {
-                
+                self.presentCouldNotGetCKAccount()
             }
         })
         setupView()
-    
+        
     }
     
     func presentCouldNotGetCKAccount() {
-
-        
-        let alert = UIAlertController(title: "We couldn't find your Check In Account on Our Server", message: "This could be a problem with your connection. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "We couldn't find your Check In Account on Our Server", message: "This could be a problem with your connection and you may want to restart application. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
         let createNewOneAction = UIAlertAction(title: "Create New Account", style: .Default) { (_) in
-            UserController.sharedController.deleteAccount({ 
-                self.presentLoginScreen()
+            let areYouSureAlert = UIAlertController(title: "Are You Sure You Want to Delete Local Account and Create a New One?", message: nil, preferredStyle: .Alert)
+            let noAction = UIAlertAction(title: "No", style: .Cancel, handler: { (_) in
+                self.presentGeneralError()
             })
+            let yesAction = UIAlertAction(title: "Yes", style: .Default, handler: { (_) in
+                
+                UserController.sharedController.deleteAccount({
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentLoginScreen()
+                        
+                    })
+                })
+            })
+            areYouSureAlert.addAction(noAction)
+            areYouSureAlert.addAction(yesAction)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(areYouSureAlert, animated: true, completion: nil)
+            })
+            
         }
         let tryToFindAgain = UIAlertAction(title: "Try Again", style: .Default) { (_) in
             guard let user = UserController.sharedController.loggedInUser else {
@@ -60,7 +74,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
         alert.addAction(createNewOneAction)
         alert.addAction(tryToFindAgain)
-                dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
     }
@@ -73,32 +87,32 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
-
+        
     }
     
     func presentSuccessfullyFoundAccount() {
         let alert = UIAlertController(title: "Successfully found your Account", message: "Please Restart Curfew Check", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alert.addAction(action)
-                dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
-
+        
     }
     
     func presentLoginScreen() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let loginVC = storyBoard.instantiateViewControllerWithIdentifier("loginScreen")
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(loginVC, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(loginVC, animated: true, completion: nil)
         })
     }
     
     
     func setupView() {
-     //   guard let user = UserController.sharedController.loggedInUser else { return }
-
-       // UINavigationBar.appearance().barTintColor = UIColor ( red: 0.8205, green: 0.1151, blue: 0.6333, alpha: 1.0 )
+        //   guard let user = UserController.sharedController.loggedInUser else { return }
+        
+        // UINavigationBar.appearance().barTintColor = UIColor ( red: 0.8205, green: 0.1151, blue: 0.6333, alpha: 1.0 )
         UINavigationBar.appearance().tintColor = UIColor ( red: 0.0024, green: 0.7478, blue: 0.8426, alpha: 1.0 )
     }
     
@@ -126,7 +140,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     // Override to support editing the table view.
-     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
             guard let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
@@ -138,12 +152,12 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
-     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         guard let sections = MessageController.sharedController.fetchedResultsController.sections else { return nil }
         
         
         guard let phoneNumber = UserController.sharedController.loggedInUser?.phoneNumber else { return "WhereYouApp" }
-
+        
         if sections[section].name == phoneNumber {
             return "WhereYouApp Requests"
         } else {
@@ -194,22 +208,22 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }
-
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "messageSegue" {
-     // Get the new view controller using segue.destinationViewController.
-        guard let messageDetailVC = segue.destinationViewController as? MessageDetailViewController,
-            let indexPath = tableView.indexPathForSelectedRow else {
-                return
+            // Get the new view controller using segue.destinationViewController.
+            guard let messageDetailVC = segue.destinationViewController as? MessageDetailViewController,
+                let indexPath = tableView.indexPathForSelectedRow else {
+                    return
             }
-        let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message
-        messageDetailVC.message = message
-        
-     // Pass the selected object to the new view controller.
+            let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message
+            messageDetailVC.message = message
+            
+            // Pass the selected object to the new view controller.
             
         } else if segue.identifier == "profileSegue" {
             guard let profileVC = segue.destinationViewController as? ProfileViewController,
@@ -220,6 +234,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             profileVC.loggedInUser = user
             
         }
-     }
+    }
     
 }
