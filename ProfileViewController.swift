@@ -21,7 +21,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
-        
+
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     @IBAction func imageTapped(sender: AnyObject) {

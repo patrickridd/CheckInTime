@@ -76,6 +76,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         messageTextView.delegate = self
       //  setupTabBarView()
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -90,6 +91,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
                 print("message in Detail View is nil OR loggedInUser is nil")
                 return
         }
+        message.hasBeenSeen = 1
         self.loggedInUser = user
         self.message = message
         // Put the Name of whoever isn't the loggedInUser in the titleLabel
@@ -392,12 +394,52 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     
     
     @IBAction func reportButtonTapped(sender: AnyObject) {
-        
-        
-        
+        let alert = UIAlertController(title: "Are you sure you want to report this user?", message: nil, preferredStyle: .ActionSheet)
+        let noAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)
+        let yesAction = UIAlertAction(title: "Yes", style: .Default) { (_) in
+            guard let usersContact = self.usersContact else {
+                return
+            }
+            let reportContactRecord = CKRecord(recordType: "ReportedContact")
+            reportContactRecord["PhoneNumber"] = usersContact.phoneNumber
+            CloudKitManager.cloudKitController.saveRecord(reportContactRecord, completion: { (record, error) in
+                if let error = error {
+                    print("Error saving record. Error: \(error.localizedDescription)")
+                    self.presentTryAgain()
+                } else {
+                    self.presentSuccess()
+                }
+            })
+            
+            
+        }
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
     }
     
+    func presentTryAgain() {
+        let alert = UIAlertController(title: "Something Went wrong. Please Try Again.", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
+    }
     
+    func presentSuccess() {
+        let alert = UIAlertController(title: "Successfully Reported User!", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+        
+    }
     
     func showErrorSendingAlert() {
         let alert = UIAlertController(title: "Had trouble Sending Message", message: nil, preferredStyle: .Alert)

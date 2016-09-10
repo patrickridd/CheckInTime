@@ -343,7 +343,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         if contact.hasAppAccount == false {
             
             cell.textLabel?.textColor = UIColor.lightGrayColor()
+        } else {
+            cell.textLabel?.textColor = UIColor.yellowColor()
         }
+        
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
 
         cell.textLabel?.text = contact.name ?? formatedPhoneNumber

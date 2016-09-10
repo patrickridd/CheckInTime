@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		215BAB071D84AFCF0026D430 /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215BAB061D84AFCF0026D430 /* Message+CoreDataProperties.swift */; };
 		216B8AF71D7F83E700FB33CF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8AF61D7F83E700FB33CF /* ContactTableViewCell.swift */; };
 		216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8B161D81084100FB33CF /* CustomImageView.swift */; };
 		216EB9611D8241E200592649 /* NumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216EB9601D8241E200592649 /* NumberController.swift */; };
@@ -31,10 +32,10 @@
 		21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4773C1D7638AB0094FCBC /* LoginViewController.swift */; };
 		21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D477431D767DD40094FCBC /* CloudKit.framework */; };
 		21D4777B1D7775990094FCBC /* MessageTesterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */; };
-		21F8FA691D78C264002F99DB /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		215BAB061D84AFCF0026D430 /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		216B8AF61D7F83E700FB33CF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		216B8B161D81084100FB33CF /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomImageView.swift; path = "../../../DevMt/Unit 6/Day 2/NewAnimations/NewAnimations/CustomImageView.swift"; sourceTree = "<group>"; };
 		216EB9601D8241E200592649 /* NumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberController.swift; sourceTree = "<group>"; };
@@ -62,7 +63,6 @@
 		21D477421D767DC00094FCBC /* WhereYouApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WhereYouApp.entitlements; sourceTree = "<group>"; };
 		21D477431D767DD40094FCBC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		21D4777A1D7775990094FCBC /* MessageTesterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTesterViewController.swift; sourceTree = "<group>"; };
-		21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */,
-				21F8FA681D78C264002F99DB /* Message+CoreDataProperties.swift */,
+				215BAB061D84AFCF0026D430 /* Message+CoreDataProperties.swift */,
 				21D477091D75FD390094FCBC /* Stack.swift */,
 				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,
 			);
@@ -253,6 +253,7 @@
 				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
 				219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */,
 				216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */,
+				215BAB071D84AFCF0026D430 /* Message+CoreDataProperties.swift in Sources */,
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
 				21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */,
 				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,
@@ -262,7 +263,6 @@
 				216B8AF71D7F83E700FB33CF /* ContactTableViewCell.swift in Sources */,
 				21D477031D75FC580094FCBC /* User.swift in Sources */,
 				21D477071D75FC580094FCBC /* Message.swift in Sources */,
-				21F8FA691D78C264002F99DB /* Message+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

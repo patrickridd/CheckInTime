@@ -58,6 +58,7 @@ class MessageController {
         message.recordName = messageRecord.recordID.recordName
         message.record = messageRecord
         message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(messageRecord.recordID)
+        message.hasBeenSeen = 1
         
         // Get records From Sender and Receiver
         UserController.sharedController.fetchUsersCloudKitRecord(sender) { (record) in
@@ -243,7 +244,7 @@ class MessageController {
             let fetchedMessage = messages.first else {
                 
                 let message = Message(record: record)!
-                
+                message.hasBeenSeen = 0
                 scheduleLocalNotificationToCheckIn(message)
                 
                 saveContext()
@@ -253,6 +254,7 @@ class MessageController {
         guard let message = Message(record: record) else {
             return
         }
+        message.hasBeenSeen = 0
         self.scheduleLocalNotificationForResponseCheckIn(message)
         saveContext()
     }

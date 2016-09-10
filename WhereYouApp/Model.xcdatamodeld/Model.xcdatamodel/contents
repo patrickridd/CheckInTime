@@ -2,6 +2,7 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15G1004" minimumToolsVersion="Xcode 7.0">
     <entity name="Message" representedClassName=".Message" syncable="YES">
         <attribute name="ckRecordID" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="hasBeenSeen" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="hasResponded" attributeType="Boolean" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -25,7 +26,7 @@
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" inverseName="sender" inverseEntity="Message" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Message" positionX="-441" positionY="-162" width="128" height="210"/>
+        <element name="Message" positionX="-441" positionY="-162" width="128" height="225"/>
         <element name="User" positionX="-198" positionY="-234" width="128" height="180"/>
     </elements>
 </model>
