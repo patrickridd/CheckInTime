@@ -20,6 +20,8 @@ class UserController {
     
     let moc = Stack.sharedStack.managedObjectContext
     
+    
+    // Contacts Used to fill ContactTableViewController
     var contacts: [User] = [] {
         didSet {
             let nc = NSNotificationCenter.defaultCenter()
@@ -27,6 +29,7 @@ class UserController {
         }
     }
     
+    /// Creates the Logged In User
     func createUser(name: String, phoneNumber: String, image: UIImage, completion: () -> Void) {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
@@ -71,11 +74,10 @@ class UserController {
                 self.saveContext()
                 completion()
             })
-            
         }
-        
     }
     
+    /// Checks for user who is logged in.
     func checkForCoreDataUserAccount(completion: (hasAccount: Bool, hasConnection: Bool)-> Void) {
         
         let sortDescriptor = NSSortDescriptor(key: "timeCreated", ascending: true)
@@ -88,7 +90,6 @@ class UserController {
                 completion(hasAccount: false, hasConnection: false)
                 return
         }
-        
         self.loggedInUser = users.first
         guard let loggedInUser = self.loggedInUser else {
             print("No user")
@@ -117,11 +118,10 @@ class UserController {
                 completion(hasAccount: true, hasConnection: true)
                 
             })
-            
         }
     }
     
-    // Adds contact to Contacts and then orders the contacts with the new Contact alphabetically.
+    /// Adds contact to Contacts and then orders the contacts with the new Contact alphabetically.
     func addContactAndOrderList(contact: User) {
         var contactList = UserController.sharedController.contacts
         contactList.append(contact)
@@ -132,7 +132,7 @@ class UserController {
     }
     
     
-    // Fetches all users in core data except the Logged In User
+    /// Fetches all users in core data except the Logged In User
     func fetchContactsFromCoreData(completion: (contacts: [User]) -> Void) {
         let contactRequest = NSFetchRequest(entityName: "User")
         
@@ -147,7 +147,7 @@ class UserController {
         
     }
     
-    // Check by user phone number if contacts who didn't have account now do have an account with the app.
+    /// Check by user phone number if contacts who didn't have account now do have an account with the app.
     func checkIfContactsHaveSignedUpForApp(completion: (newAppAcctUsers: Bool, updatedUsers: [User]?)->Void) {
         let request = NSFetchRequest(entityName: "User")
         let predicate = NSPredicate(format: "hasAppAccount == 0")
@@ -197,6 +197,7 @@ class UserController {
         
         
     }
+    
     /// Checks if current user's contacts have deleted their by checking for their records in CloudKit.
     func checkIfContactsHaveDeletedApp(completion: (haveDeletedApp: Bool, updatedUsers: [User]?) -> Void) {
         guard let loggedInUser = loggedInUser else {
@@ -262,7 +263,7 @@ class UserController {
         }
     }
     
-    /// Fetches One User from CoreData by using their phone number //
+    /// Fetches One User from CoreData by using their phone number
     func fetchCoreDataUserWithNumber(number: String, completion: (user: User?) -> Void) {
         
         let request = NSFetchRequest(entityName: "User")
@@ -285,7 +286,7 @@ class UserController {
         
     }
     
-    /// Fetches Contact with number
+    /// Fetches Contact in CloudKit with phone number.
     func fetchCloudKitUserWithNumber(number: String, completion: (contact: User?) -> Void) {
         
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
@@ -304,7 +305,7 @@ class UserController {
         }
     }
     
-    /// Fetches the loggedInUsers Contacts From Cloudkit if they get deleted. //
+    /// Fetches the loggedInUsers Contacts From Cloudkit if they get deleted.
     func fetchCloudKitContacts(completion: (hasUsers: Bool)->Void) {
         guard let loggedInUser = loggedInUser else {
             print("No user logged in yet")
@@ -340,6 +341,7 @@ class UserController {
         
     }
     
+    /// Checks if Contact has downloaded this app so User know if they can communicate with each other.
     func checkIfContactHasAccount(newContact: User, completion: (record: CKRecord?) -> Void) {
         
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [newContact.phoneNumber])
@@ -356,8 +358,8 @@ class UserController {
         })
     }
     
+    /// Checks For Duplicate Contact in CoreData
     func checkForDuplicateContact(phoneNumber: String, completion: (hasContactAlready: Bool, isCKContact: Bool) -> Void) {
-        
         let request = NSFetchRequest(entityName: "User")
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [phoneNumber])
         request.predicate = predicate
@@ -380,11 +382,10 @@ class UserController {
         } else {
             completion(hasContactAlready: false, isCKContact: false)
         }
-        
     }
     
+    /// Checks If Contact is User's contacts property so the contact isn't added twice.
     func checkIfContactIsInUsersCloudKitContacts(number: String, completion: (isCKContact: Bool) -> Void) {
-        
         fetchCloudKitUserWithNumber(number) { (contact) in
             guard let contact = contact,
                 contactReference = contact.cloudKitReference,
@@ -407,8 +408,7 @@ class UserController {
         }
     }
     
-    // Delete Contact
-    
+    /// Deletes User's Contact From CloudKit contacts property.
     func deleteContactFromCloudKit(contact: User) {
         guard let index = self.contacts.indexOf(contact) else {
             print("Couldn't find index for Contact")
@@ -443,9 +443,7 @@ class UserController {
                     print("No index")
                     return
                 }
-                
                 references.removeAtIndex(index)
-                
                 record[User.contactsKey] = references
                 loggedInUser.contactReferences = references
                 CloudKitManager.cloudKitController.modifyRecords([record], perRecordCompletion: { (record, error) in
@@ -461,7 +459,6 @@ class UserController {
                 })
                 
             } else {
-                
                 self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                     guard let record = record else {
                         return
@@ -497,11 +494,11 @@ class UserController {
         }
     }
     
+    /// Deletes the Current User Account from CloudKit, CoreData, and Cancels all notifications.
     func deleteAccount(completion: ()->Void) {
         guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
             return
         }
-        
         CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
             if let error = error {
                 print("Error Deleting User Record. Error: \(error.localizedDescription)")
@@ -517,12 +514,14 @@ class UserController {
                         UserController.sharedController.saveContext()
                         completion()
                     })
-                    
                 })
             }
         }
     }
     
+    /* Updates Local Contact's hasAppAccount Bool. If Contact has App, Contact is saved into User's CK contacts property.
+    // If Contact doesn't have app. If will fail and return
+    */
     func updateContactsAppStatus(contact: User, completion: (wasSaved: Bool) -> Void) {
         if contact.hasAppAccount == 1 {
             contact.hasAppAccount = 0

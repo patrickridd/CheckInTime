@@ -18,13 +18,11 @@ class MessageController {
     var fetchedResultsController: NSFetchedResultsController!
     
     
-    
     init() {
-        
         setupFetchController()
-        
     }
     
+    /// Fetches all messages from CoreData.
     func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
         let sortDescriptor = NSSortDescriptor(key: "timeSent", ascending: false)
@@ -39,21 +37,17 @@ class MessageController {
     
     func fetchMessagesFromCoreData(completion: (messages: [Message])->Void) {
         let request = NSFetchRequest(entityName: "Message")
-        
         guard let fetchedMessages = (try? moc.executeFetchRequest(request) as? [Message]), messages = fetchedMessages else {
             completion(messages: [])
             return
         }
-        
         completion(messages: messages)
-        
     }
     
     /* Creates a new message  with between two users and saves it both in cloudkit and core data.
      */
     
     func createMessage(sender: User, receiver: User, timeDue: NSDate, completion: (messageSent: Bool, messageRecord: CKRecord, message: Message)->Void) {
-        
         
         // create new Message
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
@@ -107,9 +101,7 @@ class MessageController {
                     }
                 }
             })
-            
         }
-        
     }
     
     /*
@@ -157,14 +149,11 @@ class MessageController {
             }
         }
     }
-    
-    
     /*
      Fetches Messages from cloudkit that havent been saved to core data yet.
      */
     
     func fetchUnsyncedMessagesFromCloudKitToCoreData(user: User) {
-        
         
         let request = NSFetchRequest(entityName: "Message")
         guard let reference = user.cloudKitReference else {
@@ -201,7 +190,6 @@ class MessageController {
         }
     }
     
-    
     /* Subscribes the logged in user to all messages in cloudkit that contain its Users record in the Message record's
      "users" property.
      */
@@ -224,8 +212,6 @@ class MessageController {
     }
     
     
-    
-    
     func createUserContactFromNewMessage(messageSender: User) {
         
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [messageSender.phoneNumber])
@@ -240,13 +226,8 @@ class MessageController {
             } else {
                 print("Saved to contact to core data")
             }
-            
-            
         }
-        
-        
     }
-    
       
     /* This method takes a record obtained from a remote notification and discerns if it is a new message or an updated one.
      If it is a new message it will simply create a new one and save it to the context. If it is an updated message then it deletes the original message from core data and creates the new updated one and saves it to core data.
@@ -276,6 +257,7 @@ class MessageController {
         saveContext()
     }
     
+    /// Schedules a notification to remind someone to check in at a specific time.
     func scheduleLocalNotificationToCheckIn(message: Message) {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.sender.phoneNumber)
         let localNotification = UILocalNotification()
@@ -287,6 +269,7 @@ class MessageController {
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     }
     
+    /// Notifies someone when someone has checked in.
     func scheduleLocalNotificationForResponseCheckIn(message: Message) {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.receiver.phoneNumber)
 
@@ -301,6 +284,7 @@ class MessageController {
         
     }
     
+    /// Deletes messages from CoreData.
     func deleteMessagesFromCoreData(messages: [Message]) {
         for message in messages {
             moc.deleteObject(message)
