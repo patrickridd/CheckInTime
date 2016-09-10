@@ -52,7 +52,7 @@ class MessageController {
     /* Creates a new message  with between two users and saves it both in cloudkit and core data.
      */
     
-    func createMessage(sender: User, receiver: User, timeDue: NSDate, completion: (messageSent: Bool, messageRecord: CKRecord)->Void) {
+    func createMessage(sender: User, receiver: User, timeDue: NSDate, completion: (messageSent: Bool, messageRecord: CKRecord, message: Message)->Void) {
         
         
         // create new Message
@@ -99,7 +99,7 @@ class MessageController {
                 CloudKitManager.cloudKitController.saveRecord(messageRecord) { (record, error) in
                     if let error = error {
                         print("Error Saving Message. Error: \(error.localizedDescription)")
-                        completion(messageSent: false)
+                        completion(messageSent: false, messageRecord: messageRecord, message: message)
                         return
                     } else {
                         print("Saved message to cloudkit")
@@ -112,8 +112,9 @@ class MessageController {
         
     }
     
-    
-    
+    /*
+    // Resaves a message record to cloudkit and the user wants to resent the message. 
+    */
     func resaveMessageRecord(messageRecord: CKRecord, completion: (messageSent: Bool)->Void) {
         CloudKitManager.cloudKitController.saveRecord(messageRecord) { (record, error) in
             if let error = error {

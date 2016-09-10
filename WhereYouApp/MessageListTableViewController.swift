@@ -18,17 +18,72 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.automaticallyAdjustsScrollViewInsets = false
-        UIApplication.sharedApplication().cancelAllLocalNotifications()
         MessageController.sharedController.fetchedResultsController.delegate = self
-        UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount) in
+        UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount, hasConnection) in
             if !hasAccount {
                 self.presentLoginScreen()
                 return
-            } 
+            }
+            if !hasConnection {
+                
+            }
         })
         setupView()
     
+    }
+    
+    func presentCouldNotGetCKAccount() {
+
+        
+        let alert = UIAlertController(title: "We couldn't find your Check In Account on Our Server", message: "This could be a problem with your connection. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
+        let createNewOneAction = UIAlertAction(title: "Create New Account", style: .Default) { (_) in
+            UserController.sharedController.deleteAccount({ 
+                self.presentLoginScreen()
+            })
+        }
+        let tryToFindAgain = UIAlertAction(title: "Try Again", style: .Default) { (_) in
+            guard let user = UserController.sharedController.loggedInUser else {
+                self.presentGeneralError()
+                return
+            }
+            UserController.sharedController.fetchUsersCloudKitRecord(user, completion: { (record) in
+                if let _ = record {
+                    self.presentSuccessfullyFoundAccount()
+                } else {
+                    self.presentCouldNotGetCKAccount()
+                }
+                
+            })
+        }
+        
+        alert.addAction(createNewOneAction)
+        alert.addAction(tryToFindAgain)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
+    
+    func presentGeneralError() {
+        let alert = UIAlertController(title: "We're sorry, but something went wrong", message: "Please Restart Curfew Check", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
+    }
+    
+    func presentSuccessfullyFoundAccount() {
+        let alert = UIAlertController(title: "Successfully found your Account", message: "Please Restart Curfew Check", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+                dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
     }
     
     func presentLoginScreen() {

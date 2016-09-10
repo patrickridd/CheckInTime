@@ -76,7 +76,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let alert = UIAlertController(title: "Are you sure you want to Delete your Account?", message: "All Contacts and Messages will be deleted.", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         let deleteAccountAction = UIAlertAction(title: "Yes I'm Sure", style: .Default) { (_) in
-            self.deleteAccount()
+            UserController.sharedController.deleteAccount({ })
+            
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAccountAction)
@@ -87,31 +88,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     
-    func deleteAccount() {
-        guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
-            return
-        }
-        
-        CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
-            if let error = error {
-                print("Error Deleting User Record. Error: \(error.localizedDescription)")
-            } else {
-                print("Successfully Deleted User Profile")
-                UserController.sharedController.fetchContactsFromCoreData({ (contacts) in
-                    var contactsToDelete = contacts
-                    contactsToDelete.append(loggedInUser)
-                    UserController.sharedController.deleteContactsFromCoreData(contactsToDelete)
-                    MessageController.sharedController.fetchMessagesFromCoreData({ (messages) in
-                        MessageController.sharedController.deleteMessagesFromCoreData(messages)
-                        UIApplication.sharedApplication().cancelAllLocalNotifications()
-                        UserController.sharedController.saveContext()
-                        self.presentLoginScreen()
-                    })
-                    
-                })
-            }
-        }
-    }
+   
     
     func presentLoginScreen() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)

@@ -141,24 +141,26 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
         
             dispatch_async(dispatch_get_main_queue(), {
-            MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: self.dueDatePicker.date, completion: { (messageSent, messageRecord) in
+            MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: self.dueDatePicker.date, completion: { (messageSent, messageRecord, message) in
                 
                 if !messageSent {
-                    self.presentMessageNotSent(messageRecord)
+                    self.presentMessageNotSent(messageRecord, message: message)
                 }
             })
         })
 
     }
     
-    func presentMessageNotSent(messageRecord: CKRecord) {
+    func presentMessageNotSent(messageRecord: CKRecord, message: Message) {
         let alert = UIAlertController(title: "Failed to Send", message: "There might be something wrong with your connection", preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in
+            MessageController.sharedController.deleteMessagesFromCoreData([message])
+            MessageController.sharedController.saveContext()
+        }
         let resendAction = UIAlertAction(title: "Resend?", style: .Default) { (_) in
-            
             MessageController.sharedController.resaveMessageRecord(messageRecord, completion: { (messageSent) in
                 if !messageSent {
-                    self.presentMessageNotSent(messageRecord)
+                    self.presentMessageNotSent(messageRecord, message: message)
                 }
             })
         }

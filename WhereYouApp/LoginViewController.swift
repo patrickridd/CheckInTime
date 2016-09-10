@@ -34,17 +34,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                                     print("Messages restored")
                                     dispatch_async(dispatch_get_main_queue(), {
                                         self.dismissViewControllerAnimated(true, completion: nil)
-                                        
                                     })
                                 })
-                                
                             } else {
                                 dispatch_async(dispatch_get_main_queue(), {
                                     self.dismissViewControllerAnimated(true, completion: nil)
-                                    
                                 })
                             }
-                            
                         })
                     }
                 })
@@ -57,12 +53,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         guard let image = imageView.image else {
             return
         }
-        
         guard let phoneNumber = numberTextField.text else {
             self.presentNumberAlert()
             return
         }
-        
         var formatedNumber = NumberController.sharedController.formatNumberFromLoginForRecordName(phoneNumber)
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
@@ -72,11 +66,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             } else {
                 self.presentNumberAlert()
             }
-            
-            
         }
-        
-        
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {

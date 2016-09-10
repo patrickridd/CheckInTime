@@ -76,7 +76,7 @@ class UserController {
         
     }
     
-    func checkForCoreDataUserAccount(completion: (hasAccount: Bool)-> Void) {
+    func checkForCoreDataUserAccount(completion: (hasAccount: Bool, hasConnection: Bool)-> Void) {
         
         let sortDescriptor = NSSortDescriptor(key: "timeCreated", ascending: true)
         let request = NSFetchRequest(entityName: "User")
@@ -85,24 +85,27 @@ class UserController {
         guard let fetchedUsers = (try? self.moc.executeFetchRequest(request) as? [User]),
             users = fetchedUsers where users.count > 0 else {
                 print("Cant find coreDataloggedInUser")
-                completion(hasAccount: false)
+                completion(hasAccount: false, hasConnection: false)
                 return
         }
         
         self.loggedInUser = users.first
         guard let loggedInUser = self.loggedInUser else {
             print("No user")
-            completion(hasAccount: false)
+            completion(hasAccount: false, hasConnection: false)
             return
         }
         self.fetchContactsFromCoreData { (contacts) in
             self.loggedInUser?.contacts = contacts
             self.contacts = contacts
             
-            self.fetchUsersCloudKitRecord(self.loggedInUser!, completion: { (record) in
+            self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                 // Subscribe to Message Changes.
                 // MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
-                
+                guard let _ = record else {
+                    completion(hasAccount: true, hasConnection: false)
+                    return
+                }
                 CloudKitManager.cloudKitController.fetchSubscription("My Messages") { (subscription, error) in
                     guard let _ = subscription else {
                         print("Trying to subscribe to My Messages")
@@ -111,7 +114,7 @@ class UserController {
                     }
                     print("You are subscribed to received messages")
                 }
-                completion(hasAccount: true)
+                completion(hasAccount: true, hasConnection: true)
                 
             })
             
@@ -494,7 +497,31 @@ class UserController {
         }
     }
     
-    
+    func deleteAccount(completion: ()->Void) {
+        guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
+            return
+        }
+        
+        CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
+            if let error = error {
+                print("Error Deleting User Record. Error: \(error.localizedDescription)")
+            } else {
+                print("Successfully Deleted User Profile")
+                UserController.sharedController.fetchContactsFromCoreData({ (contacts) in
+                    var contactsToDelete = contacts
+                    contactsToDelete.append(loggedInUser)
+                    UserController.sharedController.deleteContactsFromCoreData(contactsToDelete)
+                    MessageController.sharedController.fetchMessagesFromCoreData({ (messages) in
+                        MessageController.sharedController.deleteMessagesFromCoreData(messages)
+                        UIApplication.sharedApplication().cancelAllLocalNotifications()
+                        UserController.sharedController.saveContext()
+                        completion()
+                    })
+                    
+                })
+            }
+        }
+    }
     
     func updateContactsAppStatus(contact: User, completion: (wasSaved: Bool) -> Void) {
         if contact.hasAppAccount == 1 {
