@@ -71,14 +71,14 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func presentNoUserAccount(newContact: User) {
-        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have WhereYouApp", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in
             
             let messageVC = MFMessageComposeViewController()
             if MFMessageComposeViewController.canSendText() == true {
-                messageVC.body = "I'd like you to download WhereYouApp so I can know WhereYouApp"
+                messageVC.body = "I'd like you to download CheckInTime so you can Check In with me"
                 messageVC.recipients = [newContact.phoneNumber]
                 //  messageVC.messageComposeDelegate = self
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
@@ -128,7 +128,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         return true
     }
     
-    @IBAction func whereYouAppButtonTapped(sender: AnyObject) {
+    @IBAction func SendCheckInTime(sender: AnyObject) {
         guard let sender = UserController.sharedController.loggedInUser,
             receiver = contact else {
                 print("No logged in user or contact")
@@ -215,22 +215,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             }
             MessageController.sharedController.deleteMessagesFromCoreData([message])
             
-            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sections = MessageController.sharedController.fetchedResultsController.sections else { return nil }
-        
-        
-        guard let phoneNumber = UserController.sharedController.loggedInUser?.phoneNumber else { return "WhereYouApp" }
-        
-        if sections[section].name == phoneNumber {
-            return "WhereYouApp Requests"
-        } else {
-            return "People want to Know WhereYouApp"
-        }
-    }
+    
     
     // MARK: NSFetchedResultsControllerDelegate
     

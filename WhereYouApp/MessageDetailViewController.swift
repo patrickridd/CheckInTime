@@ -49,7 +49,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             if let text = messageTextView.text where text != self.defaultMessage {
                 myAnnotation.subtitle = text
             } else if let loggedInName = loggedInUser?.name ?? loggedInUser?.phoneNumber {
-                myAnnotation.subtitle = "Where \(loggedInName) App"
+                myAnnotation.subtitle = "Where \(loggedInName) is"
             }
             myAnnotation.coordinate = coordinate
             mapView.addAnnotation(myAnnotation)
@@ -128,26 +128,14 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
     }
     
-//    func setupTabBarView() {
-//        tabBarView.leftAnchor.isEqual(self.view?.leftAnchor)
-//        tabBarView.rightAnchor.isEqual(self.view?.rightAnchor)
-//        tabBarView.bottomAnchor.isEqual(self.view?.bottomAnchor)
-//        tabBarView.topAnchor.isEqual(self.messageTextView?.bottomAnchor)
-//        //let tabBarHeightContstraint = NSLayoutConstraint(item: tabBarView, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1/8, constant: 0)
-//      //  tabBarView.addConstraint(tabBarHeightContstraint)
-//        tabBarView.backgroundColor = UIColor.redColor()
-//
-//        view.addSubview(tabBarView)
-//    }
-    
     
     func updateWithWaitingForReceiverResponse(message: Message) {
         // Update the send button title
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
 
-            sendButton.setTitle("Waiting For \(usersContact!.name ?? formatedPhoneNumber) to Respond", forState: .Normal)
+            sendButton.setTitle("Waiting For \(usersContact!.name ?? formatedPhoneNumber) to Check In", forState: .Normal)
     
-        self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
         // Hide TextView
         messageTextView.hidden = true
         // Disable Send Button
@@ -161,9 +149,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         // Update the send button title
         if let timeRespondedDate = message.timeResponded {
-            sendButton.setTitle("Responded at \(dateFormatter.stringFromDate(timeRespondedDate))", forState: .Normal)
+            sendButton.setTitle("Checked In \(dateFormatter.stringFromDate(timeRespondedDate))", forState: .Normal)
         }
-        self.timeDueLabel.text = "Time Due: \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
         
         // Hide TextView
         messageTextView.hidden = true
@@ -230,7 +218,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         // Set time due label
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
 
-        self.timeDueLabel.text = "\(usersContact!.name ?? formatedPhoneNumber) requests to know WhereYouApp by \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "\(usersContact!.name ?? formatedPhoneNumber) wants you to Check In at \(dateFormatter.stringFromDate(message.timeDue))"
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -295,7 +283,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         } else {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
 
-            message.text = "Where \(loggedInUser.name ?? formatedPhoneNumber) App"
+            message.text = "Where \(loggedInUser.name ?? formatedPhoneNumber) Check In"
         }
         // Input time responded
         message.timeResponded = NSDate()
@@ -373,11 +361,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             
             mapView.addAnnotation(annotation)
         } else {
-            self.messageLabel.text = "Where\(loggedInUser.name ?? formatedPhoneNumber)App"
+            self.messageLabel.text = "Where\(loggedInUser.name ?? formatedPhoneNumber) Check In"
         }
         
         // Show the time you responded
-        self.timeDueLabel.text = "You responded \(dateFormatter.stringFromDate(NSDate()))"
+        self.timeDueLabel.text = "You Checked In \(dateFormatter.stringFromDate(NSDate()))"
         
         
         

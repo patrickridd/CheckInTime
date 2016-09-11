@@ -30,15 +30,14 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 self.presentCouldNotGetCKAccount()
             }
         })
-        setupRightButton()
         setupNavBar()
         setupTabBar()
-      
+        
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    override func viewWillAppear(animated: Bool) {
+            super.viewWillAppear(animated)
+        setupRightButton()
 
     }
     
@@ -184,18 +183,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sections = MessageController.sharedController.fetchedResultsController.sections else { return nil }
-        
-        
-        guard let phoneNumber = UserController.sharedController.loggedInUser?.phoneNumber else { return "WhereYouApp" }
-        
-        if sections[section].name == phoneNumber {
-            return "WhereYouApp Requests"
-        } else {
-            return "People want to Know WhereYouApp"
-        }
-    }
+ 
     
     // MARK: NSFetchedResultsControllerDelegate
     

@@ -40,6 +40,8 @@ class ContactTableViewCell: UITableViewCell {
     
     // Updates View with Message Details
     func updateWith(message: Message) {
+        
+        setupLabelCornerRadius()
         guard let user = UserController.sharedController.loggedInUser else {
             return
         }
@@ -81,9 +83,9 @@ class ContactTableViewCell: UITableViewCell {
         }
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
-        hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber)'s Response"
+        hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber) to Check In"
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
-        shouldRespondByLabel.text = "Should respond by \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "Check In ⏰ \(dateFormatter.stringFromDate(message.timeDue))"
         
     }
     
@@ -95,9 +97,9 @@ class ContactTableViewCell: UITableViewCell {
         }
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
-        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) wants to know WhereYouApp"
+        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) wants you to Check In"
         timeSentLabel.text = ""
-        shouldRespondByLabel.text = "\(userContact.name ?? formatedPhoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
     }
     
     // Cell tells User that user's contact responded to WhereYouApp request
@@ -107,14 +109,14 @@ class ContactTableViewCell: UITableViewCell {
             return
         }
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
-        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) responded to WhereYouApp request"
+        hasRespondedLabel.textColor = UIColor.yellowColor()
+        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) Check In!"
         shouldRespondByLabel.text = ""
         
         guard let timeResponded = message.timeResponded else {
             return
         }
-        timeSentLabel.text = "Responded \(dateFormatter.stringFromDate(timeResponded))"
+        timeSentLabel.text = "Checked In \(dateFormatter.stringFromDate(timeResponded))"
         
     }
     
@@ -125,9 +127,20 @@ class ContactTableViewCell: UITableViewCell {
             return
         }
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-        hasRespondedLabel.text = "You let \(userContact.name ?? formatedPhoneNumber) know WhereYouApp"
-        timeSentLabel.text = "You responded at \(dateFormatter.stringFromDate(timeResponded))"
+        hasRespondedLabel.textColor = UIColor.yellowColor()
+        hasRespondedLabel.text = "You Checked In with \(userContact.name ?? formatedPhoneNumber)!"
+        timeSentLabel.text = "You Checked In \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
+    }
+    
+    func setupLabelCornerRadius() {
+        timeSentLabel.layer.masksToBounds = true
+        timeSentLabel.layer.cornerRadius = 6.5
+        shouldRespondByLabel.layer.masksToBounds = true
+        shouldRespondByLabel.layer.cornerRadius = 6.5
+        
+        
+        
     }
     
     
