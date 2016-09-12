@@ -76,7 +76,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     func showMessage(alert: String) {
-        let alertController = UIAlertController(title: "WhereYouApp", message: alert, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "CheckInTime", message: alert, preferredStyle: UIAlertControllerStyle.Alert)
         
         let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) -> Void in
         }
@@ -89,6 +89,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.isKeyAvailable(CNContactImageDataKey) {
             
+            loadingAlert()
             guard let name = CNContactFormatter.stringFromContact(contact, style: .FullName) else {
                 return
                 
@@ -100,18 +101,21 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             if contact.phoneNumbers.count > 0 {
                 phoneNumbers = NumberController.sharedController.getMobileNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
+                self.dismissViewControllerAnimated(true, completion: nil)
                 self.presentContactHasNoMobilePhone(name)
                 print("no phone number")
                 return
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
+                self.dismissViewControllerAnimated(true, completion: nil)
                 presentContactHasNoMobilePhone(name)
                 return
             }
             var contactPhoneNumber = phoneNumbers[0]
             NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
                 if !isFormattedCorrectly {
+                    self.dismissViewControllerAnimated(true, completion: nil)
                     self.presentContactHasNoMobilePhone(name)
                     return
                 }
@@ -120,11 +124,13 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 let phoneNumber = contactPhoneNumber
                 
                 if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
+                    self.dismissViewControllerAnimated(true, completion: nil)
                     self.presentTryingToAddYourselfAlert()
                     return
                 }
                 UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
                     if hasContactAlready && isCKContact {
+                        self.dismissViewControllerAnimated(true, completion: nil)
                         self.presenthasContactAlreadyAlert(name)
                         return
                     } else if hasContactAlready && !isCKContact {
@@ -136,10 +142,12 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
                                     print("Saved Contact Successfully to CloudKit")
+                                    self.dismissViewControllerAnimated(true, completion: nil)
                                     self.presentAddedContactSuccessfully()
                                     return
                                 } else {
                                     print("Failed to save contact to cloudkit. Try again.")
+                                    self.dismissViewControllerAnimated(true, completion: nil)
                                     self.presentFailedToAddContact()
                                     return
                                 }
@@ -163,13 +171,14 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                 
                                 UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
-                                
+                                self.dismissViewControllerAnimated(true, completion: nil)
                                 self.presentNoUserAccount(newContact)
                                 return
                             }
                             
                             UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
+                                    self.dismissViewControllerAnimated(true, completion: nil)
                                     self.presentUserHasAccount(newContact)
                                 }
                             })
@@ -180,7 +189,24 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
-    
+    /// Presents a loading alert to let the user know that it is adding a contact.
+    func loadingAlert() {
+        let alert = UIAlertController(title: nil, message: "Adding Contact...", preferredStyle: .Alert)
+        
+        alert.view.tintColor = UIColor.blackColor()
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(10, 5, 50, 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        })
+    }
+
+    /// Tell the User when their contacts have deleted CheckInTime
     func presentContactsHaveDeletedApp(deletedContacts: [User]) {
         
         let names = deletedContacts.flatMap({$0.name})
@@ -197,7 +223,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     
-    ///
+    /// Tell the User when their contacts have downloaded CheckInTime
     func presentNewAppAcctUsers(updatedUsers: [User]) {
         
         let names = updatedUsers.flatMap({$0.name})
@@ -302,7 +328,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func presentUserHasAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
         
-        let alert = UIAlertController(title: "Success" , message: "\(newContact.name ?? formatedPhoneNumber) has WhereYouApp", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Success" , message: "\(newContact.name ?? formatedPhoneNumber) has CheckInTime", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Awesome", style: .Cancel, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {

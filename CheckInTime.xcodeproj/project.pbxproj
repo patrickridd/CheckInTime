@@ -39,7 +39,7 @@
 		216B8B161D81084100FB33CF /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomImageView.swift; path = "../../../DevMt/Unit 6/Day 2/NewAnimations/NewAnimations/CustomImageView.swift"; sourceTree = "<group>"; };
 		216EB9601D8241E200592649 /* NumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberController.swift; sourceTree = "<group>"; };
 		219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		21AEA8781D736770005EF030 /* WhereYouApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhereYouApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		21AEA8781D736770005EF030 /* CheckInTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckInTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21AEA87B1D736770005EF030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21AEA8801D736770005EF030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21AEA8821D736770005EF030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 		21AEA8791D736770005EF030 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				21AEA8781D736770005EF030 /* WhereYouApp.app */,
+				21AEA8781D736770005EF030 /* CheckInTime.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -159,9 +159,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		21AEA8771D736770005EF030 /* WhereYouApp */ = {
+		21AEA8771D736770005EF030 /* CheckInTime */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21AEA88A1D736770005EF030 /* Build configuration list for PBXNativeTarget "WhereYouApp" */;
+			buildConfigurationList = 21AEA88A1D736770005EF030 /* Build configuration list for PBXNativeTarget "CheckInTime" */;
 			buildPhases = (
 				21AEA8741D736770005EF030 /* Sources */,
 				21AEA8751D736770005EF030 /* Frameworks */,
@@ -171,9 +171,9 @@
 			);
 			dependencies = (
 			);
-			name = WhereYouApp;
+			name = CheckInTime;
 			productName = WhereYouApp;
-			productReference = 21AEA8781D736770005EF030 /* WhereYouApp.app */;
+			productReference = 21AEA8781D736770005EF030 /* CheckInTime.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -216,7 +216,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21AEA8771D736770005EF030 /* WhereYouApp */,
+				21AEA8771D736770005EF030 /* CheckInTime */,
 			);
 		};
 /* End PBXProject section */
@@ -409,7 +409,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21AEA88A1D736770005EF030 /* Build configuration list for PBXNativeTarget "WhereYouApp" */ = {
+		21AEA88A1D736770005EF030 /* Build configuration list for PBXNativeTarget "CheckInTime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21AEA88B1D736770005EF030 /* Debug */,

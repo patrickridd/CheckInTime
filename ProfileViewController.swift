@@ -56,10 +56,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
+        loadingAlert("Updating Profile...")
         guard let newImage = imageView.image,
             loggedInUser = loggedInUser,
             newImageData = UIImagePNGRepresentation(newImage),
             loggedInUserRecord = loggedInUser.cloudKitRecord  else {
+            self.dismissViewControllerAnimated(true, completion: nil)
             return
         }
         
@@ -77,6 +79,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             dispatch_async(dispatch_get_main_queue(), {
                 self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismissViewControllerAnimated(true, completion: nil)
             })
             
         }
@@ -91,10 +94,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let alert = UIAlertController(title: "Are you sure you want to Delete your Account?", message: "All Contacts and Messages will be deleted.", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         let deleteAccountAction = UIAlertAction(title: "Yes I'm Sure", style: .Default) { (_) in
+            self.loadingAlert("Deleting Account...")
             UserController.sharedController.deleteAccount({
-                self.presentLoginScreen()
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                            self.presentLoginScreen()
+        })
 
-            })
+    })
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAccountAction)
@@ -105,7 +112,23 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     
-   
+    /// Presents a loading alert to let the user know that it is updatint the profile.
+    func loadingAlert(alert: String) {
+        let alert = UIAlertController(title: nil, message: alert, preferredStyle: .Alert)
+        
+        alert.view.tintColor = UIColor.blackColor()
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(10, 5, 50, 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        })
+    }
+
     
     func presentLoginScreen() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)

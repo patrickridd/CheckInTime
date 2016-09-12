@@ -76,7 +76,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func presentNoUserAccount(newContact: User) {
-        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have WhereYouApp", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in

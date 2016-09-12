@@ -11,7 +11,7 @@
         <!--CheckInContacts-->
         <scene sceneID="cub-Sd-BYW">
             <objects>
-                <tableViewController storyboardIdentifier="MessageListTVC" id="Xjd-by-bxG" customClass="ContactsTableViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MessageListTVC" id="Xjd-by-bxG" customClass="ContactsTableViewController" customModule="CheckInTime" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="q9Z-XP-UEM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -52,7 +52,7 @@
         <!--Contact Detail View Controller-->
         <scene sceneID="rgT-dW-tjE">
             <objects>
-                <viewController autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="BSJ-RI-4EC" customClass="ContactDetailViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="BSJ-RI-4EC" customClass="ContactDetailViewController" customModule="CheckInTime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="WZK-Nh-Dsj"/>
                         <viewControllerLayoutGuide type="bottom" id="Pji-CL-EcM"/>
@@ -152,7 +152,7 @@
                                     </mask>
                                 </variation>
                             </stackView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="jj6-Ph-LVi" customClass="CustomImageView" customModule="WhereYouApp" customModuleProvider="target">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="jj6-Ph-LVi" customClass="CustomImageView" customModule="CheckInTime" customModuleProvider="target">
                                 <rect key="frame" x="19" y="84" width="80" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="jj6-Ph-LVi" secondAttribute="height" id="Q9V-Af-ueP"/>
@@ -190,7 +190,7 @@
                                 </constraints>
                                 <color key="separatorColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="62" id="qPD-cW-tmy" customClass="ContactTableViewCell" customModule="WhereYouApp" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="62" id="qPD-cW-tmy" customClass="ContactTableViewCell" customModule="CheckInTime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="328" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qPD-cW-tmy" id="2d5-F0-EOO">
@@ -425,7 +425,7 @@
         <!--Message Detail View Controller-->
         <scene sceneID="Pir-8o-8Tv">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="ovw-5G-6fs" customClass="MessageDetailViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="ovw-5G-6fs" customClass="MessageDetailViewController" customModule="CheckInTime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MBz-Pq-2wq"/>
                         <viewControllerLayoutGuide type="bottom" id="tcx-JX-m3f"/>
@@ -594,7 +594,7 @@
         <!--Check In Time ⏰-->
         <scene sceneID="qVJ-dj-E56">
             <objects>
-                <viewController id="kgn-wK-eCI" customClass="LoginViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="kgn-wK-eCI" customClass="LoginViewController" customModule="CheckInTime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zna-nf-KBf"/>
                         <viewControllerLayoutGuide type="bottom" id="5sg-3o-7OL"/>
@@ -624,7 +624,7 @@
                                 <color key="textColor" red="1" green="0.98039215690000003" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ZKF-PA-3Xv" customClass="CustomImageView" customModule="WhereYouApp">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ZKF-PA-3Xv" customClass="CustomImageView" customModule="CheckInTime">
                                 <rect key="frame" x="36" y="116" width="248" height="248"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ZKF-PA-3Xv" secondAttribute="height" multiplier="1:1" id="3n8-Ld-6vF"/>
@@ -700,7 +700,7 @@
         <!--CheckInTime⏰-->
         <scene sceneID="2x4-RV-2TJ">
             <objects>
-                <viewController id="7Ps-R0-3v8" customClass="MessageListTableViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="7Ps-R0-3v8" customClass="MessageListTableViewController" customModule="CheckInTime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ftJ-wd-XHB"/>
                         <viewControllerLayoutGuide type="bottom" id="Gy4-LH-JbZ"/>
@@ -715,14 +715,14 @@
                                 <color key="separatorColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="119" id="sgI-YI-LtR" customClass="MessageTableViewCell" customModule="WhereYouApp" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="119" id="sgI-YI-LtR" customClass="MessageTableViewCell" customModule="CheckInTime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="92" width="320" height="119"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sgI-YI-LtR" id="pG1-cJ-DaN" userLabel="view">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="118.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="vO5-l7-n6E" customClass="CustomImageView" customModule="WhereYouApp" customModuleProvider="target">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="vO5-l7-n6E" customClass="CustomImageView" customModule="CheckInTime" customModuleProvider="target">
                                                     <rect key="frame" x="20" y="8" width="79" height="76"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="vO5-l7-n6E" secondAttribute="height" multiplier="79:76" id="he8-ze-cRa"/>
@@ -835,7 +835,7 @@
         <!--Profile View Controller-->
         <scene sceneID="xe7-yI-HDC">
             <objects>
-                <viewController storyboardIdentifier="profilePage" id="W8S-m3-Nun" customClass="ProfileViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="profilePage" id="W8S-m3-Nun" customClass="ProfileViewController" customModule="CheckInTime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="teG-8O-rBu"/>
                         <viewControllerLayoutGuide type="bottom" id="3Uv-67-xtA"/>
@@ -873,7 +873,7 @@
                                     <action selector="deleteAccountButtonTapped:" destination="W8S-m3-Nun" eventType="touchUpInside" id="z34-YX-ziV"/>
                                 </connections>
                             </button>
-                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="rMw-gD-37y" customClass="CustomImageView" customModule="WhereYouApp" customModuleProvider="target">
+                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="rMw-gD-37y" customClass="CustomImageView" customModule="CheckInTime">
                                 <rect key="frame" x="40" y="120" width="240" height="240"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -987,6 +987,6 @@
         <image name="profile" width="454" height="454"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sQm-XH-vtG"/>
+        <segue reference="NFt-RW-uyj"/>
     </inferredMetricsTieBreakers>
 </document>

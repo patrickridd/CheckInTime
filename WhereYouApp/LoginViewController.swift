@@ -50,24 +50,39 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func submitButtonTapped(sender: AnyObject) {
-        guard let image = imageView.image else {
+        
+        
+        
+        
+        guard let image = self.imageView.image else {
             return
         }
-        guard let phoneNumber = numberTextField.text else {
+        guard let phoneNumber = self.numberTextField.text else {
             self.presentNumberAlert()
             return
         }
         var formatedNumber = NumberController.sharedController.formatNumberFromLoginForRecordName(phoneNumber)
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
+                self.loadingAlert()
+                
+                
+                
                 UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image) {
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                    
                 }
+                
             } else {
                 self.presentNumberAlert()
                 return
             }
         }
+        
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
@@ -85,7 +100,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             alert.popoverPresentationController?.sourceView = self.view
             alert.popoverPresentationController?.sourceRect = self.view.bounds
             // this is the center of the screen currently but it can be any point in the view
-
+            
             self.presentViewController(alert, animated: true, completion: nil)
             
         })
@@ -188,6 +203,23 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             self.presentViewController(alert, animated: true, completion: nil)
         })
         
+    }
+    
+    /// Presents a loading screen when creating account.
+    func loadingAlert() {
+        let alert = UIAlertController(title: nil, message: "Creating Your Profile...", preferredStyle: .Alert)
+        
+        alert.view.tintColor = UIColor.blackColor()
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(10, 5, 50, 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        })
     }
     
     /// Alerts to User that they need to sign into iCloud
