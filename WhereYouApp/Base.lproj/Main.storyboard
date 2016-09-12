@@ -697,7 +697,7 @@
             </objects>
             <point key="canvasLocation" x="1859" y="-137"/>
         </scene>
-        <!--Check in Time⏰-->
+        <!--CheckInTime⏰-->
         <scene sceneID="2x4-RV-2TJ">
             <objects>
                 <viewController id="7Ps-R0-3v8" customClass="MessageListTableViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -818,7 +818,7 @@
                             <constraint firstItem="Gy4-LH-JbZ" firstAttribute="top" secondItem="aZR-vM-sjl" secondAttribute="bottom" id="rpf-9V-eaZ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Check in Time⏰" id="RYn-Ug-fxc">
+                    <navigationItem key="navigationItem" title="CheckInTime⏰" id="RYn-Ug-fxc">
                         <barButtonItem key="rightBarButtonItem" title="Profile" id="KvA-cZ-zq9">
                             <color key="tintColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>

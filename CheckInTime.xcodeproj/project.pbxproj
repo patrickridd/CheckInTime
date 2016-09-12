@@ -203,7 +203,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 21AEA8731D736770005EF030 /* Build configuration list for PBXProject "WhereYouApp" */;
+			buildConfigurationList = 21AEA8731D736770005EF030 /* Build configuration list for PBXProject "CheckInTime" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -377,8 +377,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WhereYouApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.PatrickRidd.WhereYouApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RiddPatrick.CheckInTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -390,15 +391,16 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WhereYouApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.PatrickRidd.WhereYouApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RiddPatrick.CheckInTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		21AEA8731D736770005EF030 /* Build configuration list for PBXProject "WhereYouApp" */ = {
+		21AEA8731D736770005EF030 /* Build configuration list for PBXProject "CheckInTime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21AEA8881D736770005EF030 /* Debug */,

@@ -17,7 +17,7 @@
                BlueprintIdentifier = "21AEA8771D736770005EF030"
                BuildableName = "WhereYouApp.app"
                BlueprintName = "WhereYouApp"
-               ReferencedContainer = "container:WhereYouApp.xcodeproj">
+               ReferencedContainer = "container:CheckInTime.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "21AEA8771D736770005EF030"
             BuildableName = "WhereYouApp.app"
             BlueprintName = "WhereYouApp"
-            ReferencedContainer = "container:WhereYouApp.xcodeproj">
+            ReferencedContainer = "container:CheckInTime.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "21AEA8771D736770005EF030"
             BuildableName = "WhereYouApp.app"
             BlueprintName = "WhereYouApp"
-            ReferencedContainer = "container:WhereYouApp.xcodeproj">
+            ReferencedContainer = "container:CheckInTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -77,7 +77,7 @@
             BlueprintIdentifier = "21AEA8771D736770005EF030"
             BuildableName = "WhereYouApp.app"
             BlueprintName = "WhereYouApp"
-            ReferencedContainer = "container:WhereYouApp.xcodeproj">
+            ReferencedContainer = "container:CheckInTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
