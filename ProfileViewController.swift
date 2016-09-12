@@ -14,19 +14,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBOutlet weak var imageView: UIImageView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+       
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         guard let loggedInUser = UserController.sharedController.loggedInUser else {
             return
         }
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
+        
 
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-    }
     
     @IBAction func imageTapped(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
@@ -97,8 +96,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             self.loadingAlert("Deleting Account...")
             UserController.sharedController.deleteAccount({
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.dismissViewControllerAnimated(true, completion: nil)
-                            self.presentLoginScreen()
+                            self.dismissViewControllerAnimated(true, completion: { 
+                                
+                                self.presentLoginScreen()
+
+                            })
         })
 
     })

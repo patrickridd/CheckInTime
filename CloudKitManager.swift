@@ -25,9 +25,7 @@ class CloudKitManager {
     
     
     init() {
-        
         checkCloudKitAvailability()
-        
     }
     
 
