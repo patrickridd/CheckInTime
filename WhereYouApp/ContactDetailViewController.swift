@@ -65,7 +65,12 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
         
         self.contactImage.image = contact.photo
-        self.nameLabel.text = contact.name ?? formattedPhoneNumber
+        if contact.name == contact.phoneNumber {
+        self.nameLabel.text = formattedPhoneNumber
+        } else {
+            self.nameLabel.text = contact.name!
+        }
+        
         self.numberLabel.text = formattedPhoneNumber
         
     }
@@ -278,7 +283,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 let indexPath = tableView.indexPathForSelectedRow else {
                     return
             }
-            let message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message
+            let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message
             messageDetailVC.message = message
             
             // Pass the selected object to the new view controller.

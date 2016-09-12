@@ -216,10 +216,13 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         messageLabel.hidden = true
         
         // Set time due label
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
 
-        self.timeDueLabel.text = "\(usersContact!.name ?? formatedPhoneNumber) wants you to Check In at \(dateFormatter.stringFromDate(message.timeDue))"
-        
+        if usersContact?.phoneNumber == usersContact?.name {
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+             self.timeDueLabel.text = "\(formatedPhoneNumber) wants you to Check In at \(dateFormatter.stringFromDate(message.timeDue))"
+        } else {
+        self.timeDueLabel.text = "\(usersContact!.name) wants you to Check In at \(dateFormatter.stringFromDate(message.timeDue))"
+        }
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -281,9 +284,14 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if messageTextView.text != defaultMessage {
             message.text = messageTextView.text
         } else {
-            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
-
-            message.text = "Where \(loggedInUser.name ?? formatedPhoneNumber) Check In"
+            if usersContact?.name == usersContact?.phoneNumber {
+                let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
+                message.text = "\(formatedPhoneNumber) Checked In"
+            } else {
+                message.text = "\(usersContact?.name!) Checked In"
+            }
+            
+            
         }
         // Input time responded
         message.timeResponded = NSDate()
@@ -308,7 +316,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             return
         }
         
-        print("\(record.recordID.recordName)")
         
         record[Message.textKey] = text
         record[Message.latitudeKey] = latitude

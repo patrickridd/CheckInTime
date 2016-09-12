@@ -62,7 +62,9 @@ class MessageController {
         
         // Get records From Sender and Receiver
         UserController.sharedController.fetchUsersCloudKitRecord(sender) { (record) in
+            completion(messageSent: false, messageRecord: messageRecord, message: message)
             guard let record = record else {
+               
                 print("No sender record found")
                 return
             }
@@ -70,13 +72,15 @@ class MessageController {
             UserController.sharedController.fetchUsersCloudKitRecord(receiver, completion: { (record) in
                 guard let record = record else {
                     print("No Receiver record found")
+                    completion(messageSent: false, messageRecord: messageRecord, message: message)
                     return
                 }
                 receiver.cloudKitRecord = record
                 
                 guard let senderRecord = sender.cloudKitRecord,
                     receiverRecord = receiver.cloudKitRecord else {
-                        print("Couldn't get back CKRecords from NSData")
+                        completion(messageSent: false, messageRecord: messageRecord, message: message)
+                        print("Couldn't get back CKRecords")
                         return
                 }
                 // Save message to CloudKit
@@ -246,7 +250,9 @@ class MessageController {
                 let message = Message(record: record)!
                 message.hasBeenSeen = 0
                 scheduleLocalNotificationToCheckIn(message)
-                
+                if message.sender.name == nil {
+                    message.sender.name = message.sender.phoneNumber
+                }
                 saveContext()
                 return
         }
@@ -263,7 +269,7 @@ class MessageController {
     func scheduleLocalNotificationToCheckIn(message: Message) {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.sender.phoneNumber)
         let localNotification = UILocalNotification()
-        localNotification.alertTitle = "Time to Check In ⏰"
+        localNotification.alertTitle = "CheckInTime ⏰"
         localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to check in now"
         localNotification.fireDate = message.timeDue
         
@@ -276,7 +282,7 @@ class MessageController {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.receiver.phoneNumber)
 
         let localNotification = UILocalNotification()
-        localNotification.alertTitle = "Curfew Check In"
+        localNotification.alertTitle = "CheckInTime ⏰"
         localNotification.alertBody =   "\(message.receiver.name ?? formattedPhoneNumber) checked in."
         localNotification.fireDate = message.timeResponded
         

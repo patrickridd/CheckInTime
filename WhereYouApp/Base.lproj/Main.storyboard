@@ -8,7 +8,7 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
-        <!--Curfew Check Contacts-->
+        <!--CheckInContacts-->
         <scene sceneID="cub-Sd-BYW">
             <objects>
                 <tableViewController storyboardIdentifier="MessageListTVC" id="Xjd-by-bxG" customClass="ContactsTableViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -36,7 +36,7 @@
                             <outlet property="delegate" destination="Xjd-by-bxG" id="hAN-eN-EGt"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Curfew Check Contacts" id="JCR-8H-r6H">
+                    <navigationItem key="navigationItem" title="CheckInContacts" id="JCR-8H-r6H">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="jNO-2O-ebr">
                             <color key="tintColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -438,7 +438,7 @@
                                 <rect key="frame" x="-4" y="303" width="328" height="22"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdE-33-zLI">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdE-33-zLI">
                                 <rect key="frame" x="6" y="324" width="308" height="114"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="Eea-e1-BAZ"/>
@@ -461,7 +461,7 @@
                                 <color key="textColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SJ9-4r-0Du">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SJ9-4r-0Du">
                                 <rect key="frame" x="0.0" y="440" width="320" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DYc-Xk-5XT">
@@ -496,7 +496,7 @@
                                     </mask>
                                 </variation>
                             </mapView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lp6-hf-qxg">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lp6-hf-qxg">
                                 <rect key="frame" x="0.0" y="325" width="320" height="115"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -713,7 +713,7 @@
                                 <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="sectionIndexBackgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="119" id="sgI-YI-LtR" customClass="MessageTableViewCell" customModule="WhereYouApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="92" width="320" height="119"/>
@@ -819,12 +819,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Check in Time⏰" id="RYn-Ug-fxc">
-                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="lOn-hL-3dw">
-                            <color key="tintColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <segue destination="ziW-Ke-fKP" kind="presentation" id="Jaf-zt-FoD"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Profile" id="KvA-cZ-zq9">
                             <color key="tintColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
@@ -837,73 +831,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JbC-gC-wqO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="986" y="416"/>
-        </scene>
-        <!--Sender Message-->
-        <scene sceneID="fPY-2L-5Dl">
-            <objects>
-                <viewController id="G95-7H-su0" customClass="MessageTesterViewController" customModule="WhereYouApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="SI5-KJ-JPJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="Ijz-Og-mle"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gB0-Y2-hib">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="WhereYouApp time due..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oJH-gP-XKI">
-                                <rect key="frame" x="36" y="225" width="248" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sw1-KR-M1K">
-                                <rect key="frame" x="142" y="407" width="36" height="30"/>
-                                <state key="normal" title="Send"/>
-                                <connections>
-                                    <action selector="sendButtonTapped:" destination="G95-7H-su0" eventType="touchUpInside" id="JMo-Pb-GIc"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <gestureRecognizers/>
-                        <constraints>
-                            <constraint firstItem="oJH-gP-XKI" firstAttribute="centerY" secondItem="gB0-Y2-hib" secondAttribute="centerY" id="Bib-cp-Ot1"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="oJH-gP-XKI" secondAttribute="trailing" constant="20" id="VSH-qA-jYk"/>
-                            <constraint firstItem="oJH-gP-XKI" firstAttribute="centerX" secondItem="gB0-Y2-hib" secondAttribute="centerX" id="ars-kg-3f1"/>
-                            <constraint firstItem="Ijz-Og-mle" firstAttribute="top" secondItem="Sw1-KR-M1K" secondAttribute="bottom" constant="43" id="dMx-cy-GfO"/>
-                            <constraint firstItem="oJH-gP-XKI" firstAttribute="leading" secondItem="gB0-Y2-hib" secondAttribute="leadingMargin" constant="20" id="u7C-6n-AyE"/>
-                            <constraint firstItem="Sw1-KR-M1K" firstAttribute="centerX" secondItem="gB0-Y2-hib" secondAttribute="centerX" id="xWf-Gt-icO"/>
-                        </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="I6j-4E-jnD" appends="YES" id="HkG-FB-iMf"/>
-                        </connections>
-                    </view>
-                    <navigationItem key="navigationItem" title="Sender Message" id="UgJ-DH-8Fo">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="zqk-Kr-ihP">
-                            <connections>
-                                <action selector="cancelButtonTapped:" destination="G95-7H-su0" id="HPd-Nk-xs7"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="dueDatePicker" destination="PkC-7C-NaZ" id="Kxc-Sw-qoU"/>
-                        <outlet property="dueDateTextField" destination="oJH-gP-XKI" id="nRe-1u-IaP"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Fr5-EI-xMh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" id="PkC-7C-NaZ">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <date key="date" timeIntervalSinceReferenceDate="494368126.88609803">
-                        <!--2016-08-31 20:28:46 +0000-->
-                    </date>
-                </datePicker>
-                <tapGestureRecognizer id="I6j-4E-jnD">
-                    <connections>
-                        <action selector="screenTapped:" destination="G95-7H-su0" id="b3r-Ym-Yug"/>
-                    </connections>
-                </tapGestureRecognizer>
-            </objects>
-            <point key="canvasLocation" x="773" y="-230"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="xe7-yI-HDC">
@@ -1052,24 +979,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vAK-44-cMz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1464" y="-137"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="kVl-GN-kec">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ziW-Ke-fKP" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="uhk-Lm-9ya">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="G95-7H-su0" kind="relationship" relationship="rootViewController" id="oBB-9J-iVL"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="V43-IT-BbF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="360" y="-227"/>
         </scene>
     </scenes>
     <resources>

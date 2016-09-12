@@ -274,13 +274,16 @@ class UserController {
                 print("Couldn't fetch user")
                 self.fetchCloudKitUserWithNumber(number, completion: { (contact) in
                     guard let contact = contact else {
-                        completion(user: nil)
+                        let photoData = UIImagePNGRepresentation(UIImage(named: "profile")!)
+                        let user = User(name: number, phoneNumber: number, imageData: photoData!,hasAppAccount: true)
+                        completion(user: user)
                         return
                     }
+                    contact.name = number
                     completion(user: contact)
                     return
                 })
-                return
+               return
         }
         completion(user: user)
         
@@ -325,6 +328,7 @@ class UserController {
         
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
             if let user = User(record: record) {
+                user.name = user.phoneNumber
                 loggedInUser.contacts.append(user)
                 UserController.sharedController.contacts.append(user)
             }

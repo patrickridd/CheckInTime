@@ -15,13 +15,13 @@ class NumberController {
     static let sharedController = NumberController()
     
     /// Gets Mobile phone number and fomats it so we can use it as a predicate when searching for User in CloudKit
-    func getiPhoneNumberFormatedForUserRecordName(numbers: [CNLabeledValue]) -> [String] {
+    func getMobileNumberFormatedForUserRecordName(numbers: [CNLabeledValue]) -> [String] {
         
         var phoneNumbers = [String]()
         
         // Find The Mobile Phone Number in Contacts and remove any punctuation and white spacing
         for phoneNumberLabel in numbers {
-            if phoneNumberLabel.label != CNLabelPhoneNumberiPhone {
+            if phoneNumberLabel.label != CNLabelPhoneNumberMobile {
                 continue
             }
             let phoneNumber = phoneNumberLabel.value as! CNPhoneNumber

@@ -45,7 +45,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         actionSheet.addAction(cancelAction)
         actionSheet.addAction(photoLibraryAction)
-        self.presentViewController(actionSheet, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), {
+                    actionSheet.popoverPresentationController?.sourceView = self.view
+                    actionSheet.popoverPresentationController?.sourceRect = self.view.bounds
+                    // this is the center of the screen currently but it can be any point in the view
+                    self.presentViewController(actionSheet, animated: true, completion: nil)
+
+        })
+
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {

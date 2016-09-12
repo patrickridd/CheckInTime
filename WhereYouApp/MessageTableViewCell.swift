@@ -37,57 +37,57 @@ class MessageTableViewCell: UITableViewCell {
         formatter.timeStyle = .ShortStyle
         return formatter
     }()
-
+    
+    
+    // Updates View with Message Details
+    func updateWith(message: Message) {
+        guard let user = UserController.sharedController.loggedInUser else {
+            return
+        }
         
-        // Updates View with Message Details
-        func updateWith(message: Message) {
-            guard let user = UserController.sharedController.loggedInUser else {
-                return
-            }
-            
-            updateLabelRadius()
-            
-            self.loggedInUser = user
-            if message.sender.phoneNumber == user.phoneNumber {
-                self.userContact = message.receiver
-            } else {
-                self.userContact = message.sender
-            }
-            if userContact == nil {
-                
-            }
-            guard let userContact = self.userContact else {
-                
-                print("No contact in MessageTableViewCell")
-                return
-            }
+        updateLabelRadius()
         
-            // Set contactlabel and image to the name of the loggedInUser's contact
-            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
-            self.contactName.text = userContact.name ?? formatedPhoneNumber
-           
-            self.profileImage.image = userContact.photo
-            
-            // Sender is looking at message that has not been responded to
-            if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
-                updateWithWaitingForReceiverResponse(message)
-            }
-                // Receiver is looking at message that needs to be filled out and responded to
-            else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
-                updateWithYouHaveANewMessage(message)
-            }
-            
-                // Contact Responded to Logged In User's request.
-            else if message.timeResponded != nil && message.receiver.phoneNumber != loggedInUser?.phoneNumber{
-                updateWithContactRespondedToRequest(message)
-            }
-                // Logged In User responded to a message request
-            else if message.timeResponded != nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
-                updateWithUserRespondedToContactsRequest(message)
-            }
+        self.loggedInUser = user
+        if message.sender.phoneNumber == user.phoneNumber {
+            self.userContact = message.receiver
+        } else {
+            self.userContact = message.sender
+        }
+        if userContact == nil {
             
         }
+        guard let userContact = self.userContact else {
+            
+            print("No contact in MessageTableViewCell")
+            return
+        }
+        
+        // Set contactlabel and image to the name of the loggedInUser's contact
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.name!)
+        
+        self.contactName.text = userContact.name ?? formatedPhoneNumber
+        
+        self.profileImage.image = userContact.photo
+        
+        // Sender is looking at message that has not been responded to
+        if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
+            updateWithWaitingForReceiverResponse(message)
+        }
+            // Receiver is looking at message that needs to be filled out and responded to
+        else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
+            updateWithYouHaveANewMessage(message)
+        }
+            
+            // Contact Responded to Logged In User's request.
+        else if message.timeResponded != nil && message.receiver.phoneNumber != loggedInUser?.phoneNumber{
+            updateWithContactRespondedToRequest(message)
+        }
+            // Logged In User responded to a message request
+        else if message.timeResponded != nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
+            updateWithUserRespondedToContactsRequest(message)
+        }
+        
+    }
     
     func updateLabelRadius() {
         hasRespondedLabel.layer.masksToBounds = true
@@ -102,33 +102,46 @@ class MessageTableViewCell: UITableViewCell {
         
         
     }
-        
-        
+    
+    
     // Cell tells you that your request hasn't been responded to yet
     func updateWithWaitingForReceiverResponse(message: Message) {
         guard let userContact = userContact else {
             print("User's contact was nil")
             return
         }
+        
+        if userContact.name == userContact.phoneNumber {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+        hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to Check In"
+        } else {
+            hasRespondedLabel.text = "Waiting for \(userContact.name!) to Check In"
 
-        hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber) to Check In"
+        }
+        
+        
         timeMessageSentLabel.text = "Sent \(dateFormatter.stringFromDate(message.timeSent))"
         shouldRespondByLabel.text = "⏰ Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
         
     }
-
+    
     // Cell tells you your contact wants to know WhereYouApp
     func updateWithYouHaveANewMessage(message: Message) {
         guard let userContact = userContact else {
             print("User's contact was nil")
             return
         }
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
-        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) wants to know WhereYouApp"
         timeMessageSentLabel.text = ""
-        shouldRespondByLabel.text = "\(userContact.name ?? userContact.phoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+        
+        if userContact.name == userContact.phoneNumber {
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+            shouldRespondByLabel.text = "\(formatedPhoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+            hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to Check In"
+        } else {
+            shouldRespondByLabel.text = "\(userContact.name!) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+            hasRespondedLabel.text = "\(userContact.name!) wants you to Check In"
+            
+        }
     }
     
     // Cell tells User that user's contact responded to WhereYouApp request
@@ -137,11 +150,16 @@ class MessageTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
-        hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) has checked in."
-        shouldRespondByLabel.text = ""
-
+        if userContact.name == userContact.phoneNumber {
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+            hasRespondedLabel.text = formatedPhoneNumber
+            hasRespondedLabel.text = "\(formatedPhoneNumber) has Checked In."
+            
+        } else {
+            hasRespondedLabel.text = "\(userContact.name!) has Checked In."
+            
+        }
+        
         guard let timeResponded = message.timeResponded else {
             return
         }
@@ -155,12 +173,16 @@ class MessageTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
-        hasRespondedLabel.text = "You Checked In with \(userContact.name ?? formatedPhoneNumber)"
+        if userContact.name == userContact.phoneNumber{
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+            hasRespondedLabel.text = "You Checked In with \(formatedPhoneNumber)"
+        } else {
+            hasRespondedLabel.text = "You Checked In with \(userContact.name!)"
+        }
+        
         timeMessageSentLabel.text = "You Checked In at \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
     }
-
+    
     
 }

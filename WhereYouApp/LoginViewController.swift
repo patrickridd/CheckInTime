@@ -82,6 +82,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         alert.addAction(photoLibraryAction)
         alert.addAction(cancelAction)
         dispatch_async(dispatch_get_main_queue(), {
+            alert.popoverPresentationController?.sourceView = self.view
+            alert.popoverPresentationController?.sourceRect = self.view.bounds
+            // this is the center of the screen currently but it can be any point in the view
+
             self.presentViewController(alert, animated: true, completion: nil)
             
         })

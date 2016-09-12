@@ -98,91 +98,91 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             var phoneNumbers = [String]()
             
             if contact.phoneNumbers.count > 0 {
-                phoneNumbers = NumberController.sharedController.getiPhoneNumberFormatedForUserRecordName(contact.phoneNumbers)
+                phoneNumbers = NumberController.sharedController.getMobileNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
-                self.presentContactHasNoiPhone(name)
+                self.presentContactHasNoMobilePhone(name)
                 print("no phone number")
                 return
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
-                presentContactHasNoiPhone(name)
+                presentContactHasNoMobilePhone(name)
                 return
             }
             var contactPhoneNumber = phoneNumbers[0]
             NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
                 if !isFormattedCorrectly {
-                    self.presentContactHasNoiPhone(name)
+                    self.presentContactHasNoMobilePhone(name)
                     return
                 }
-            
-            // Add phone number to new contact.
-            let phoneNumber = contactPhoneNumber
-        
-            if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
-                self.presentTryingToAddYourselfAlert()
-                return
-            }
-            UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
-                if hasContactAlready && isCKContact {
-                    self.presenthasContactAlreadyAlert(name)
+                
+                // Add phone number to new contact.
+                let phoneNumber = contactPhoneNumber
+                
+                if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
+                    self.presentTryingToAddYourselfAlert()
                     return
-                } else if hasContactAlready && !isCKContact {
-                    UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
-                        guard let contact = contact else {
-                            return
-                        }
-                        contact.name = name
-                        UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
-                            if savedSuccessfully {
-                                print("Saved Contact Successfully to CloudKit")
-                                self.presentAddedContactSuccessfully()
-                                return
-                            } else {
-                                print("Failed to save contact to cloudkit. Try again.")
-                                self.presentFailedToAddContact()
-                                return
-                            }
-                        })
-                        
-                    })
-                    
-                } else {
-                    // Create Contact and Save Contact to CoreData
-                    let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
-                    MessageController.sharedController.saveContext()
-                    guard let  loggedInUser = UserController.sharedController.loggedInUser else {                            print("Couldn't get logged in user and/or record")
+                }
+                UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
+                    if hasContactAlready && isCKContact {
+                        self.presenthasContactAlreadyAlert(name)
                         return
-                    }
-                    // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
-                    UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
-                        guard let contactRecord = record else {
-                            newContact.hasAppAccount = false
-                            // Add contact to Logged In User's contact
-                            loggedInUser.contacts.append(newContact)
+                    } else if hasContactAlready && !isCKContact {
+                        UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
+                            guard let contact = contact else {
+                                return
+                            }
+                            contact.name = name
+                            UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
+                                if savedSuccessfully {
+                                    print("Saved Contact Successfully to CloudKit")
+                                    self.presentAddedContactSuccessfully()
+                                    return
+                                } else {
+                                    print("Failed to save contact to cloudkit. Try again.")
+                                    self.presentFailedToAddContact()
+                                    return
+                                }
+                            })
                             
-                            UserController.sharedController.addContactAndOrderList(newContact)
-                            UserController.sharedController.saveContext()
-                            
-                            self.presentNoUserAccount(newContact)
+                        })
+                        
+                    } else {
+                        // Create Contact and Save Contact to CoreData
+                        let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
+                        MessageController.sharedController.saveContext()
+                        guard let  loggedInUser = UserController.sharedController.loggedInUser else {                            print("Couldn't get logged in user and/or record")
                             return
                         }
-                        
-                        UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
-                            if savedSuccessfully {
-                                self.presentUserHasAccount(newContact)
+                        // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
+                        UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
+                            guard let contactRecord = record else {
+                                newContact.hasAppAccount = false
+                                // Add contact to Logged In User's contact
+                                loggedInUser.contacts.append(newContact)
+                                
+                                UserController.sharedController.addContactAndOrderList(newContact)
+                                UserController.sharedController.saveContext()
+                                
+                                self.presentNoUserAccount(newContact)
+                                return
                             }
+                            
+                            UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
+                                if savedSuccessfully {
+                                    self.presentUserHasAccount(newContact)
+                                }
+                            })
                         })
-                    })
-                }
-            })
+                    }
+                })
             })
         }
     }
     
-   
+    
     func presentContactsHaveDeletedApp(deletedContacts: [User]) {
-       
+        
         let names = deletedContacts.flatMap({$0.name})
         let formatedNames = names.joinWithSeparator(" ")
         
@@ -191,12 +191,12 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             self.tableView.reloadData()
         }
         alert.addAction(okAction)
-                dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
     }
     
-      
+    
     ///
     func presentNewAppAcctUsers(updatedUsers: [User]) {
         
@@ -269,15 +269,15 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     func presentNoUserAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
-
-        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? formatedPhoneNumber) doesn't have WhereYouApp", message: "Would you like to suggest that they download WhereYouApp", preferredStyle: .Alert)
+        
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? formatedPhoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in
             
             let messageVC = MFMessageComposeViewController()
             if MFMessageComposeViewController.canSendText() == true {
-                messageVC.body = "I'd like you to download WhereYouApp so I can know WhereYouApp"
+                messageVC.body = "I'd like you to download Check In Time so you can check in with me."
                 messageVC.recipients = [newContact.phoneNumber]
                 //  messageVC.messageComposeDelegate = self
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
@@ -301,7 +301,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     
     func presentUserHasAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
-
+        
         let alert = UIAlertController(title: "Success" , message: "\(newContact.name ?? formatedPhoneNumber) has WhereYouApp", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Awesome", style: .Cancel, handler: nil)
         alert.addAction(action)
@@ -312,8 +312,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
     }
     
-    func presentContactHasNoiPhone(name: String) {
-        let alert = UIAlertController(title: "No iPhone Number Found", message: "\(name)'s number in your Contact's needs to be in iPhone field and needs to be no more than 11 numbers long.", preferredStyle: .Alert)
+    func presentContactHasNoMobilePhone(name: String) {
+        let alert = UIAlertController(title: "No Mobile Number Found", message: "\(name)'s number in your Contact's needs to be in a Mobile field and no more than 11 digits long.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
         alert.addAction(action)
         
@@ -350,10 +350,12 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
         
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
-
-        cell.textLabel?.text = contact.name ?? formatedPhoneNumber
-        // Configure the cell...
         
+        if contact.name == contact.phoneNumber {
+            cell.textLabel?.text = formatedPhoneNumber
+        } else {
+            cell.textLabel?.text = contact.name ?? formatedPhoneNumber
+        }
         return cell
     }
     
