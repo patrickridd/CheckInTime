@@ -12,13 +12,13 @@ import Contacts
 import ContactsUI
 import MessageUI
 
-class ContactsTableViewController: UITableViewController, CNContactPickerDelegate  {
+class ContactsTableViewController: UITableViewController, CNContactPickerDelegate, MFMessageComposeViewControllerDelegate  {
     
     var contactStore = CNContactStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupNavBar()
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
         UserController.sharedController.checkIfContactsHaveDeletedApp { (haveDeletedApp, updatedUsers) in
@@ -101,38 +101,50 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             if contact.phoneNumbers.count > 0 {
                 phoneNumbers = NumberController.sharedController.getMobileNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
-                self.dismissViewControllerAnimated(true, completion: nil)
-                self.presentContactHasNoMobilePhone(name)
+                self.dismissViewControllerAnimated(true, completion: { 
+                    self.presentContactHasNoMobilePhone(name)
+
+                    
+                })
                 print("no phone number")
                 return
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
-                self.dismissViewControllerAnimated(true, completion: nil)
-                presentContactHasNoMobilePhone(name)
+                self.dismissViewControllerAnimated(true, completion: { 
+                    
+                    self.presentContactHasNoMobilePhone(name)
+
+                })
                 return
             }
             var contactPhoneNumber = phoneNumbers[0]
             NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
                 if !isFormattedCorrectly {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                    self.presentContactHasNoMobilePhone(name)
-                    return
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.presentContactHasNoMobilePhone(name)
+                        return
+                    })
+                    
                 }
                 
                 // Add phone number to new contact.
                 let phoneNumber = contactPhoneNumber
                 
                 if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                    self.presentTryingToAddYourselfAlert()
-                    return
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.presentTryingToAddYourselfAlert()
+                        return
+                    })
+                    
                 }
                 UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
                     if hasContactAlready && isCKContact {
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                        self.presenthasContactAlreadyAlert(name)
-                        return
+                        self.dismissViewControllerAnimated(true, completion: { 
+                            self.presenthasContactAlreadyAlert(name)
+                            return
+                        })
+                        
                     } else if hasContactAlready && !isCKContact {
                         UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
                             guard let contact = contact else {
@@ -222,6 +234,12 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
     }
     
+    /// 
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.becomeFirstResponder()
+    }
     
     /// Tell the User when their contacts have downloaded CheckInTime
     func presentNewAppAcctUsers(updatedUsers: [User]) {
@@ -298,13 +316,16 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? formatedPhoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
         
-        let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
+        let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel) { (_) in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
         let recommendAction = UIAlertAction(title: "Recommend", style: .Default) { (_) in
             
             let messageVC = MFMessageComposeViewController()
             if MFMessageComposeViewController.canSendText() == true {
-                messageVC.body = "I'd like you to download Check In Time so you can check in with me."
+                messageVC.body = "I'd like you to download CheckInTime so you can check in with me."
                 messageVC.recipients = [newContact.phoneNumber]
+                messageVC.messageComposeDelegate = self
                 //  messageVC.messageComposeDelegate = self
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
                 messageVC.navigationBar.translucent = false
@@ -324,6 +345,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
         
     }
+    
+    
     
     func presentUserHasAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
@@ -386,6 +409,15 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     
+    func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+        let image = UIImage(named: "ContactsTitle")
+        let imageView = UIImageView(image: image)
+        
+        self.navigationItem.titleView = imageView
+    }
+
+    
     /*
      // Override to support conditional editing of the table view.
      override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -394,6 +426,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
      }
      */
     
+
     
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
