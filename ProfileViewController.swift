@@ -14,18 +14,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBOutlet weak var imageView: UIImageView!
     
-       
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         guard let loggedInUser = UserController.sharedController.loggedInUser else {
             return
         }
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
-        
-
     }
     
+       
     
     @IBAction func imageTapped(sender: AnyObject) {
         let imagePicker = UIImagePickerController()

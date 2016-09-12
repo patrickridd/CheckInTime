@@ -17,6 +17,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBar()
         numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
@@ -71,8 +72,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image) {
                     dispatch_async(dispatch_get_main_queue(), {
                         
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                        self.dismissViewControllerAnimated(true, completion: nil)
+                        self.dismissViewControllerAnimated(true, completion: { 
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                            let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
+                            self.navigationController?.pushViewController(messageListTVC, animated: true)
+                        })
                     })
                     
                 }
@@ -204,6 +208,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
         
     }
+    
+    /// Sets up the titleView with the logo
+    func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+        let image = UIImage(named: "CheckInTimeTitle")
+        let imageView = UIImageView(image: image)
+        
+        self.navigationItem.titleView = imageView
+    }
+
     
     /// Presents a loading screen when creating account.
     func loadingAlert() {
