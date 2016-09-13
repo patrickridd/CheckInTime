@@ -28,7 +28,10 @@ class NumberController {
             let stringPhoneNumber = phoneNumber.stringValue
             let phoneWhite = stringPhoneNumber.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).joinWithSeparator(" ")
             let noPunc =  phoneWhite.componentsSeparatedByCharactersInSet(NSCharacterSet.punctuationCharacterSet()).joinWithSeparator("")
-            let noSpaces = noPunc.stringByReplacingOccurrencesOfString(" ", withString: "")
+            let stringArray = noPunc.componentsSeparatedByCharactersInSet(
+                NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+            
+            let noSpaces = stringArray.joinWithSeparator("")
             
             phoneNumbers.append(noSpaces)
         }

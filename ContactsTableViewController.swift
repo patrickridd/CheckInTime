@@ -101,9 +101,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             if contact.phoneNumbers.count > 0 {
                 phoneNumbers = NumberController.sharedController.getMobileNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
-                self.dismissViewControllerAnimated(true, completion: { 
+                self.dismissViewControllerAnimated(true, completion: {
                     self.presentContactHasNoMobilePhone(name)
-
+                    
                     
                 })
                 print("no phone number")
@@ -111,17 +111,17 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
-                self.dismissViewControllerAnimated(true, completion: { 
+                self.dismissViewControllerAnimated(true, completion: {
                     
                     self.presentContactHasNoMobilePhone(name)
-
+                    
                 })
                 return
             }
             var contactPhoneNumber = phoneNumbers[0]
             NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
                 if !isFormattedCorrectly {
-                    self.dismissViewControllerAnimated(true, completion: { 
+                    self.dismissViewControllerAnimated(true, completion: {
                         self.presentContactHasNoMobilePhone(name)
                         return
                     })
@@ -140,14 +140,24 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 }
                 UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
                     if hasContactAlready && isCKContact {
-                        self.dismissViewControllerAnimated(true, completion: { 
-                            self.presenthasContactAlreadyAlert(name)
-                            return
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.dismissViewControllerAnimated(true, completion: {
+                                self.presenthasContactAlreadyAlert(name)
+                                return
+                            })
+                            
                         })
+                        
                         
                     } else if hasContactAlready && !isCKContact {
                         UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
                             guard let contact = contact else {
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    self.dismissViewControllerAnimated(true, completion: {
+                                        self.presentFailedToAddContact()
+                                        
+                                    })
+                                })
                                 return
                             }
                             contact.name = name
@@ -183,15 +193,17 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                 
                                 UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
-                                self.dismissViewControllerAnimated(true, completion: nil)
-                                self.presentNoUserAccount(newContact)
+                                self.dismissViewControllerAnimated(true, completion: { 
+                                    self.presentNoUserAccount(newContact)
+                                })
                                 return
                             }
                             
                             UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
-                                    self.dismissViewControllerAnimated(true, completion: nil)
-                                    self.presentUserHasAccount(newContact)
+                                    self.dismissViewControllerAnimated(true, completion: {
+                                        self.presentUserHasAccount(newContact)
+                                    })
                                 }
                             })
                         })
@@ -217,7 +229,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
         })
     }
-
+    
     /// Tell the User when their contacts have deleted CheckInTime
     func presentContactsHaveDeletedApp(deletedContacts: [User]) {
         
@@ -234,7 +246,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
     }
     
-    /// 
+    ///
     func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
         
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -415,8 +427,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView
+        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
     }
-
+    
     
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -429,6 +442,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
+        
+        
     }
     
     

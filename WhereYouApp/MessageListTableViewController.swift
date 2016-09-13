@@ -117,7 +117,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
        let tabBar = tabBarController?.tabBar
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: UIColor ( red: 0.0, green: 1.0, blue: 0.9961, alpha: 1.0 )], forState:.Normal)
         tabBar?.tintColor = UIColor ( red: 0.0, green: 1.0, blue: 0.9961, alpha: 1.0 )
-        tabBar?.barTintColor = UIColor ( red: 0.9961, green: 0.2431, blue: 0.4431, alpha: 1.0 )
+        tabBar?.barTintColor = UIColor.whiteColor()
       
     }
     
@@ -127,6 +127,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView
+        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
     }
     
     func setupRightButton() {

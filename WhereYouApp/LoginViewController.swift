@@ -34,12 +34,17 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                                 MessageController.sharedController.fetchAllMessagesFromCloudKit({
                                     print("Messages restored")
                                     dispatch_async(dispatch_get_main_queue(), {
-                                        self.dismissViewControllerAnimated(true, completion: nil)
+                                        self.dismissViewControllerAnimated(true, completion: { 
+                                            self.dismissViewControllerAnimated(true, completion: nil)
+
+                                        })
                                     })
                                 })
                             } else {
                                 dispatch_async(dispatch_get_main_queue(), {
-                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                    self.dismissViewControllerAnimated(true, completion: { 
+                                        self.dismissViewControllerAnimated(true, completion: nil)
+                                    })
                                 })
                             }
                         })
@@ -181,6 +186,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 completion(restoredUser: false)
                 return
             }
+            self.loadingAlert()
             user.name = ""
             UserController.sharedController.loggedInUser = user
             UserController.sharedController.loggedInUser?.cloudKitRecord = record
@@ -216,6 +222,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView
+        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
     }
 
     
