@@ -220,7 +220,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     /// Sets up the titleView with the logo
     func setupView() {
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
-        let image = UIImage(named: "CheckInTimeTitle")
+        let image = UIImage(named: "CheckInTimeTitleWhiteSmall")
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView

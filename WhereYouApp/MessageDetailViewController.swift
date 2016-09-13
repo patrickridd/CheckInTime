@@ -76,6 +76,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         messageTextView.delegate = self
         setupView()
+        setupTabBar()
         
     }
     
@@ -452,7 +453,17 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     }
 
     func setupView() {
-        
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+    }
+    
+    func setupTabBar() {
+        func setupTabBar() {
+            let tabBar = tabBarController?.tabBar
+            UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )], forState:.Normal)
+            tabBar?.tintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+            tabBar?.barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+            
+        }
     }
     
     // MARK: - TextView placeholder

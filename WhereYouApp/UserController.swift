@@ -515,6 +515,7 @@ class UserController {
     func deleteAccount(completion: ()->Void) {
         guard let loggedInUser = loggedInUser,
             loggedInUserRecord = loggedInUser.cloudKitRecord else {
+                completion()
             return
         }
         self.deleteAccountFromCoreData()
@@ -529,6 +530,7 @@ class UserController {
         }
     }
     
+    
     func deleteAccountFromCoreData() {
         let messageRequest = NSFetchRequest(entityName: "Message")
         guard let messages = (try? moc.executeFetchRequest(messageRequest) as? [Message]),
@@ -540,6 +542,7 @@ class UserController {
         let usersRequest = NSFetchRequest(entityName: "User")
         guard let users = (try? moc.executeFetchRequest(usersRequest) as? [User]),
             deletedUsers = users else {
+            
                 return
         }
         
