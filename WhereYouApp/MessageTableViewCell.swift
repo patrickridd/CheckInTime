@@ -138,10 +138,10 @@ class MessageTableViewCell: UITableViewCell {
         
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-            shouldRespondByLabel.text = "\(formatedPhoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+            shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
             hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to CheckIn"
         } else {
-            shouldRespondByLabel.text = "\(userContact.name!) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
+            shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
             hasRespondedLabel.text = "\(userContact.name!) wants you to CheckIn"
             
         }

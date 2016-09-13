@@ -62,9 +62,8 @@ class MessageController {
         
         // Get records From Sender and Receiver
         UserController.sharedController.fetchUsersCloudKitRecord(sender) { (record) in
-            completion(messageSent: false, messageRecord: messageRecord, message: message)
             guard let record = record else {
-               
+                completion(messageSent: false, messageRecord: messageRecord, message: message)
                 print("No sender record found")
                 return
             }

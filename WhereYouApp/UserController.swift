@@ -562,6 +562,7 @@ class UserController {
         } else {
             contact.hasAppAccount = 1
         }
+        saveContext()
         
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record, loggedInUser = self.loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {

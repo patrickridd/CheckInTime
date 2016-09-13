@@ -263,7 +263,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let names = updatedUsers.flatMap({$0.name})
         let newNames = names.joinWithSeparator("")
         
-        let newAppAcctsAlert = UIAlertController(title: "\(newNames) downloaded CheckInTime", message: "You can now set CheckIn Times for them or Check In Time with them.", preferredStyle: .Alert)
+        let newAppAcctsAlert = UIAlertController(title: "\(newNames) downloaded CheckInTime", message: "You can now send CheckInTimes to them and they can send CheckInTimes to you.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Sounds Good", style: .Cancel, handler: nil)
         newAppAcctsAlert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
