@@ -39,7 +39,7 @@ class User: NSManagedObject {
     }
 
 // Insert code here to add functionality to your managed object subclass
-    convenience init(name: String , phoneNumber: String, imageData: NSData, hasAppAccount: Bool, insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
+    convenience init(name: String , phoneNumber: String, imageData: NSData, hasAppAccount: Bool, timeCreated: NSDate = NSDate(), insertIntoManagedObjectContext context: NSManagedObjectContext = Stack.sharedStack.managedObjectContext) {
         
         let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: context)!
         
@@ -48,7 +48,7 @@ class User: NSManagedObject {
         self.name = name
         self.phoneNumber = phoneNumber
         self.imageData = imageData
-        self.timeCreated = NSDate()
+        self.timeCreated = timeCreated
         self.hasAppAccount = hasAppAccount
     }
     
@@ -92,9 +92,9 @@ class User: NSManagedObject {
         let context = Stack.sharedStack.managedObjectContext
         
         let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: context)!
-        
         self.init(entity: entity, insertIntoManagedObjectContext: context)
         
+        self.timeCreated = NSDate()
         self.phoneNumber = phoneNumber
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {

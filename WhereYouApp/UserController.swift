@@ -227,20 +227,22 @@ class UserController {
                 if record == nil {
                     deletedUsers.append(user)
                 }
-            })
-            
-            if deletedUsers.count < 1 {
-                completion(haveDeletedApp: false, updatedUsers: nil)
-            } else {
-                for deletedUser in deletedUsers {
-                    updateContactsAppStatus(deletedUser, completion: { (wasSaved) in
-                        
-                        
-                    })
+                
+                
+                if deletedUsers.count < 1 {
+                    completion(haveDeletedApp: false, updatedUsers: nil)
+                } else {
+                    for deletedUser in deletedUsers {
+                        self.updateContactsAppStatus(deletedUser, completion: { (wasSaved) in
+                            
+                            
+                        })
+                    }
+                    completion(haveDeletedApp: true, updatedUsers: deletedUsers)
                 }
-                completion(haveDeletedApp: true, updatedUsers: deletedUsers)
-            }
+            })
         }
+        
     }
     
     
@@ -283,7 +285,7 @@ class UserController {
                     completion(user: contact)
                     return
                 })
-               return
+                return
         }
         completion(user: user)
         
@@ -300,7 +302,7 @@ class UserController {
             self.saveContext()
         }) { (records, error) in
             if let _ = error {
-            
+                
             } else {
                 print("Couldn't fetch CKRecord in fetchCloudKitUserWithNumber")
                 completion(contact: nil)
@@ -410,8 +412,8 @@ class UserController {
             }
             
             if loggedInUserReferences.count < 1 {
-            self.deleteContactsFromCoreData([contact])
-            completion(isCKContact: false)
+                self.deleteContactsFromCoreData([contact])
+                completion(isCKContact: false)
             }
         }
     }
@@ -443,7 +445,7 @@ class UserController {
                 guard var references = record[User.contactsKey] as? [CKReference] else {
                     print("No references in CloudKit")
                     self.deleteContactsFromCoreData([contact])
-
+                    
                     return
                 }
                 
@@ -516,7 +518,7 @@ class UserController {
         guard let loggedInUser = loggedInUser,
             loggedInUserRecord = loggedInUser.cloudKitRecord else {
                 completion()
-            return
+                return
         }
         self.deleteAccountFromCoreData()
         CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
@@ -542,7 +544,7 @@ class UserController {
         let usersRequest = NSFetchRequest(entityName: "User")
         guard let users = (try? moc.executeFetchRequest(usersRequest) as? [User]),
             deletedUsers = users else {
-            
+                
                 return
         }
         
