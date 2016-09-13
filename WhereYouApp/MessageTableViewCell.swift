@@ -16,7 +16,7 @@ class MessageTableViewCell: UITableViewCell {
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var contactName: UILabel!
     @IBOutlet weak var hasRespondedLabel: UILabel!
-    @IBOutlet weak var timeMessageSentLabel: UILabel!
+    @IBOutlet weak var timeResponded: UILabel!
     @IBOutlet weak var shouldRespondByLabel: UILabel!
     
     override func awakeFromNib() {
@@ -63,9 +63,12 @@ class MessageTableViewCell: UITableViewCell {
         }
         
         // Set contactlabel and image to the name of the loggedInUser's contact
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.name!)
-        
-        self.contactName.text = userContact.name ?? formatedPhoneNumber
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
+        if userContact.phoneNumber == userContact.name {
+            self.contactName.text = formatedPhoneNumber
+        } else {
+            self.contactName.text = userContact.name
+        }
         
         self.profileImage.image = userContact.photo
         
@@ -94,8 +97,8 @@ class MessageTableViewCell: UITableViewCell {
         hasRespondedLabel.layer.cornerRadius = 6.5
         
         
-        timeMessageSentLabel.layer.masksToBounds = true
-        timeMessageSentLabel.layer.cornerRadius = 6.5
+        timeResponded.layer.masksToBounds = true
+        timeResponded.layer.cornerRadius = 6.5
         
         shouldRespondByLabel.layer.masksToBounds = true
         shouldRespondByLabel.layer.cornerRadius  = 6.5
@@ -113,15 +116,15 @@ class MessageTableViewCell: UITableViewCell {
         
         if userContact.name == userContact.phoneNumber {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-        hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to Check In"
+        hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to CheckInTime"
         } else {
-            hasRespondedLabel.text = "Waiting for \(userContact.name!) to Check In"
+            hasRespondedLabel.text = "Waiting for \(userContact.name!) to CheckInTime"
 
         }
         
         
-        timeMessageSentLabel.text = "Sent \(dateFormatter.stringFromDate(message.timeSent))"
-        shouldRespondByLabel.text = "⏰ Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
+        timeResponded.text = ""
+        shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
         
     }
     
@@ -131,15 +134,15 @@ class MessageTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        timeMessageSentLabel.text = ""
+        timeResponded.text = ""
         
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
             shouldRespondByLabel.text = "\(formatedPhoneNumber) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
-            hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to Check In"
+            hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to CheckIn"
         } else {
             shouldRespondByLabel.text = "\(userContact.name!) wants to know by \(dateFormatter.stringFromDate(message.timeDue))"
-            hasRespondedLabel.text = "\(userContact.name!) wants you to Check In"
+            hasRespondedLabel.text = "\(userContact.name!) wants you to CheckIn"
             
         }
     }
@@ -153,34 +156,34 @@ class MessageTableViewCell: UITableViewCell {
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
             hasRespondedLabel.text = formatedPhoneNumber
-            hasRespondedLabel.text = "\(formatedPhoneNumber) has Checked In."
+            hasRespondedLabel.text = "\(formatedPhoneNumber) has CheckedIn."
             
         } else {
-            hasRespondedLabel.text = "\(userContact.name!) has Checked In."
+            hasRespondedLabel.text = "\(userContact.name!) has CheckedIn."
             
         }
         
-        guard let timeResponded = message.timeResponded else {
+        guard let checkInAt = message.timeResponded else {
             return
         }
-        timeMessageSentLabel.text = " Checked In at \(dateFormatter.stringFromDate(timeResponded))"
+        timeResponded.text = " CheckedIn at \(dateFormatter.stringFromDate(checkInAt))"
         
     }
     
     // Cell tell user that they responded to the contacts WhereYouApp request
     func updateWithUserRespondedToContactsRequest(message: Message) {
-        guard let userContact = userContact, timeResponded = message.timeResponded else {
+        guard let userContact = userContact, checkedInAt = message.timeResponded else {
             print("User's contact was nil")
             return
         }
         if userContact.name == userContact.phoneNumber{
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-            hasRespondedLabel.text = "You Checked In with \(formatedPhoneNumber)"
+            hasRespondedLabel.text = "You CheckedIn with \(formatedPhoneNumber)"
         } else {
-            hasRespondedLabel.text = "You Checked In with \(userContact.name!)"
+            hasRespondedLabel.text = "You CheckedIn with \(userContact.name!)"
         }
         
-        timeMessageSentLabel.text = "You Checked In at \(dateFormatter.stringFromDate(timeResponded))"
+        timeResponded.text = "You CheckedIn at \(dateFormatter.stringFromDate(checkedInAt))"
         shouldRespondByLabel.text = ""
     }
     

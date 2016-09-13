@@ -51,10 +51,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
         updateWith(contact)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardDidappear(_:)), name: UIKeyboardDidShowNotification, object: nil)
-        
     }
     
     

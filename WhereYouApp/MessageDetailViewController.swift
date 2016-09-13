@@ -112,9 +112,15 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func updateWith(message: Message) {
         
         // Set title to the name of the loggedInUser's contact
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+        
+        if usersContact?.name == usersContact?.phoneNumber{
+            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
+            self.titleLabel.title = formatedPhoneNumber
 
-        self.titleLabel.title = usersContact?.name ?? formatedPhoneNumber
+        } else {
+            self.titleLabel.title = usersContact?.name ?? usersContact?.phoneNumber
+        }
+
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
             updateWithWaitingForReceiverResponse(message)

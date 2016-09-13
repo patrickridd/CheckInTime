@@ -182,8 +182,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 return
             }
             MessageController.sharedController.deleteMessagesFromCoreData([message])
-            
-            //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
     

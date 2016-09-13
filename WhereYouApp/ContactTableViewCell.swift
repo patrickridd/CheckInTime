@@ -90,7 +90,7 @@ class ContactTableViewCell: UITableViewCell {
         }
         
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
-        shouldRespondByLabel.text = "Check In ⏰ \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "Check In \(dateFormatter.stringFromDate(message.timeDue))"
         
     }
     

@@ -19,22 +19,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WhereYouApp/MessageController.swift"
-            timestampString = "495333512.063952"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "256"
-            endingLineNumber = "256"
-            landmarkName = "updateOrAddRemoteNotification(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "WhereYouApp/UserController.swift"
             timestampString = "495429129.699759"
             startingColumnNumber = "9223372036854775807"
@@ -68,12 +52,12 @@
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495475885.980201"
+                  timestampString = "495480713.136109"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "394"
                   endingLineNumber = "394"
-                  offsetFromSymbolStart = "42">
+                  offsetFromSymbolStart = "32">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -83,12 +67,12 @@
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495475885.980353"
+                  timestampString = "495480713.136287"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "394"
                   endingLineNumber = "394"
-                  offsetFromSymbolStart = "84">
+                  offsetFromSymbolStart = "76">
                </Location>
             </Locations>
          </BreakpointContent>
