@@ -36,15 +36,15 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                                 MessageController.sharedController.fetchAllMessagesFromCloudKit({
                                     print("Messages restored")
                                     dispatch_async(dispatch_get_main_queue(), {
-                                        self.dismissViewControllerAnimated(true, completion: { 
+                                        self.dismissViewControllerAnimated(true, completion: {
                                             self.dismissViewControllerAnimated(true, completion: nil)
-
+                                            
                                         })
                                     })
                                 })
                             } else {
                                 dispatch_async(dispatch_get_main_queue(), {
-                                    self.dismissViewControllerAnimated(true, completion: { 
+                                    self.dismissViewControllerAnimated(true, completion: {
                                         self.dismissViewControllerAnimated(true, completion: nil)
                                     })
                                 })
@@ -76,13 +76,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
                 self.loadingAlert()
-                
-                
-                
+     
                 UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image) {
                     dispatch_async(dispatch_get_main_queue(), {
                         
-                        self.dismissViewControllerAnimated(true, completion: { 
+                        self.dismissViewControllerAnimated(true, completion: {
                             self.dismissViewControllerAnimated(true, completion: nil)
                             let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
                             self.navigationController?.pushViewController(messageListTVC, animated: true)
@@ -125,15 +123,15 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             
             let keyboardFrame = keyboardFrameValue.CGRectValue()
-            UIView.animateWithDuration(0.8, animations: { 
+            UIView.animateWithDuration(0.8, animations: {
                 self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-51
             })
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        UIView.animateWithDuration(0.8) { 
-         self.numberFieldButtomConstraint.constant = 15
+        UIView.animateWithDuration(0.8) {
+            self.numberFieldButtomConstraint.constant = 15
             
         }
     }
@@ -149,10 +147,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool
-    {
-        if (textField == numberTextField)
-        {
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if (textField == numberTextField) {
             let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
             let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
             
@@ -160,8 +156,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             let length = decimalString.length
             let hasLeadingOne = length > 0 && decimalString.characterAtIndex(0) == (1 as unichar)
             
-            if length == 0 || (length > 10 && !hasLeadingOne) || length > 11
-            {
+            if length == 0 || (length > 10 && !hasLeadingOne) || length > 11 {
                 let newLength = (textField.text! as NSString).length + (string as NSString).length - range.length as Int
                 
                 return (newLength > 10) ? false : true
@@ -169,19 +164,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             var index = 0 as Int
             let formattedString = NSMutableString()
             
-            if hasLeadingOne
-            {
+            if hasLeadingOne {
                 formattedString.appendString("1 ")
                 index += 1
             }
-            if (length - index) > 3
-            {
+            if (length - index) > 3 {
                 let areaCode = decimalString.substringWithRange(NSMakeRange(index, 3))
                 formattedString.appendFormat("(%@)", areaCode)
                 index += 3
             }
-            if length - index > 3
-            {
+            if length - index > 3 {
                 let prefix = decimalString.substringWithRange(NSMakeRange(index, 3))
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
@@ -192,8 +184,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             textField.text = formattedString as String
             return false
         }
-        else
-        {
+        else {
             return true
         }
     }
@@ -249,7 +240,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         buttonView.layer.masksToBounds = true
         buttonView.layer.cornerRadius = 8
     }
-
+    
     
     /// Presents a loading screen when creating account.
     func loadingAlert() {

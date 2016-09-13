@@ -32,13 +32,13 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             }
         })
         setupTabBar()
-        setupNavBar()
 
     }
     
     override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
         setupRightButton()
+        setupNavBar()
 
 
     }

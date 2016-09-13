@@ -281,7 +281,9 @@ class UserController {
                         completion(user: user)
                         return
                     }
+                    
                     contact.name = number
+                    self.contacts.append(contact)
                     completion(user: contact)
                     return
                 })
@@ -376,6 +378,7 @@ class UserController {
             if users.count > 0 {
                 checkIfContactIsInUsersCloudKitContacts(phoneNumber, completion: { (isCKContact) in
                     if isCKContact {
+                        self.deleteContactsFromCoreData(users)
                         completion(hasContactAlready: true, isCKContact: isCKContact)
                     } else {
                         self.deleteContactsFromCoreData(users)

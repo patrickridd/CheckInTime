@@ -111,21 +111,26 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
-                self.dismissViewControllerAnimated(true, completion: {
-                    
-                    self.presentContactHasNoMobilePhone(name)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.presentContactHasNoMobilePhone(name)
+                        
+                    })
                     
                 })
+                
                 return
             }
             var contactPhoneNumber = phoneNumbers[0]
             NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
                 if !isFormattedCorrectly {
-                    self.dismissViewControllerAnimated(true, completion: {
-                        self.presentContactHasNoMobilePhone(name)
-                        return
+                    dispatch_async(dispatch_get_main_queue(), {
+                        
+                        self.dismissViewControllerAnimated(true, completion: {
+                            self.presentContactHasNoMobilePhone(name)
+                        })
                     })
-                    
+                    return
                 }
                 
                 // Add phone number to new contact.
@@ -133,21 +138,22 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 
                 if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
                     self.dismissViewControllerAnimated(true, completion: {
+                        
                         self.presentTryingToAddYourselfAlert()
-                        return
                     })
+                    return
                     
                 }
+                
                 UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
                     if hasContactAlready && isCKContact {
                         dispatch_async(dispatch_get_main_queue(), {
                             self.dismissViewControllerAnimated(true, completion: {
                                 self.presenthasContactAlreadyAlert(name)
-                                return
                             })
                             
                         })
-                        
+                        return
                         
                     } else if hasContactAlready && !isCKContact {
                         UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
@@ -164,24 +170,24 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
                                     print("Saved Contact Successfully to CloudKit")
-                                    self.dismissViewControllerAnimated(true, completion: { 
+                                    self.dismissViewControllerAnimated(true, completion: {
                                         
                                         self.presentAddedContactSuccessfully()
-
+                                        
                                     })
                                     return
                                 } else {
                                     print("Failed to save contact to cloudkit. Try again.")
-                                    self.dismissViewControllerAnimated(true, completion: { 
-                                        
+                                    self.dismissViewControllerAnimated(true, completion: {
                                         self.presentFailedToAddContact()
-
                                     })
                                     return
                                 }
                             })
                             
                         })
+                        
+                        
                         
                     } else {
                         // Create Contact and Save Contact to CoreData
@@ -195,11 +201,14 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             guard let contactRecord = record else {
                                 newContact.hasAppAccount = false
                                 // Add contact to Logged In User's contact
-                                loggedInUser.contacts.append(newContact)                                
+                                loggedInUser.contacts.append(newContact)
                                 UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
-                                self.dismissViewControllerAnimated(true, completion: {
-                                    self.presentNoUserAccount(newContact)
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    
+                                    self.dismissViewControllerAnimated(true, completion: {
+                                        self.presentNoUserAccount(newContact)
+                                    })
                                 })
                                 return
                             }
@@ -286,7 +295,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func presentFailedToAddContact() {
         let alert = UIAlertController(title: "Something Went Wrong When Adding Contact. Please Try Again.", message: nil, preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
-        alert.addAction(action)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
@@ -411,7 +419,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             cell.textLabel?.textColor = UIColor.lightGrayColor()
         } else {
-            cell.textLabel?.textColor = UIColor ( red: 0.098, green: 0.4745, blue: 0.7451, alpha: 1.0 )
+            cell.textLabel?.textColor = UIColor ( red: 0.1451, green: 0.1686, blue: 0.251, alpha: 1.0 )
         }
         
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)

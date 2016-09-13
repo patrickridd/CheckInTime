@@ -29,10 +29,12 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     @IBOutlet weak var contactImage: UIImageView!
     @IBOutlet weak var dateTextField: UITextField!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet var dueDatePicker: UIDatePicker!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var profileViewBox: UIView!
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var editButtonLabel: UIBarButtonItem!
     
     
     override func viewDidLoad() {
@@ -73,6 +75,34 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         
     }
+    
+    @IBAction func editButtonTapped(sender: AnyObject) {
+        
+        if editButtonLabel.title == "Edit" {
+        nameLabel.hidden = true
+        nameTextField.enabled = true
+        nameTextField.text = ""
+        nameTextField.placeholder = "Edit name..."
+        nameTextField.borderStyle = .RoundedRect
+        editButtonLabel.title = "Save"
+        editButtonLabel.tintColor = UIColor ( red: 0.9843, green: 0.1451, blue: 0.3686, alpha: 1.0 )
+        } else {
+            nameLabel.text = nameTextField.text
+            nameLabel.hidden = false
+            nameTextField.text = ""
+            nameTextField.placeholder = ""
+            nameTextField.borderStyle = .None
+            nameTextField.enabled = false
+            editButtonLabel.title = "Edit"
+            contact?.name = nameLabel.text
+            UserController.sharedController.saveContext()
+            editButtonLabel.tintColor = UIColor.whiteColor()
+            UserController.sharedController.contacts = UserController.sharedController.contacts
+            
+        }
+    
+    }
+    
     
     func presentNoUserAccount(newContact: User) {
         
@@ -184,6 +214,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func setupView() {
+        nameTextField.enabled = false
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         profileViewBox.layer.masksToBounds = true
         profileViewBox.layer.cornerRadius = 8

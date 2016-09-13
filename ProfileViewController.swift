@@ -24,7 +24,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         imageView.image = loggedInUser.photo
     }
     
-       
+    
     
     @IBAction func imageTapped(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
@@ -43,14 +43,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         actionSheet.addAction(cancelAction)
         actionSheet.addAction(photoLibraryAction)
-                dispatch_async(dispatch_get_main_queue(), {
-                    actionSheet.popoverPresentationController?.sourceView = self.view
-                    actionSheet.popoverPresentationController?.sourceRect = self.view.bounds
-                    // this is the center of the screen currently but it can be any point in the view
-                    self.presentViewController(actionSheet, animated: true, completion: nil)
-
+        dispatch_async(dispatch_get_main_queue(), {
+            actionSheet.popoverPresentationController?.sourceView = self.view
+            actionSheet.popoverPresentationController?.sourceRect = self.view.bounds
+            // this is the center of the screen currently but it can be any point in the view
+            self.presentViewController(actionSheet, animated: true, completion: nil)
+            
         })
-
+        
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
@@ -59,8 +59,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             loggedInUser = loggedInUser,
             newImageData = UIImagePNGRepresentation(newImage),
             loggedInUserRecord = loggedInUser.cloudKitRecord  else {
-            self.dismissViewControllerAnimated(true, completion: nil)
-            return
+                self.dismissViewControllerAnimated(true, completion: nil)
+                return
         }
         
         loggedInUser.imageData = newImageData
@@ -94,22 +94,20 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let deleteAccountAction = UIAlertAction(title: "Yes I'm Sure", style: .Default) { (_) in
             self.loadingAlert("Deleting Account...")
             UserController.sharedController.deleteAccount({
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.dismissViewControllerAnimated(true, completion: { 
-                                
-                                self.presentLoginScreen()
-
-                            })
-        })
-
-    })
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.presentLoginScreen()
+                    })
+                })
+                
+            })
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAccountAction)
-                dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
-
+        
     }
     
     
@@ -129,7 +127,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             
         })
     }
-
+    
     
     func presentLoginScreen() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)

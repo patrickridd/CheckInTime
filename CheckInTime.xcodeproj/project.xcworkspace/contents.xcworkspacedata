@@ -4,4 +4,7 @@
    <FileRef
       location = "self:/Users/PatrickRidd/Programming/Swift Programs/App Store Apps/WhereYouApp/CheckInTime.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:../WhereYouApp">
+   </FileRef>
 </Workspace>

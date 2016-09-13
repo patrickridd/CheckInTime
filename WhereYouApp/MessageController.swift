@@ -268,8 +268,13 @@ class MessageController {
     func scheduleLocalNotificationToCheckIn(message: Message) {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.sender.phoneNumber)
         let localNotification = UILocalNotification()
-        localNotification.alertTitle = "CheckInTime ⏰"
-        localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to check in now"
+        localNotification.alertTitle = "CheckInTime"
+        if message.sender.name == message.sender.phoneNumber || message.sender.name == "" {
+            localNotification.alertBody =   "\(formattedPhoneNumber) wants you to checked in now."
+        } else {
+            
+            localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to checked in now."
+        }
         localNotification.fireDate = message.timeDue
         
         localNotification.category = "TimeToCheckIn"
@@ -281,8 +286,12 @@ class MessageController {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.receiver.phoneNumber)
 
         let localNotification = UILocalNotification()
-        localNotification.alertTitle = "CheckInTime ⏰"
-        localNotification.alertBody =   "\(message.receiver.name ?? formattedPhoneNumber) checked in."
+        localNotification.alertTitle = "CheckInTime"
+        if message.receiver.name == message.receiver.phoneNumber {
+            localNotification.alertBody =   "\(formattedPhoneNumber) checked in."
+        } else {
+            localNotification.alertBody =   "\(message.receiver.name) checked in."
+        }
         localNotification.fireDate = message.timeResponded
         
         localNotification.category = "ResponseToCheckIn"
