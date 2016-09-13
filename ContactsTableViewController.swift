@@ -164,13 +164,19 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
                                     print("Saved Contact Successfully to CloudKit")
-                                    self.dismissViewControllerAnimated(true, completion: nil)
-                                    self.presentAddedContactSuccessfully()
+                                    self.dismissViewControllerAnimated(true, completion: { 
+                                        
+                                        self.presentAddedContactSuccessfully()
+
+                                    })
                                     return
                                 } else {
                                     print("Failed to save contact to cloudkit. Try again.")
-                                    self.dismissViewControllerAnimated(true, completion: nil)
-                                    self.presentFailedToAddContact()
+                                    self.dismissViewControllerAnimated(true, completion: { 
+                                        
+                                        self.presentFailedToAddContact()
+
+                                    })
                                     return
                                 }
                             })
@@ -189,16 +195,14 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             guard let contactRecord = record else {
                                 newContact.hasAppAccount = false
                                 // Add contact to Logged In User's contact
-                                loggedInUser.contacts.append(newContact)
-                                
+                                loggedInUser.contacts.append(newContact)                                
                                 UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
-                                self.dismissViewControllerAnimated(true, completion: { 
+                                self.dismissViewControllerAnimated(true, completion: {
                                     self.presentNoUserAccount(newContact)
                                 })
                                 return
                             }
-                            
                             UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
                                     self.dismissViewControllerAnimated(true, completion: {
@@ -407,7 +411,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             cell.textLabel?.textColor = UIColor.lightGrayColor()
         } else {
-            cell.textLabel?.textColor = UIColor.yellowColor()
+            cell.textLabel?.textColor = UIColor ( red: 0.098, green: 0.4745, blue: 0.7451, alpha: 1.0 )
         }
         
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
@@ -427,7 +431,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView
-        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
     }
     
     

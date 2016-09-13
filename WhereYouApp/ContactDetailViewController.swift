@@ -30,9 +30,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var contactImage: UIImageView!
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet var dueDatePicker: UIDatePicker!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var profileViewBox: UIView!
     
     
     override func viewDidLoad() {
@@ -45,6 +45,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             self.presentNoUserAccount(contact)
         }
         
+        setupView()
         
         setupFetchController(contact)
         fetchedResultsController.delegate = self
@@ -71,11 +72,11 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             self.nameLabel.text = contact.name!
         }
         
-        self.numberLabel.text = formattedPhoneNumber
         
     }
     
     func presentNoUserAccount(newContact: User) {
+        
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
@@ -183,6 +184,11 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
       //  dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
     }
     
+    func setupView() {
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+        profileViewBox.layer.masksToBounds = true
+        profileViewBox.layer.cornerRadius = 8
+    }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         guard let sections = fetchedResultsController.sections else {

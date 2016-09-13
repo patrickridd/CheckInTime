@@ -426,6 +426,7 @@ class UserController {
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record else {
                 print("Couldn't find Contact's record to delete his reference")
+                self.deleteContactsFromCoreData([contact])
                 return
             }
             let contactRecordName = record.recordID.recordName
@@ -434,12 +435,15 @@ class UserController {
             // guard let reference = contact.cloudKitReference,
             guard let loggedInUser = self.loggedInUser else {
                 print("no logged In user")
+                self.deleteContactsFromCoreData([contact])
                 return
             }
             
             if let record = loggedInUser.cloudKitRecord {
                 guard var references = record[User.contactsKey] as? [CKReference] else {
                     print("No references in CloudKit")
+                    self.deleteContactsFromCoreData([contact])
+
                     return
                 }
                 
@@ -449,6 +453,7 @@ class UserController {
                 self.saveContext()
                 guard let index = names.indexOf(contactRecordName) else {
                     print("No index")
+                    self.deleteContactsFromCoreData([contact])
                     return
                 }
                 references.removeAtIndex(index)
@@ -469,10 +474,12 @@ class UserController {
             } else {
                 self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                     guard let record = record else {
+                        self.deleteContactsFromCoreData([contact])
                         return
                     }
                     guard var references = record[User.contactsKey] as? [CKReference] else {
                         print("No references in CloudKit")
+                        self.deleteContactsFromCoreData([contact])
                         return
                     }
                     loggedInUser.contactReferences = references
@@ -480,6 +487,7 @@ class UserController {
                     
                     
                     guard let index = recordNames.indexOf(contactRecordName) else {
+                        self.deleteContactsFromCoreData([contact])
                         return
                     }
                     references.removeAtIndex(index)
@@ -490,6 +498,7 @@ class UserController {
                         }, completion: { (records, error) in
                             if let error = error {
                                 print("Error Deleting Contact Reference. Error: \(error.localizedDescription)")
+                                self.deleteContactsFromCoreData([contact])
                             } else {
                                 print("Successfully deleted contact reference")
                             }

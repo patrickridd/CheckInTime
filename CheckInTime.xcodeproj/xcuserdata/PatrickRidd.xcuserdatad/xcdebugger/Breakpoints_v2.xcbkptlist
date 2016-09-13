@@ -35,13 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495424966.81015"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495429129.699759"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
-            landmarkName = "contactPicker(_:didSelectContact:)"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
+            landmarkName = "checkIfContactIsInUsersCloudKitContacts(_:completion:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -51,238 +51,46 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495424968.613984"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495429131.734039"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "contactPicker(_:didSelectContact:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495424978.110918"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "contactPicker(_:didSelectContact:)"
+            startingLineNumber = "394"
+            endingLineNumber = "394"
+            landmarkName = "checkIfContactIsInUsersCloudKitContacts(_:completion:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3)"
+                  symbolName = "CheckInTime.UserController.(checkIfContactIsInUsersCloudKitContacts (Swift.String, completion : (isCKContact : Swift.Bool) -&gt; ()) -&gt; ()).(closure #1)"
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.396014"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
+                  timestampString = "495430793.980916"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "141"
-                  endingLineNumber = "141"
-                  offsetFromSymbolStart = "1723">
+                  startingLineNumber = "394"
+                  endingLineNumber = "394"
+                  offsetFromSymbolStart = "36">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3)"
+                  symbolName = "CheckInTime.UserController.(checkIfContactIsInUsersCloudKitContacts (Swift.String, completion : (isCKContact : Swift.Bool) -&gt; ()) -&gt; ()).(closure #1)"
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.39611"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
+                  timestampString = "495430793.981222"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "114">
+                  startingLineNumber = "394"
+                  endingLineNumber = "394"
+                  offsetFromSymbolStart = "105">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495425210.130415"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
-            landmarkName = "contactPicker(_:didSelectContact:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.396666"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "153"
-                  endingLineNumber = "153"
-                  offsetFromSymbolStart = "743">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3).(closure #2)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.396801"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "154"
-                  endingLineNumber = "154"
-                  offsetFromSymbolStart = "45">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495425210.130415"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "contactPicker(_:didSelectContact:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3).(closure #2)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.397418"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "252">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3).(closure #2).(closure #2)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.397513"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "165"
-                  endingLineNumber = "165"
-                  offsetFromSymbolStart = "26">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495425242.036065"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "contactPicker(_:didSelectContact:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3).(closure #1)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.398116"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "144"
-                  endingLineNumber = "144"
-                  offsetFromSymbolStart = "27">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #3).(closure #3).(closure #1).(closure #1)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495425989.398207"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "145"
-                  endingLineNumber = "145"
-                  offsetFromSymbolStart = "31">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495425276.816679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "contactPicker(_:didSelectContact:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495425893.854151"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "contactPicker(_:didSelectContact:)"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

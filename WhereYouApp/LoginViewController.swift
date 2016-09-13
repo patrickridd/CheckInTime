@@ -15,9 +15,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var numberTextField: UITextField!
     let imagePicker = UIImagePickerController()
     
+    @IBOutlet weak var numberFieldButtomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var buttonView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavBar()
+        setupView()
         numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
@@ -216,13 +218,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     /// Sets up the titleView with the logo
-    func setupNavBar() {
+    func setupView() {
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
         let image = UIImage(named: "CheckInTimeTitle")
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView
-        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+        
+        buttonView.layer.masksToBounds = true
+        buttonView.layer.cornerRadius = 8
     }
 
     

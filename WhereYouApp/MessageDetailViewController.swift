@@ -75,7 +75,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         
         messageTextView.delegate = self
-      //  setupTabBarView()
+        setupView()
         
     }
     
@@ -451,6 +451,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
 
     }
 
+    func setupView() {
+        
+    }
     
     // MARK: - TextView placeholder
     

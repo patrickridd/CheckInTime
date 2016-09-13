@@ -116,18 +116,18 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     func setupTabBar() {
        let tabBar = tabBarController?.tabBar
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: UIColor ( red: 0.0, green: 1.0, blue: 0.9961, alpha: 1.0 )], forState:.Normal)
-        tabBar?.tintColor = UIColor ( red: 0.0, green: 1.0, blue: 0.9961, alpha: 1.0 )
-        tabBar?.barTintColor = UIColor.whiteColor()
+        tabBar?.tintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+        tabBar?.barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
       
     }
     
     func setupNavBar() {
-        UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         let image = UIImage(named: "CheckInTimeTitle")
         let imageView = UIImageView(image: image)
         
         self.navigationItem.titleView = imageView
-        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
     }
     
     func setupRightButton() {
@@ -168,9 +168,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? MessageTableViewCell, message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message  else {
             return UITableViewCell()
         }
-        if message.hasBeenSeen == 0 {
-            cell.backgroundColor = UIColor.lightGrayColor()
-        }
+       
         cell.updateWith(message)
         return cell
     }
