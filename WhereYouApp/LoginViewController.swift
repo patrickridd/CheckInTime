@@ -55,6 +55,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             }
         }
         numberTextField.delegate = self
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        
     }
     
     @IBAction func submitButtonTapped(sender: AnyObject) {
@@ -117,6 +120,23 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
     }
     
+    
+    func keyboardWillShowNotification(notification: NSNotification) {
+        if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            
+            let keyboardFrame = keyboardFrameValue.CGRectValue()
+            UIView.animateWithDuration(0.8, animations: { 
+                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-51
+            })
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        UIView.animateWithDuration(0.8) { 
+         self.numberFieldButtomConstraint.constant = 15
+            
+        }
+    }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
