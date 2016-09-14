@@ -25,10 +25,10 @@ class MessageController {
     /// Fetches all messages from CoreData.
     func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
-        let sortDescriptor = NSSortDescriptor(key: "timeSent", ascending: false)
-        let sortDescriptorBool = NSSortDescriptor(key: "hasResponded", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "timeDue", ascending: false)
+       // let sortDescriptorBool = NSSortDescriptor(key: "hasResponded", ascending: false)
         
-        request.sortDescriptors = [sortDescriptor, sortDescriptorBool]
+        request.sortDescriptors = [sortDescriptor]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
         let _ = try? fetchedResultsController.performFetch()
@@ -270,14 +270,17 @@ class MessageController {
         let localNotification = UILocalNotification()
         localNotification.alertTitle = "CheckInTime"
         if message.sender.name == message.sender.phoneNumber || message.sender.name == "" {
-            localNotification.alertBody =   "\(formattedPhoneNumber) wants you to checked in now."
+            localNotification.alertBody =   "\(formattedPhoneNumber) wants you to check in now."
         } else {
             
-            localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to checked in now."
+            localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to check in now."
         }
+
         localNotification.fireDate = message.timeDue
         message.hasBeenSeen = 0
         localNotification.category = "TimeToCheckIn"
+        
+        localNotification.soundName = UILocalNotificationDefaultSoundName
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     }
     

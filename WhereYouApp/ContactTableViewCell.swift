@@ -84,6 +84,8 @@ class ContactTableViewCell: UITableViewCell {
             return
         }
         
+      
+        
         if userContact.name == userContact.phoneNumber {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
         hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to Check In"
@@ -93,10 +95,19 @@ class ContactTableViewCell: UITableViewCell {
         
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
         shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
-        
+        // If time is due now
+        if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
+            newMessageIcon.image = UIImage(named: "checkedInLate")
+            hasRespondedLabel.text = "Time for \(userContact.name!) to CheckIn..."
+            shouldRespondByLabel.textColor = .redColor()
+            
+        } else {
+            newMessageIcon.image = UIImage(named: "checkedInPending")
+            
+        }
     }
     
-    // Cell tells you your contact wants to know WhereYouApp
+    // Cell tells you your contact wants you to CheckIn
     func updateWithYouHaveANewMessage(message: Message) {
         guard let userContact = userContact else {
             print("User's contact was nil")
@@ -104,9 +115,17 @@ class ContactTableViewCell: UITableViewCell {
         }
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-            hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to Check In"
+            hasRespondedLabel.text = "\(formatedPhoneNumber) sent you a CheckInTime"
         } else {
-            hasRespondedLabel.text = "\(userContact.name!) wants you to Check In"
+            hasRespondedLabel.text = "\(userContact.name!) sent you a CheckInTime"
+        }
+        
+        if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
+            newMessageIcon.image = UIImage(named: "checkedInLate")
+            hasRespondedLabel.text = "It's time for you to CheckIn with \(userContact.name!)"
+        } else {
+            newMessageIcon.image = UIImage(named: "checkedInPending")
+            
         }
         
         timeSentLabel.text = ""
@@ -119,7 +138,9 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.textColor = UIColor.yellowColor()
+        
+    
+        
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
             hasRespondedLabel.text = "\(formatedPhoneNumber) Check In!"
@@ -135,6 +156,7 @@ class ContactTableViewCell: UITableViewCell {
             return
         }
         timeSentLabel.text = "Checked In \(dateFormatter.stringFromDate(timeResponded))"
+        newMessageIcon.image = UIImage(named: "checkedIn")
         
         
     }
@@ -145,19 +167,21 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        hasRespondedLabel.textColor = UIColor.yellowColor()
+     
         
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
             hasRespondedLabel.text = "You Checked In with \(formatedPhoneNumber)!"
-
+            
         } else {
             
             hasRespondedLabel.text = "You Checked In with \(userContact.name!)!"
 
         }
+        newMessageIcon.image = UIImage(named: "checkedIn")
         timeSentLabel.text = "You Checked In \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
+        newMessageIcon.image = UIImage(named: "checkedIn")
     }
     
     

@@ -32,7 +32,10 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             }
         })
         setupTabBar()
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(updatedMessage), name: UpdatedMessages, object: nil)
 
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -41,6 +44,10 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         setupNavBar()
 
 
+    }
+    
+    func updatedMessage(notification: NSNotification) {
+        self.tableView.reloadData()
     }
     
     func presentCouldNotGetCKAccount() {

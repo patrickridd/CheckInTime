@@ -53,6 +53,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
         updateWith(contact)
+        
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(self.updatedMessage(_:)), name: UpdatedMessages, object: nil)
     }
     
     
@@ -60,6 +63,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         // self.navigationController?.tabBarController?.
+    }
+    
+    func updatedMessage(notification: NSNotification){
+        self.tableView.reloadData()
     }
     
     func updateWith(contact: User) {
@@ -143,7 +150,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func setupFetchController(contact: User) {
         
         let request = NSFetchRequest(entityName: "Message")
-        let descriptor = NSSortDescriptor(key: "timeSent", ascending: false)
+        let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
         request.sortDescriptors = [descriptor]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])

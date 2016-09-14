@@ -10,6 +10,8 @@ import UIKit
 import CloudKit
 import CoreData
 
+let UpdatedMessages = "UpdatedMessages"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -56,7 +58,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         
         let alert = UIAlertController(title: "New Message", message: notification.alertBody , preferredStyle: .Alert)
-        let action = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
+        let action = UIAlertAction(title: "Dismiss", style: .Default) { (_) in
+            let nc = NSNotificationCenter.defaultCenter()
+            nc.postNotificationName(UpdatedMessages, object: nil)
+        }
         alert.addAction(action)
         window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }

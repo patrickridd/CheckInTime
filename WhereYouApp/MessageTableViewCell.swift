@@ -46,10 +46,6 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         
-        
-     
-        updateLabelRadius()
-        
         self.loggedInUser = user
         if message.sender.phoneNumber == user.phoneNumber {
             self.userContact = message.receiver
@@ -100,20 +96,6 @@ class MessageTableViewCell: UITableViewCell {
         
     }
     
-    func updateLabelRadius() {
-        hasRespondedLabel.layer.masksToBounds = true
-        hasRespondedLabel.layer.cornerRadius = 6.5
-        
-        
-        timeResponded.layer.masksToBounds = true
-        timeResponded.layer.cornerRadius = 6.5
-        
-        shouldRespondByLabel.layer.masksToBounds = true
-        shouldRespondByLabel.layer.cornerRadius  = 6.5
-        
-        
-    }
-    
     
     // Cell tells you that your request hasn't been responded to yet
     func updateWithWaitingForReceiverResponse(message: Message) {
@@ -132,8 +114,8 @@ class MessageTableViewCell: UITableViewCell {
         
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
             newMessageIcon.image = UIImage(named: "checkedInLate")
-            hasRespondedLabel.text = "Waiting for \(userContact.name!) to CheckIn..."
-        } else {
+            hasRespondedLabel.text = "Time for \(userContact.name!) to CheckIn..."
+            shouldRespondByLabel.textColor = .redColor()        } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
         }
         
@@ -215,7 +197,7 @@ class MessageTableViewCell: UITableViewCell {
         }
         newMessageIcon.image = UIImage(named: "checkedIn")
 
-        timeResponded.text = "You CheckedIn at \(dateFormatter.stringFromDate(checkedInAt))"
+        timeResponded.text = "You CheckedIn \(dateFormatter.stringFromDate(checkedInAt))"
         shouldRespondByLabel.text = ""
     }
     
