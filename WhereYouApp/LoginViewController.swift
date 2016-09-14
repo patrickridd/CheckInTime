@@ -17,6 +17,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     @IBOutlet weak var numberFieldButtomConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()

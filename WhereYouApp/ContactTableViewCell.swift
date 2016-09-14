@@ -16,6 +16,7 @@ class ContactTableViewCell: UITableViewCell {
     @IBOutlet weak var hasRespondedLabel: UILabel!
     @IBOutlet weak var timeSentLabel: UILabel!
     @IBOutlet weak var shouldRespondByLabel: UILabel!
+    @IBOutlet weak var newMessageIcon: UIImageView!
     
     
     override func awakeFromNib() {
@@ -41,7 +42,12 @@ class ContactTableViewCell: UITableViewCell {
     // Updates View with Message Details
     func updateWith(message: Message) {
         
-        setupLabelCornerRadius()
+        if message.hasBeenSeen == 0 {
+            newMessageIcon.hidden = false
+        } else {
+            newMessageIcon.hidden = true
+        }
+        
         guard let user = UserController.sharedController.loggedInUser else {
             return
         }
@@ -90,7 +96,7 @@ class ContactTableViewCell: UITableViewCell {
         }
         
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
-        shouldRespondByLabel.text = "Check In \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
         
     }
     
@@ -127,12 +133,13 @@ class ContactTableViewCell: UITableViewCell {
         }
         
         
-        shouldRespondByLabel.text = ""
+        shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
         
         guard let timeResponded = message.timeResponded else {
             return
         }
         timeSentLabel.text = "Checked In \(dateFormatter.stringFromDate(timeResponded))"
+        
         
     }
     
@@ -156,15 +163,7 @@ class ContactTableViewCell: UITableViewCell {
         shouldRespondByLabel.text = ""
     }
     
-    func setupLabelCornerRadius() {
-        timeSentLabel.layer.masksToBounds = true
-        timeSentLabel.layer.cornerRadius = 6.5
-        shouldRespondByLabel.layer.masksToBounds = true
-        shouldRespondByLabel.layer.cornerRadius = 6.5
-        
-        
-        
-    }
+    
     
     
 }

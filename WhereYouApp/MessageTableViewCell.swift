@@ -19,7 +19,6 @@ class MessageTableViewCell: UITableViewCell {
     @IBOutlet weak var timeResponded: UILabel!
     @IBOutlet weak var shouldRespondByLabel: UILabel!
     @IBOutlet weak var newMessageIcon: UIImageView!
-    @IBOutlet weak var newLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -48,14 +47,7 @@ class MessageTableViewCell: UITableViewCell {
         }
         
         
-        if message.hasBeenSeen == 1 {
-            self.newLabel.hidden = true
-            self.newMessageIcon.hidden = true
-            
-        } else {
-            self.newLabel.hidden = false
-            self.newMessageIcon.hidden = false
-        }
+     
         updateLabelRadius()
         
         self.loggedInUser = user
@@ -158,7 +150,8 @@ class MessageTableViewCell: UITableViewCell {
             hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to CheckIn"
         } else {
             shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
-            hasRespondedLabel.text = "\(userContact.name!) wants you to CheckIn"
+            hasRespondedLabel.text = "\(userContact.name!) sent you CheckInTime"
+            newMessageIcon.image = UIImage(named: "checkedInPending")
             
         }
     }
@@ -176,6 +169,8 @@ class MessageTableViewCell: UITableViewCell {
             
         } else {
             hasRespondedLabel.text = "\(userContact.name!) has CheckedIn."
+            newMessageIcon.image = UIImage(named: "checkedIn")
+
             
         }
         
@@ -198,7 +193,8 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             hasRespondedLabel.text = "You CheckedIn with \(userContact.name!)"
         }
-        
+        newMessageIcon.image = UIImage(named: "checkedIn")
+
         timeResponded.text = "You CheckedIn at \(dateFormatter.stringFromDate(checkedInAt))"
         shouldRespondByLabel.text = ""
     }

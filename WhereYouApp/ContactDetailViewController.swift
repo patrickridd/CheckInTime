@@ -245,9 +245,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? ContactTableViewCell, let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
             return UITableViewCell()
         }
-        if message.hasBeenSeen == 0 {
-            cell.backgroundColor = UIColor.lightGrayColor()
-        }
+      
         cell.updateWith(message)
         
         return cell

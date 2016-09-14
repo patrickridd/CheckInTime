@@ -17,6 +17,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     var loggedInUser: User?
     var usersContact: User?
     var locationManager: CLLocationManager!
+    var geocoder: CLGeocoder?
     let latSpan: CLLocationDegrees = 0.005
     let longSpan: CLLocationDegrees = 0.005
     let tabBarView = UIView()
@@ -28,6 +29,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     @IBOutlet weak var titleLabel: UINavigationItem!
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var textViewBottomContraint: NSLayoutConstraint!
+    @IBOutlet weak var addressLabel: UILabel!
     
     var location: CLLocation? {
         didSet {
@@ -77,6 +80,10 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         messageTextView.delegate = self
         setupView()
         setupTabBar()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+
         
     }
     
@@ -232,9 +239,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
 
         if usersContact?.phoneNumber == usersContact?.name || usersContact?.name == "" {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
-             self.timeDueLabel.text = "\(formatedPhoneNumber) wants you to Check In \(dateFormatter.stringFromDate(message.timeDue))"
+             self.timeDueLabel.text = "\(formatedPhoneNumber) sent a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
         } else {
-        self.timeDueLabel.text = "\(usersContact!.name) wants you to Check In \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "\(usersContact!.name!) sent a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
         }
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -246,6 +253,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func checkCoreLocationPermission() {
         if CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse {
             dispatch_async(dispatch_get_main_queue(), {
+                self.geocoder = CLGeocoder()
                 self.locationManager.startUpdatingLocation()
                 
             })
@@ -266,14 +274,26 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if let newLocation = locations.last {
                     dispatch_async(dispatch_get_main_queue(), {
                         self.location = newLocation
+                        self.geoCodeLocation(newLocation)
         })
 
         }
         locationManager.stopUpdatingLocation()
         
     }
+    func geoCodeLocation(location: CLLocation) {
+        geocoder?.reverseGeocodeLocation(location) { (placemarks, error) in
+            guard let placemark = placemarks?.last,
+                thoroughfare = placemark.thoroughfare  else {
+                    print("Can't get placemark for address")
+                    return
+            }
+            self.addressLabel.text = placemark.subThoroughfare!  + " " + thoroughfare + ", " + placemark.postalCode!
+        }
+    }
 
-    /// Sends Check In Notification to current contact. 
+
+    /// Sends Check In Notification to current contact.
     @IBAction func sendButtonTapped(sender: AnyObject) {
         guard let message = message, loggedInUser = loggedInUser else {
             print("No message to send because it is nil")
@@ -394,6 +414,23 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    
+    func keyboardWillShowNotification(notification: NSNotification) {
+        if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            
+            let keyboardFrame = keyboardFrameValue.CGRectValue()
+            UIView.animateWithDuration(0.8, animations: {
+                self.textViewBottomContraint.constant = keyboardFrame.size.height
+            })
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        UIView.animateWithDuration(0.8) {
+            self.textViewBottomContraint.constant = 0
+            
+        }
+    }
     
     
     @IBAction func backButtonTapped(sender: AnyObject) {
@@ -516,6 +553,10 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         // if it's not empty, then the text should be black and not italic
         // BUT, we also need to remove the placeholder text if that's the only text
         // if it is empty, then the text should be the placeholder
+        if text == "\n" {
+            textView.resignFirstResponder()
+        }
+        
         let newLength = textView.text.utf16.count + text.utf16.count - range.length
         if newLength > 0 { // have text, so don't show the placeholder
             // check if the only text is the placeholder and remove it if needed
