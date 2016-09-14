@@ -30,6 +30,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var textViewBottomContraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var textViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var addressLabel: UILabel!
     
     var location: CLLocation? {
@@ -239,9 +241,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
 
         if usersContact?.phoneNumber == usersContact?.name || usersContact?.name == "" {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
-             self.timeDueLabel.text = "\(formatedPhoneNumber) sent a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
+             self.timeDueLabel.text = "\(formatedPhoneNumber) sent you a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
         } else {
-        self.timeDueLabel.text = "\(usersContact!.name!) sent a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "\(usersContact!.name!) sent you a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
         }
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -317,22 +319,22 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if messageTextView.text != defaultMessage {
             message.text = messageTextView.text
         } else {
-            if usersContact?.name == usersContact?.phoneNumber {
-                let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
-                message.text = "\(formatedPhoneNumber) Checked In"
-            } else {
-                message.text = "\(usersContact?.name!) Checked In"
-            }
-            
-            
+//            if usersContact?.name == usersContact?.phoneNumber {
+//                let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
+//                message.text = "\(formatedPhoneNumber) Checked In"
+//            } else {
+//                message.text = "\(usersContact?.name!) Checked In"
+            //}
+            message.text = "You Checked In!"
         }
+            
+        
         // Input time responded
         message.timeResponded = NSDate()
         
         // Change boolean to show that user has responded to request.
         message.hasResponded = 1
 
-        
                // Get message record and save values to CloudKit
         guard let record = message.cloudKitRecord else {
             // Change Local message properties back to what they were.
@@ -348,8 +350,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         guard let text = message.text else {
             return
         }
-        
-        
+
         record[Message.textKey] = text
         record[Message.latitudeKey] = latitude
         record[Message.longitudeKey] = longitude
@@ -379,7 +380,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         // Change Button Title and Disable
         self.sendButton.setTitle("Message Sent", forState: .Normal)
-        self.sendButton.setTitleColor(UIColor ( red: 0.5969, green: 1.0, blue: 0.2341, alpha: 1.0 ), forState: .Normal)
+        self.sendButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         self.sendButton.enabled = false
         
         // Hide textview and show label
@@ -401,7 +402,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             
             mapView.addAnnotation(annotation)
         } else {
-            self.messageLabel.text = "Where\(loggedInUser.name ?? formatedPhoneNumber) Check In"
+            self.messageLabel.text = "Where \(loggedInUser.name ?? formatedPhoneNumber) Check In"
         }
         
         // Show the time you responded
@@ -421,6 +422,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
                 self.textViewBottomContraint.constant = keyboardFrame.size.height
+                self.textViewTopConstraint.constant = keyboardFrame.size.height
             })
         }
     }
@@ -428,9 +430,10 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func keyboardWillHide(notification: NSNotification) {
         UIView.animateWithDuration(0.8) {
             self.textViewBottomContraint.constant = 0
-            
+            self.textViewTopConstraint.constant = 0
         }
     }
+    
     
     
     @IBAction func backButtonTapped(sender: AnyObject) {
@@ -489,7 +492,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func showErrorSendingAlert() {
         let alert = UIAlertController(title: "Had trouble Sending Message", message: nil, preferredStyle: .Alert)
         let action = UIAlertAction(title: "Resend Message?", style: .Default) { (_) in
-
+            
             
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
