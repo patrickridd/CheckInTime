@@ -124,7 +124,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     func setupNavBar() {
-        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         let image = UIImage(named: "CheckInTimeTitleWhiteSmall")
         let imageView = UIImageView(image: image)
         

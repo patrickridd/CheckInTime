@@ -351,6 +351,12 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="umW-YK-LGZ">
+                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="nhj-rq-LOh">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="backButtonTapped:" destination="BSJ-RI-4EC" id="lKs-If-dps"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="Srh-sa-LBh">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -360,6 +366,7 @@
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="bottomDateTextField" destination="FB2-QB-3Nh" id="sP9-Kj-FY4"/>
                         <outlet property="contactImage" destination="jj6-Ph-LVi" id="q8p-CR-JSu"/>
                         <outlet property="dateTextField" destination="1Bk-9e-3tf" id="0SF-Rg-erQ"/>
                         <outlet property="dueDatePicker" destination="i5v-BK-YiP" id="fAE-Dp-57b"/>

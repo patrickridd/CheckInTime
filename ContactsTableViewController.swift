@@ -114,9 +114,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 dispatch_async(dispatch_get_main_queue(), {
                     self.dismissViewControllerAnimated(true, completion: {
                         self.presentContactHasNoMobilePhone(name)
-                        
                     })
-                    
                 })
                 
                 return

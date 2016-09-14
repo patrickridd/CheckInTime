@@ -53,9 +53,15 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             self.userContact = message.sender
         }
-        if userContact == nil {
+        if userContact?.name == nil {
+            contactName.text = "Deleted Contact"
+            hasRespondedLabel.text = ""
+            timeResponded.text = ""
+            shouldRespondByLabel.text = ""
+            return
             
         }
+        
         guard let userContact = self.userContact else {
             print("No contact in MessageTableViewCell")
             return

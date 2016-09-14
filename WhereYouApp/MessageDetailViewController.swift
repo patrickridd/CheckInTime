@@ -103,6 +103,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             self.usersContact = message.sender
         }
 
+        if message.sender.name == nil {
+            timeDueLabel.text = "Sent by a Deleted Contact"
+            return
+        }
+        
         updateWith(message)
 
     }
@@ -181,6 +186,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
         
         // Create the coordinate through the latitude and longitude
+        mapView.showsUserLocation = true
         let latitudeDegrees = CLLocationDegrees(Double(latitude))
         let longitudeDegrees = CLLocationDegrees(Double(longitude))
         let location = CLLocation(latitude: latitudeDegrees, longitude: longitudeDegrees)
@@ -224,11 +230,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         // Set time due label
 
-        if usersContact?.phoneNumber == usersContact?.name {
+        if usersContact?.phoneNumber == usersContact?.name || usersContact?.name == "" {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
-             self.timeDueLabel.text = "\(formatedPhoneNumber) wants you to Check In at \(dateFormatter.stringFromDate(message.timeDue))"
+             self.timeDueLabel.text = "\(formatedPhoneNumber) wants you to Check In \(dateFormatter.stringFromDate(message.timeDue))"
         } else {
-        self.timeDueLabel.text = "\(usersContact!.name) wants you to Check In at \(dateFormatter.stringFromDate(message.timeDue))"
+        self.timeDueLabel.text = "\(usersContact!.name) wants you to Check In \(dateFormatter.stringFromDate(message.timeDue))"
         }
         locationManager = CLLocationManager()
         locationManager.delegate = self

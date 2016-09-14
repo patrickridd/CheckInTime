@@ -156,6 +156,7 @@ class UserController {
         guard let users = (try? moc.executeFetchRequest(request) as! [User]) else {
             return
         }
+        
         if users.count < 1 {
             print("No users to Check for App status")
             completion(newAppAcctUsers: false, updatedUsers: nil)

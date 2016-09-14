@@ -35,6 +35,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var editButtonLabel: UIBarButtonItem!
+    @IBOutlet weak var bottomDateTextField: NSLayoutConstraint!
     
     
     override func viewDidLoad() {
@@ -48,7 +49,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         setupView()
-        
         setupFetchController(contact)
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
@@ -103,6 +103,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     }
     
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+    }
     
     func presentNoUserAccount(newContact: User) {
         
@@ -218,6 +221,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         profileViewBox.layer.masksToBounds = true
         profileViewBox.layer.cornerRadius = 8
+        
+        
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+        
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

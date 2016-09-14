@@ -54,7 +54,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
+        
         loadingAlert("Updating Profile...")
+        
         guard let newImage = imageView.image,
             loggedInUser = loggedInUser,
             newImageData = UIImagePNGRepresentation(newImage),
@@ -76,8 +78,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
             }
             dispatch_async(dispatch_get_main_queue(), {
-                self.dismissViewControllerAnimated(true, completion: nil)
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismissViewControllerAnimated(true, completion: { 
+                    
+                    self.dismissViewControllerAnimated(true, completion: nil)
+
+                })
             })
             
         }
@@ -98,8 +103,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                     self.dismissViewControllerAnimated(true, completion: {
                         self.presentLoginScreen()
                     })
-                })
-                
+                })  
             })
         }
         alert.addAction(cancelAction)
