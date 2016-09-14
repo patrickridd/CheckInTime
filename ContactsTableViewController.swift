@@ -89,7 +89,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.isKeyAvailable(CNContactImageDataKey) {
             
-            loadingAlert()
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
             guard let name = CNContactFormatter.stringFromContact(contact, style: .FullName) else {
                 return
                 
@@ -101,66 +102,54 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             if contact.phoneNumbers.count > 0 {
                 phoneNumbers = NumberController.sharedController.getMobileNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
-                self.dismissViewControllerAnimated(true, completion: {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     self.presentContactHasNoMobilePhone(name)
-                    
-                    
-                })
-                print("no phone number")
-                return
+                    print("no phone number")
+                    return
+                
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.dismissViewControllerAnimated(true, completion: {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                         self.presentContactHasNoMobilePhone(name)
-                    })
+                        return
                 })
-                
-                return
             }
+            
             var contactPhoneNumber = phoneNumbers[0]
             NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&contactPhoneNumber, completion: { (isFormattedCorrectly, formatedNumber) in
                 if !isFormattedCorrectly {
                     dispatch_async(dispatch_get_main_queue(), {
-                        
-                        self.dismissViewControllerAnimated(true, completion: {
-                            self.presentContactHasNoMobilePhone(name)
-                        })
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        self.presentContactHasNoMobilePhone(name)
+
+                        return
+                   
                     })
-                    return
                 }
-                
                 // Add phone number to new contact.
                 let phoneNumber = contactPhoneNumber
-                
                 if phoneNumber == UserController.sharedController.loggedInUser?.phoneNumber {
-                    self.dismissViewControllerAnimated(true, completion: {
-                        
-                        self.presentTryingToAddYourselfAlert()
-                    })
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    self.presentTryingToAddYourselfAlert()
                     return
-                    
                 }
-                
                 UserController.sharedController.checkForDuplicateContact(phoneNumber, completion: { (hasContactAlready, isCKContact) in
                     if hasContactAlready && isCKContact {
                         dispatch_async(dispatch_get_main_queue(), {
-                            self.dismissViewControllerAnimated(true, completion: {
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                                 self.presenthasContactAlreadyAlert(name)
+                                return
                             })
-                            
-                        })
-                        return
+                        
                         
                     } else if hasContactAlready && !isCKContact {
                         UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
                             guard let contact = contact else {
                                 dispatch_async(dispatch_get_main_queue(), {
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        self.presentFailedToAddContact()
-                                        
-                                    })
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                    self.presentFailedToAddContact()
                                 })
                                 return
                             }
@@ -168,17 +157,13 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
                                     print("Saved Contact Successfully to CloudKit")
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        
-                                        self.presentAddedContactSuccessfully()
-                                        
-                                    })
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                    self.presentAddedContactSuccessfully()
                                     return
                                 } else {
                                     print("Failed to save contact to cloudkit. Try again.")
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        self.presentFailedToAddContact()
-                                    })
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                    self.presentFailedToAddContact()
                                     return
                                 }
                             })
@@ -191,7 +176,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         // Create Contact and Save Contact to CoreData
                         let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
                         MessageController.sharedController.saveContext()
-                        guard let  loggedInUser = UserController.sharedController.loggedInUser else {                            print("Couldn't get logged in user and/or record")
+                        guard let  loggedInUser = UserController.sharedController.loggedInUser else {
+                            print("Couldn't get logged in user and/or record")
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                             return
                         }
                         // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
@@ -203,18 +190,16 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                 UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
                                 dispatch_async(dispatch_get_main_queue(), {
-                                    
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        self.presentNoUserAccount(newContact)
-                                    })
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                    self.presentNoUserAccount(newContact)
                                 })
                                 return
                             }
                             UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        self.presentUserHasAccount(newContact)
-                                    })
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                    self.presentUserHasAccount(newContact)
+                                
                                 }
                             })
                         })
@@ -417,7 +402,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             cell.textLabel?.textColor = UIColor.lightGrayColor()
         } else {
-            cell.textLabel?.textColor = UIColor ( red: 0.1451, green: 0.1686, blue: 0.251, alpha: 1.0 )
+            cell.textLabel?.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         }
         
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)

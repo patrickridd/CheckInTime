@@ -105,6 +105,7 @@ class MessageTableViewCell: UITableViewCell {
         }
         
         if userContact.name == userContact.phoneNumber {
+        hasRespondedLabel.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
         hasRespondedLabel.text = "You sent \(formatedPhoneNumber) a CheckInTime"
         } else {
@@ -113,9 +114,10 @@ class MessageTableViewCell: UITableViewCell {
         }
         
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-            newMessageIcon.image = UIImage(named: "checkedInLate")
+            newMessageIcon.image = UIImage(named: "notCheckedInPink")
             hasRespondedLabel.text = "Time for \(userContact.name!) to CheckIn..."
-            shouldRespondByLabel.textColor = .redColor()        } else {
+            hasRespondedLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+        } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
         }
         
@@ -139,8 +141,8 @@ class MessageTableViewCell: UITableViewCell {
             hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to CheckIn"
             
             if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-                newMessageIcon.image = UIImage(named: "checkedInLate")
-                hasRespondedLabel.text = "CheckIn with \(formatedPhoneNumber) now."
+                newMessageIcon.image = UIImage(named: "notCheckedInPink")
+                hasRespondedLabel.text = "Time for you to CheckIn with \(formatedPhoneNumber)"
             } else {
                 newMessageIcon.image = UIImage(named: "checkedInPending")
             }
@@ -150,8 +152,9 @@ class MessageTableViewCell: UITableViewCell {
             shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
             hasRespondedLabel.text = "\(userContact.name!) sent you a CheckInTime"
             if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-                newMessageIcon.image = UIImage(named: "checkedInLate")
-                hasRespondedLabel.text = "CheckIn with \(userContact.name!) now."
+                newMessageIcon.image = UIImage(named: "notCheckedInPink")
+                hasRespondedLabel.text = "Time for you to CheckIn with \(userContact.name!)"
+                hasRespondedLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
             } else {
                 newMessageIcon.image = UIImage(named: "checkedInPending")
             }

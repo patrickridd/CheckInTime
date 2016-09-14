@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import CloudKit
 import UIKit
+import AVFoundation
 
 class MessageController {
     
@@ -30,7 +31,7 @@ class MessageController {
         
         request.sortDescriptors = [sortDescriptor]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeDue", cacheName: nil)
         let _ = try? fetchedResultsController.performFetch()
         
     }
@@ -279,7 +280,8 @@ class MessageController {
         localNotification.fireDate = message.timeDue
         message.hasBeenSeen = 0
         localNotification.category = "TimeToCheckIn"
-        
+        let systemSound: SystemSoundID = 1016 
+        AudioServicesPlaySystemSound(systemSound)
         localNotification.soundName = UILocalNotificationDefaultSoundName
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     }
@@ -298,6 +300,8 @@ class MessageController {
         localNotification.fireDate = message.timeResponded
         message.hasBeenSeen = 0
         localNotification.category = "ResponseToCheckIn"
+        localNotification.soundName = UILocalNotificationDefaultSoundName
+
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
 
         

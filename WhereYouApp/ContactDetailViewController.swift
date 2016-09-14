@@ -92,7 +92,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         nameTextField.placeholder = "Edit name..."
         nameTextField.borderStyle = .RoundedRect
         editButtonLabel.title = "Save"
-        editButtonLabel.tintColor = UIColor ( red: 0.9843, green: 0.1451, blue: 0.3686, alpha: 1.0 )
+        editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         } else {
             nameLabel.text = nameTextField.text
             nameLabel.hidden = false
@@ -224,11 +224,12 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func setupView() {
+        nameLabel.layer.masksToBounds = true
+        nameLabel.layer.cornerRadius = 20
         nameTextField.enabled = false
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         profileViewBox.layer.masksToBounds = true
         profileViewBox.layer.cornerRadius = 8
-        
         
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
         

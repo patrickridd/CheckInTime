@@ -40,6 +40,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
+        tableView.reloadData()
         setupRightButton()
         setupNavBar()
 
@@ -145,7 +146,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
         rightProfileButtonImage.layer.cornerRadius = 20
         rightProfileButtonImage.layer.masksToBounds = true
-        rightProfileButtonImage.contentMode = .ScaleAspectFill
+        rightProfileButtonImage.contentMode = .ScaleAspectFit
         self.navigationItem.rightBarButtonItem?.customView = rightProfileButtonImage
         rightProfileButtonImage.addTarget(self, action: #selector(presentProfilePage), forControlEvents: UIControlEvents.TouchUpInside)
     }

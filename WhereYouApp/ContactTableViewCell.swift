@@ -93,13 +93,15 @@ class ContactTableViewCell: UITableViewCell {
             hasRespondedLabel.text = "Waiting for \(userContact.name!) to Check In"
         }
         
+        timeSentLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         timeSentLabel.text = "Time Sent \(dateFormatter.stringFromDate(message.timeSent))"
         shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
         // If time is due now
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-            newMessageIcon.image = UIImage(named: "checkedInLate")
+            newMessageIcon.image = UIImage(named: "notCheckedInPink")
             hasRespondedLabel.text = "Time for \(userContact.name!) to CheckIn..."
-            shouldRespondByLabel.textColor = .redColor()
+            hasRespondedLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+            shouldRespondByLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
             
         } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
@@ -113,6 +115,7 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
+        hasRespondedLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
             hasRespondedLabel.text = "\(formatedPhoneNumber) sent you a CheckInTime"
@@ -121,8 +124,9 @@ class ContactTableViewCell: UITableViewCell {
         }
         
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
-            newMessageIcon.image = UIImage(named: "checkedInLate")
-            hasRespondedLabel.text = "It's time for you to CheckIn with \(userContact.name!)"
+            newMessageIcon.image = UIImage(named: "notCheckedInPink")
+            hasRespondedLabel.text = "Time for you to CheckIn with \(userContact.name!)"
+            timeSentLabel.textColor = UIColor ( red: 1.0, green: 0.5294, blue: 0.5686, alpha: 1.0 )
         } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
             
@@ -167,7 +171,8 @@ class ContactTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-     
+        timeSentLabel.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+
         
         if userContact.name == userContact.phoneNumber {
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
