@@ -42,11 +42,7 @@ class ContactTableViewCell: UITableViewCell {
     // Updates View with Message Details
     func updateWith(message: Message) {
         
-        if message.hasBeenSeen == 0 {
-            newMessageIcon.hidden = false
-        } else {
-            newMessageIcon.hidden = true
-        }
+     
         
         guard let user = UserController.sharedController.loggedInUser else {
             return
@@ -156,6 +152,7 @@ class ContactTableViewCell: UITableViewCell {
             hasRespondedLabel.text = "You Checked In with \(formatedPhoneNumber)!"
 
         } else {
+            
             hasRespondedLabel.text = "You Checked In with \(userContact.name!)!"
 
         }

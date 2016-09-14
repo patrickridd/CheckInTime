@@ -29,9 +29,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     @IBOutlet weak var titleLabel: UINavigationItem!
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var messageLabel: UILabel!
-    @IBOutlet weak var textViewBottomContraint: NSLayoutConstraint!
+    @IBOutlet weak var addressLabelTopConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var textViewTopConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var addressLabel: UILabel!
     
     var location: CLLocation? {
@@ -421,16 +421,14 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
-                self.textViewBottomContraint.constant = keyboardFrame.size.height
-                self.textViewTopConstraint.constant = keyboardFrame.size.height
+                self.addressLabelTopConstraint.constant = -keyboardFrame.size.height
             })
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
         UIView.animateWithDuration(0.8) {
-            self.textViewBottomContraint.constant = 0
-            self.textViewTopConstraint.constant = 0
+            self.addressLabelTopConstraint.constant = 0
         }
     }
     
@@ -557,6 +555,9 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         // BUT, we also need to remove the placeholder text if that's the only text
         // if it is empty, then the text should be the placeholder
         if text == "\n" {
+            if textView.text == "" {
+                applyNonPlaceholderStyle(textView)
+            }
             textView.resignFirstResponder()
         }
         

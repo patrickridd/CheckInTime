@@ -481,12 +481,6 @@
                                     </mask>
                                 </variation>
                             </mapView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lp6-hf-qxg">
-                                <rect key="frame" x="0.0" y="347" width="320" height="93"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wVG-bb-7Dj">
                                 <rect key="frame" x="-4" y="64" width="328" height="22"/>
                                 <color key="backgroundColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -494,6 +488,12 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lp6-hf-qxg">
+                                <rect key="frame" x="0.0" y="347" width="320" height="93"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -559,12 +559,11 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addressLabel" destination="wVG-bb-7Dj" id="4QA-3K-LSv"/>
+                        <outlet property="addressLabelTopConstraint" destination="Gae-dx-tmw" id="UIB-ed-yte"/>
                         <outlet property="mapView" destination="CNa-Ia-dRJ" id="4IK-YZ-tB9"/>
                         <outlet property="messageLabel" destination="rdE-33-zLI" id="Yok-U0-kL7"/>
                         <outlet property="messageTextView" destination="Lp6-hf-qxg" id="qP8-UT-7eg"/>
                         <outlet property="sendButton" destination="DYc-Xk-5XT" id="A57-FX-MIc"/>
-                        <outlet property="textViewBottomContraint" destination="lDT-bH-N0e" id="fI9-XF-jRp"/>
-                        <outlet property="textViewTopConstraint" destination="awc-Un-fiW" id="7wG-1K-E8o"/>
                         <outlet property="timeDueLabel" destination="PBt-gj-EVs" id="jOW-WN-PeI"/>
                         <outlet property="titleLabel" destination="PP0-zM-HvV" id="0jg-q0-UI0"/>
                     </connections>
