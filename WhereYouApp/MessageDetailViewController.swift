@@ -103,7 +103,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             self.usersContact = message.sender
         }
 
-        if message.sender.name == nil {
+        if message.sender.name == nil || message.receiver.name == nil {
             timeDueLabel.text = "Sent by a Deleted Contact"
             return
         }

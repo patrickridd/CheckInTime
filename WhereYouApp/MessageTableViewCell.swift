@@ -18,6 +18,8 @@ class MessageTableViewCell: UITableViewCell {
     @IBOutlet weak var hasRespondedLabel: UILabel!
     @IBOutlet weak var timeResponded: UILabel!
     @IBOutlet weak var shouldRespondByLabel: UILabel!
+    @IBOutlet weak var newMessageIcon: UIImageView!
+    @IBOutlet weak var newLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -45,6 +47,15 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         
+        
+        if message.hasBeenSeen == 1 {
+            self.newLabel.hidden = true
+            self.newMessageIcon.hidden = true
+            
+        } else {
+            self.newLabel.hidden = false
+            self.newMessageIcon.hidden = false
+        }
         updateLabelRadius()
         
         self.loggedInUser = user
@@ -53,7 +64,7 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             self.userContact = message.sender
         }
-        if userContact?.name == nil {
+        if message.sender.name == nil || message.receiver.name == nil {
             contactName.text = "Deleted Contact"
             hasRespondedLabel.text = ""
             timeResponded.text = ""

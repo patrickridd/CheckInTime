@@ -276,7 +276,7 @@ class MessageController {
             localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to checked in now."
         }
         localNotification.fireDate = message.timeDue
-        
+        message.hasBeenSeen = 0
         localNotification.category = "TimeToCheckIn"
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
     }
@@ -293,7 +293,7 @@ class MessageController {
             localNotification.alertBody =   "\(message.receiver.name) checked in."
         }
         localNotification.fireDate = message.timeResponded
-        
+        message.hasBeenSeen = 0
         localNotification.category = "ResponseToCheckIn"
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
 
