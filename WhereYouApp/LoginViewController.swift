@@ -78,11 +78,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 self.loadingAlert()
                 
                 UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image, completion: { (success, user) in
-                    
                     if success {
-                        
                         dispatch_async(dispatch_get_main_queue(), {
-            
+                            
                             self.dismissViewControllerAnimated(true, completion: {
                                 self.dismissViewControllerAnimated(true, completion: nil)
                                 let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
@@ -91,22 +89,23 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                         })
                     }
                     else {
-                        self.dismissViewControllerAnimated(true, completion: {
-                            if let user = user {
-                                UserController.sharedController.deleteContactsFromCoreData([user])
-                            }
-                            self.presentFailedToSave()
-                            
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.dismissViewControllerAnimated(true, completion: {
+                                if let user = user {
+                                    UserController.sharedController.deleteContactsFromCoreData([user])
+                                }
+                                self.presentFailedToSave()
+                            })
                         })
                     }
                 })
-                
             } else {
-                self.presentNumberAlert()
-                return
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentNumberAlert()
+                    return
+                })
             }
         }
-        
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
