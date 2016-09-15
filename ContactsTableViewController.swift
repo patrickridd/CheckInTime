@@ -416,7 +416,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
         let image = UIImage(named: "ContactsTitleSmall")
         let imageView = UIImageView(image: image)
-        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+
         self.navigationItem.titleView = imageView
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
     }

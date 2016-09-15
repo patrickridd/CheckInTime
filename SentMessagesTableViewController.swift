@@ -1,24 +1,24 @@
 //
-//  MessageListTableViewController.swift
-//  WhereYouApp
+//  SentMessagesTableViewController.swift
+//  CheckInTime
 //
-//  Created by Patrick Ridd on 8/29/16.
+//  Created by Patrick Ridd on 9/15/16.
 //  Copyright © 2016 PatrickRidd. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-class MessageListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate  {
+class SentMessagesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate  {
     
     let rightProfileButtonImage = UIButton()
-
+    
     static let sharedController = MessageListTableViewController()
     @IBOutlet weak var tableView: UITableView!
     
     
     override func viewDidLoad() {
-
+        
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
         MessageController.sharedController.fetchedResultsController.delegate = self
@@ -34,22 +34,22 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         setupTabBar()
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(updatedMessage), name: UpdatedMessages, object: nil)
-
-         setupNavBar()
+        
+        setupNavBar()
         setupRightButton()
-
-
+        
+        
     }
     
     override func viewWillAppear(animated: Bool) {
-            super.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         tableView.reloadData()
         guard let user = UserController.sharedController.loggedInUser else {
             return
         }
         rightProfileButtonImage.setImage(user.photo, forState: .Normal)
-
-
+        
+        
     }
     
     func updatedMessage(notification: NSNotification) {
@@ -129,11 +129,11 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     
     func setupTabBar() {
-       let tabBar = tabBarController?.tabBar
+        let tabBar = tabBarController?.tabBar
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )], forState:.Normal)
         tabBar?.tintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
         tabBar?.barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
-      
+        
     }
     
     func setupNavBar() {
@@ -141,7 +141,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         let imageView = UIImageView(image: image)
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-
+        
         self.navigationItem.titleView = imageView
     }
     
@@ -149,15 +149,15 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         guard let user = UserController.sharedController.loggedInUser else {
             return
         }
-
+        
         rightProfileButtonImage.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         rightProfileButtonImage.layer.cornerRadius = 20
         rightProfileButtonImage.layer.masksToBounds = true
         rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
-
+        
         let minSideSize = min(rightProfileButtonImage.frame.size.width, rightProfileButtonImage.frame.size.height)
         let radius = minSideSize / 2
-
+        
         rightProfileButtonImage.clipsToBounds = true
         rightProfileButtonImage.layer.cornerRadius = radius
         rightProfileButtonImage.contentMode = .ScaleAspectFit
@@ -168,8 +168,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     func presentProfilePage() {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
         let profilePage = storyBoard.instantiateViewControllerWithIdentifier("profilePage")
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(profilePage, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(profilePage, animated: true, completion: nil)
         })
     }
     
@@ -193,7 +193,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? MessageTableViewCell, message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message  else {
             return UITableViewCell()
         }
-       
+        
         cell.updateWith(message)
         return cell
     }
@@ -209,7 +209,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
- 
+    
     
     // MARK: NSFetchedResultsControllerDelegate
     
@@ -283,3 +283,4 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
 }
+

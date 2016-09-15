@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         
-        let alert = UIAlertController(title: "New Message", message: notification.alertBody , preferredStyle: .Alert)
+        let alert = UIAlertController(title: notification.alertTitle, message: notification.alertBody , preferredStyle: .Alert)
         let action = UIAlertAction(title: "Dismiss", style: .Default) { (_) in
             let nc = NSNotificationCenter.defaultCenter()
             nc.postNotificationName(UpdatedMessages, object: nil)

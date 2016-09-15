@@ -76,6 +76,8 @@ class MessageTableViewCell: UITableViewCell {
         
         self.profileImage.image = userContact.photo
         
+        setupImage()
+        
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
@@ -186,6 +188,8 @@ class MessageTableViewCell: UITableViewCell {
         
     }
     
+    
+    
     // Cell tell user that they responded to the contacts WhereYouApp request
     func updateWithUserRespondedToContactsRequest(message: Message) {
         guard let userContact = userContact, checkedInAt = message.timeResponded else {
@@ -202,6 +206,14 @@ class MessageTableViewCell: UITableViewCell {
 
         timeResponded.text = "You CheckedIn \(dateFormatter.stringFromDate(checkedInAt))"
         shouldRespondByLabel.text = ""
+    }
+    
+    func setupImage() {
+        
+        let radius = self.profileImage.frame.size.height/2
+        self.profileImage?.layer.masksToBounds = true
+        self.profileImage?.layer.cornerRadius = radius
+        self.profileImage?.clipsToBounds = true
     }
     
     

@@ -365,13 +365,7 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="umW-YK-LGZ">
-                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="nhj-rq-LOh">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="backButtonTapped:" destination="BSJ-RI-4EC" id="lKs-If-dps"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="Srh-sa-LBh">
+                        <barButtonItem key="rightBarButtonItem" title="EditName" id="Srh-sa-LBh">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="editButtonTapped:" destination="BSJ-RI-4EC" id="huQ-fx-Kws"/>
@@ -544,12 +538,6 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="PP0-zM-HvV">
-                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="oav-VU-4bf">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="backButtonTapped:" destination="ovw-5G-6fs" id="AeP-IO-hgC"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Report" id="qbT-xc-Z9i">
                             <color key="tintColor" red="1" green="0.2533796948" blue="0.44136510010000002" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -572,11 +560,13 @@
             </objects>
             <point key="canvasLocation" x="1648" y="492"/>
         </scene>
-        <!--Messages-->
+        <!--Messages -->
         <scene sceneID="5RO-BO-Fyd">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wKG-Pl-UeF" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Messages" image="icon" id="ohp-Fb-DHy"/>
+                    <tabBarItem key="tabBarItem" title="Messages " image="icon" id="ohp-Fb-DHy">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ODX-mr-5Gv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -632,6 +622,17 @@
                                 <color key="textColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ZKF-PA-3Xv" customClass="CustomImageView" customModule="CheckInTime" customModuleProvider="target">
+                                <rect key="frame" x="36" y="116" width="248" height="248"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ZKF-PA-3Xv" secondAttribute="height" multiplier="1:1" id="3n8-Ld-6vF"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k4k-2i-PyO">
                                 <rect key="frame" x="36" y="225" width="248" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
@@ -659,17 +660,6 @@
                                     </mask>
                                 </variation>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="ZKF-PA-3Xv" customClass="CustomImageView" customModule="CheckInTime" customModuleProvider="target">
-                                <rect key="frame" x="36" y="116" width="248" height="248"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="ZKF-PA-3Xv" secondAttribute="height" multiplier="1:1" id="3n8-Ld-6vF"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -730,7 +720,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="96N-nK-Wtx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1859" y="-137"/>
+            <point key="canvasLocation" x="2391" y="-137"/>
         </scene>
         <!--CheckInTime⏰-->
         <scene sceneID="2x4-RV-2TJ">
@@ -858,7 +848,13 @@
                             <constraint firstAttribute="trailing" secondItem="aZR-vM-sjl" secondAttribute="trailing" id="gPQ-Vd-FZv"/>
                             <constraint firstItem="aZR-vM-sjl" firstAttribute="top" secondItem="ftJ-wd-XHB" secondAttribute="bottom" id="kz0-6X-ilG"/>
                             <constraint firstItem="Gy4-LH-JbZ" firstAttribute="top" secondItem="aZR-vM-sjl" secondAttribute="bottom" id="rpf-9V-eaZ"/>
+                            <constraint firstItem="aZR-vM-sjl" firstAttribute="top" secondItem="ftJ-wd-XHB" secondAttribute="bottom" id="yxJ-ev-jl0"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="kz0-6X-ilG"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="CheckInTime⏰" id="RYn-Ug-fxc">
                         <barButtonItem key="rightBarButtonItem" title="Profile" id="KvA-cZ-zq9">
@@ -875,7 +871,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JbC-gC-wqO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="986" y="416"/>
+            <point key="canvasLocation" x="1013" y="387"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="xe7-yI-HDC">
@@ -972,7 +968,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2299" y="190"/>
+            <point key="canvasLocation" x="2831" y="190"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="XpZ-ZF-PLd">
@@ -991,13 +987,15 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eac-la-3bE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="282" y="401"/>
+            <point key="canvasLocation" x="89" y="350"/>
         </scene>
         <!--Contacts-->
         <scene sceneID="za8-A9-hsX">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WO5-qi-bsg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Contacts" image="circle-user-7" id="tbZ-8H-8fm"/>
+                    <tabBarItem key="tabBarItem" title="Contacts" image="circle-user-7" id="tbZ-8H-8fm">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-5"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Tq1-ty-eSx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1029,7 +1027,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vAK-44-cMz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1464" y="-137"/>
+            <point key="canvasLocation" x="1996" y="-137"/>
         </scene>
     </scenes>
     <resources>

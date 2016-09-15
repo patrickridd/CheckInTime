@@ -435,9 +435,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     
     
     
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
-    }
+    
     
     
     @IBAction func reportButtonTapped(sender: AnyObject) {
@@ -506,7 +504,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func setupView() {
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-
+        
     }
     
     func setupTabBar() {

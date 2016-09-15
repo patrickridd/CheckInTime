@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var imageView: UIImageView!
     
     
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let loggedInUser = UserController.sharedController.loggedInUser else {
@@ -22,11 +24,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
-        self.imageView.layer.masksToBounds = false
-        self.imageView.layer.cornerRadius = self.imageView.frame.size.height/2
-        self.imageView.clipsToBounds = true
+        view.layoutIfNeeded()
+        setupImage()
+
     }
-    
     
     
     @IBAction func imageTapped(sender: AnyObject) {
@@ -144,6 +145,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         })
     }
     
+    func setupImage() {
+        
+        
+        let radius = imageView.frame.width/2.0
+        self.imageView.layer.masksToBounds = true
+        self.imageView.layer.cornerRadius = radius
+        self.imageView.clipsToBounds = true
+    }
+
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
             print("Couldn't Get Image from imagePicker 'info'")
@@ -151,6 +162,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         
         imageView.image = image
+        setupImage()
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     

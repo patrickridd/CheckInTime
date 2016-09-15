@@ -295,14 +295,13 @@ class MessageController {
         if message.receiver.name == message.receiver.phoneNumber {
             localNotification.alertBody =   "\(formattedPhoneNumber) checked in."
         } else {
-            localNotification.alertBody =   "\(message.receiver.name) checked in."
+            localNotification.alertBody =   "\(message.receiver.name ?? formattedPhoneNumber) checked in."
         }
-        localNotification.fireDate = message.timeResponded
         message.hasBeenSeen = 0
         localNotification.category = "ResponseToCheckIn"
         localNotification.soundName = UILocalNotificationDefaultSoundName
 
-        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+        UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
 
         
     }

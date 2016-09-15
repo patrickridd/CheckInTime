@@ -153,6 +153,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         
         imageView.image = image
+        setupView()
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -251,9 +252,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         buttonView.layer.masksToBounds = true
         buttonView.layer.cornerRadius = 8
         
-        self.imageView.layer.masksToBounds = false
-        self.imageView.layer.cornerRadius = self.imageView.frame.size.height/2
-        self.imageView.clipsToBounds = true
+        
+            
+            let minSideSize = min(imageView.frame.size.width, imageView.frame.size.height)
+            let radius = minSideSize / 2
+            self.imageView.layer.masksToBounds = true
+            self.imageView.layer.cornerRadius = radius
+            self.imageView.clipsToBounds = true
+        
+
+        
     }
     
     

@@ -49,6 +49,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         setupView()
+        setupImage()
         setupFetchController(contact)
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
@@ -85,16 +86,18 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     @IBAction func editButtonTapped(sender: AnyObject) {
         
-        if editButtonLabel.title == "Edit" {
+        if editButtonLabel.title == "EditName" {
         nameLabel.hidden = true
         nameTextField.enabled = true
         nameTextField.text = ""
         nameTextField.placeholder = "Edit name..."
         nameTextField.borderStyle = .RoundedRect
         editButtonLabel.title = "Save"
-        editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+        editButtonLabel.tintColor = UIColor ( red: 1.0, green: 0.1629, blue: 0.4057, alpha: 1.0 )
         } else {
-            nameLabel.text = nameTextField.text
+            if let text = nameTextField.text where text.characters.count > 1  {
+                nameLabel.text = text
+            }
             nameLabel.hidden = false
             nameTextField.text = ""
             nameTextField.placeholder = ""
@@ -102,6 +105,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             nameTextField.enabled = false
             editButtonLabel.title = "Edit"
             contact?.name = nameLabel.text
+            
             UserController.sharedController.saveContext()
             editButtonLabel.tintColor = UIColor.whiteColor()
             UserController.sharedController.contacts = UserController.sharedController.contacts
@@ -109,11 +113,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
     
     }
-    
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
+ 
     func presentNoUserAccount(newContact: User) {
         
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
@@ -140,7 +140,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
-            
         })
         
     }
@@ -227,15 +226,25 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         nameLabel.layer.masksToBounds = true
         nameLabel.layer.cornerRadius = 20
         nameTextField.enabled = false
-        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+      //  UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         profileViewBox.layer.masksToBounds = true
         profileViewBox.layer.cornerRadius = 8
-        
-        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+        editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         let iconImage = UIImage(named: "ContactDetailIcon")
         let imageView = UIImageView(image: iconImage)
         self.navigationItem.titleView = imageView
+        
     }
+    
+    func setupImage() {
+        
+        let radius = self.contactImage.frame.size.height/2
+        self.contactImage.layer.masksToBounds = true
+        self.contactImage.layer.cornerRadius = radius
+        self.contactImage.clipsToBounds = true
+    }
+    
+
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         guard let sections = fetchedResultsController.sections else {
