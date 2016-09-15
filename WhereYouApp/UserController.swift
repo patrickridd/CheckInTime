@@ -30,16 +30,18 @@ class UserController {
     }
     
     /// Creates the Logged In User
-    func createUser(name: String, phoneNumber: String, image: UIImage, completion: (success: Bool, user: User) -> Void) {
+    func createUser(name: String, phoneNumber: String, image: UIImage, completion: (success: Bool, user: User?) -> Void) {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
             guard let record = record else {
+                completion(success: false, user: nil)
                 print("Not signed in to cloudkit")
                 return
                 
             }
             guard let imageData = UIImagePNGRepresentation(image) else {
                 print("Cant get NSData from Image")
+                completion(success: false, user: nil)
                 return
             }
             
