@@ -44,10 +44,8 @@ class UserController {
                 completion(success: false, user: nil)
                 return
             }
-            
             let user = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: true)
             /* Create Custom User Record with a recordID made from the users phone number so we can use the phone number to fetch him/her from coredata */
-            
             user.recordName = record.recordID.recordName
             let recordID = CKRecordID(recordName: user.phoneNumber)
             let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
@@ -120,7 +118,6 @@ class UserController {
                     print("You are subscribed to received messages")
                 }
                 completion(hasAccount: true, hasConnection: true)
-                
             })
         }
     }
@@ -134,8 +131,6 @@ class UserController {
         UserController.sharedController.contacts = orderedList
         
     }
-    
-    
     /// Fetches all users in core data except the Logged In User
     func fetchContactsFromCoreData(completion: (contacts: [User]) -> Void) {
         let contactRequest = NSFetchRequest(entityName: "User")
@@ -195,12 +190,9 @@ class UserController {
                     })
                 }
             }
-            
             self.deleteContactsFromCoreData(newUsers)
             completion(newAppAcctUsers: true, updatedUsers: updatedUsers)
         }
-        
-        
     }
     
     /// Checks if current user's contacts have deleted their by checking for their records in CloudKit.
@@ -239,7 +231,6 @@ class UserController {
                 } else {
                     for deletedUser in deletedUsers {
                         self.updateContactsAppStatus(deletedUser, completion: { (wasSaved) in
-                            
                             
                         })
                     }
@@ -329,29 +320,27 @@ class UserController {
                 completion(hasUsers: false)
                 return
         }
-        
+       
         loggedInUser.contactReferences = references
-        
         let predicate = NSPredicate(format: "recordID IN %@", argumentArray: [references])
-        
-        
+       
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-            if let user = User(record: record) {
-                user.name = user.phoneNumber
-                loggedInUser.contacts.append(user)
-                UserController.sharedController.contacts.append(user)
-            }
-            
+        
+        
         }) { (records, error) in
-            if let error = error {
-                print("Error fetching contacts: Error: \(error.localizedDescription)")
+            guard let records = records else {
                 completion(hasUsers: false)
                 return
             }
+            if records.count < 1 {
+                completion(hasUsers: false)
+                return
+            }
+            let contacts = records.flatMap({User(record: $0)})
+            UserController.sharedController.contacts = contacts
+            loggedInUser.contacts = contacts
             completion(hasUsers: true)
-            
         }
-        
     }
     
     /// Checks if Contact has downloaded this app so User know if they can communicate with each other.
@@ -552,7 +541,6 @@ class UserController {
         let usersRequest = NSFetchRequest(entityName: "User")
         guard let users = (try? moc.executeFetchRequest(usersRequest) as? [User]),
             deletedUsers = users else {
-                
                 return
         }
         self.contacts.removeAll()
@@ -577,19 +565,15 @@ class UserController {
                 print("Couldn't fetch Contact's Record to add to User's Contacts in CK")
                 return
             }
-            
             contact.cloudKitRecord = record
             guard let contactReference = contact.cloudKitReference else {
                 print("no contact reference available in updateContactsAppStatus ")
                 return
             }
-            
             // save contact to loggedInUser record's contacts property
             loggedInUser.contactReferences.append(contactReference)
             loggedInUserRecord[User.contactsKey] = loggedInUser.contactReferences
             CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
-                
-                
                 }, completion: { (records, error) in
                     if let error = error {
                         print("Error saving Contact to User's Cloudkit contacts field. Error: \(error.localizedDescription)")
@@ -598,7 +582,6 @@ class UserController {
                         print("Saved Contact to Cloudkit")
                         completion(wasSaved: true)
                     }
-                    
             })
         }
     }
@@ -637,6 +620,7 @@ class UserController {
                     print("Error modifying Contacts. Error: \(error.localizedDescription)")
                     UserController.sharedController.saveContext()
                     completion(savedSuccessfully: false)
+                    
                 } else {
                     // If modifying records are successful present success alert to user.
                     newContact.hasAppAccount = true
@@ -645,8 +629,6 @@ class UserController {
                     completion(savedSuccessfully: true)
                 }
         })
-        
-        
     }
     
     // Saves the ManagedObject Context
@@ -661,12 +643,5 @@ class UserController {
         
         
     }
-    
-    
-    
-    
-    
-    
-    
     
 }

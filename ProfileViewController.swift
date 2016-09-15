@@ -22,6 +22,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
+        self.imageView.layer.masksToBounds = false
+        self.imageView.layer.cornerRadius = self.imageView.frame.size.height/2
+        self.imageView.clipsToBounds = true
     }
     
     

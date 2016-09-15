@@ -142,10 +142,13 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         guard let user = UserController.sharedController.loggedInUser else {
             return
         }
+
         rightProfileButtonImage.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
         rightProfileButtonImage.layer.cornerRadius = 20
-        rightProfileButtonImage.layer.masksToBounds = true
+        rightProfileButtonImage.layer.masksToBounds = false
+        rightProfileButtonImage.clipsToBounds = true
+        rightProfileButtonImage.layer.cornerRadius = rightProfileButtonImage.frame.size.height/2
         rightProfileButtonImage.contentMode = .ScaleAspectFit
         self.navigationItem.rightBarButtonItem?.customView = rightProfileButtonImage
         rightProfileButtonImage.addTarget(self, action: #selector(presentProfilePage), forControlEvents: UIControlEvents.TouchUpInside)
@@ -154,8 +157,10 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     func presentProfilePage() {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
         let profilePage = storyBoard.instantiateViewControllerWithIdentifier("profilePage")
-            self.presentViewController(profilePage, animated: true, completion: nil
-        )
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(profilePage, animated: true, completion: nil)
+        })
+
     }
     
     // Data Source Methods

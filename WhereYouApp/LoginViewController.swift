@@ -64,7 +64,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func submitButtonTapped(sender: AnyObject) {
-        
         guard let image = self.imageView.image else {
             return
         }
@@ -243,13 +242,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     func setupView() {
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
         let image = UIImage(named: "CheckInTimeTitleWhiteSmall")
-        let imageView = UIImageView(image: image)
+        let imageViewImage = UIImageView(image: image)
         
-        self.navigationItem.titleView = imageView
+        
+        self.navigationItem.titleView = imageViewImage
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         
         buttonView.layer.masksToBounds = true
         buttonView.layer.cornerRadius = 8
+        
+        self.imageView.layer.masksToBounds = false
+        self.imageView.layer.cornerRadius = self.imageView.frame.size.height/2
+        self.imageView.clipsToBounds = true
     }
     
     
