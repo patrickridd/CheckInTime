@@ -156,7 +156,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
         request.predicate = compoundPredicate
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "hasResponded" , cacheName: nil  )
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeDue" , cacheName: nil  )
         
         let _ = try? fetchedResultsController.performFetch()
         
@@ -232,7 +232,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         profileViewBox.layer.cornerRadius = 8
         
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
-        
+        let iconImage = UIImage(named: "ContactDetailIcon")
+        let imageView = UIImageView(image: iconImage)
+        self.navigationItem.titleView = imageView
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

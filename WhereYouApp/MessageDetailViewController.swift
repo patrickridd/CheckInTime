@@ -78,7 +78,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        self.geocoder = CLGeocoder()
         messageTextView.delegate = self
         setupView()
         setupTabBar()
@@ -126,6 +126,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func updateWith(message: Message) {
         
         // Set title to the name of the loggedInUser's contact
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )]
+      // self.navigationItem.titleCol
         
         if usersContact?.name == usersContact?.phoneNumber{
             let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
@@ -154,14 +156,17 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         // Update the send button title
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
 
-            sendButton.setTitle("Waiting For \(usersContact!.name ?? formatedPhoneNumber) to Check In", forState: .Normal)
+            sendButton.setTitle("Message Sent", forState: .Normal)
     
         self.timeDueLabel.text = "Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
         // Hide TextView
         messageTextView.hidden = true
         // Disable Send Button
         sendButton.enabled = false
-        messageLabel.hidden = true
+        messageLabel.hidden = false
+        messageLabel.text = "Waiting For \(usersContact!.name ?? formatedPhoneNumber) to Check In"
+        addressLabel.text = "Waiting for CheckInTime"
+        
         
     }
     
@@ -201,7 +206,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         let location = CLLocation(latitude: latitudeDegrees, longitude: longitudeDegrees)
         let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let span: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: self.latSpan, longitudeDelta: self.longSpan)
-        
+        addressLabel.hidden = false
+        geoCodeLocation(location)
         let region = MKCoordinateRegion(center: coordinate, span: span)
         mapView.setRegion(region, animated: true)
         
@@ -210,7 +216,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         myAnnotation.coordinate = coordinate
         
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(usersContact!.phoneNumber)
-
+        
         myAnnotation.title = self.usersContact?.name ?? formatedPhoneNumber
         // If the Contact decides to send a text message put it in the annotation else give it the defaultMessage
         if let messageText = message.text {
@@ -218,8 +224,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         } else {
             myAnnotation.subtitle = defaultMessage
         }
-        
+        geoCodeLocation(location)
         mapView.addAnnotation(myAnnotation)
+        if CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse {
+            mapView.showsUserLocation = true
+        }
         
     }
     
@@ -255,7 +264,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func checkCoreLocationPermission() {
         if CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse {
             dispatch_async(dispatch_get_main_queue(), {
-                self.geocoder = CLGeocoder()
                 self.locationManager.startUpdatingLocation()
                 
             })
@@ -294,7 +302,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
     }
 
-
     /// Sends Check In Notification to current contact.
     @IBAction func sendButtonTapped(sender: AnyObject) {
         guard let message = message, loggedInUser = loggedInUser else {
@@ -319,15 +326,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         if messageTextView.text != defaultMessage {
             message.text = messageTextView.text
         } else {
-//            if usersContact?.name == usersContact?.phoneNumber {
-//                let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
-//                message.text = "\(formatedPhoneNumber) Checked In"
-//            } else {
-//                message.text = "\(usersContact?.name!) Checked In"
-            //}
+            message.text = "\(usersContact?.name!) Checked In"
             message.text = "You Checked In!"
         }
             
+        self.addressLabel.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         
         // Input time responded
         message.timeResponded = NSDate()
@@ -374,8 +377,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
                     print("Saved and sent record")
                     MessageController.sharedController.saveContext()
                 }
-
-                
         }
         
         // Change Button Title and Disable
@@ -405,11 +406,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             self.messageLabel.text = "Where \(loggedInUser.name ?? formatedPhoneNumber) Check In"
         }
         
+        
+        
         // Show the time you responded
+        self.timeDueLabel.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         self.timeDueLabel.text = "You Checked In \(dateFormatter.stringFromDate(NSDate()))"
-        
-        
-        
         
         // Go back to MessageListTableViewController
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -504,6 +505,8 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
 
     func setupView() {
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+
     }
     
     func setupTabBar() {
