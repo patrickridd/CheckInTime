@@ -30,7 +30,7 @@ class UserController {
     }
     
     /// Creates the Logged In User
-    func createUser(name: String, phoneNumber: String, image: UIImage, completion: () -> Void) {
+    func createUser(name: String, phoneNumber: String, image: UIImage, completion: (success: Bool, user: User) -> Void) {
         
         CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
             guard let record = record else {
@@ -68,11 +68,13 @@ class UserController {
             CloudKitManager.cloudKitController.saveRecord(customUserRecord, completion: { (record, error) in
                 if let error = error {
                     print("Error saving to cloudkit. Error: \(error.localizedDescription)")
-                }
+                    completion(success: false, user: user)
+                } else {
                 user.hasAppAccount = 1
                 MessageController.sharedController.subscribeToMessages()
                 self.saveContext()
-                completion()
+                completion(success: true, user: user)
+                }
             })
         }
     }

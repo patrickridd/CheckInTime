@@ -65,9 +65,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     @IBAction func submitButtonTapped(sender: AnyObject) {
         
-        
-        
-        
         guard let image = self.imageView.image else {
             return
         }
@@ -79,18 +76,28 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
                 self.loadingAlert()
-     
-                UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image) {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        
-                        self.dismissViewControllerAnimated(true, completion: {
-                            self.dismissViewControllerAnimated(true, completion: nil)
-                            let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
-                            self.navigationController?.pushViewController(messageListTVC, animated: true)
-                        })
-                    })
+                
+                UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image, completion: { (success, user) in
                     
-                }
+                    if success {
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            
+                            self.dismissViewControllerAnimated(true, completion: {
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                                let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
+                                self.navigationController?.pushViewController(messageListTVC, animated: true)
+                            })
+                        })
+                    }
+                    else {
+                        self.dismissViewControllerAnimated(true, completion: {
+                            UserController.sharedController.deleteContactsFromCoreData([user])
+                            self.presentFailedToSave()
+                            
+                        })
+                    }
+                })
                 
             } else {
                 self.presentNumberAlert()
@@ -301,6 +308,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
+    }
+    
+    func presentFailedToSave() {
+        let alert = UIAlertController(title: "We're Sorry. There was a problem saving your account.", message: "Please try again.", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+        
+        
+        
     }
     
     

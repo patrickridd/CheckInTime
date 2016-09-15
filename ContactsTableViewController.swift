@@ -103,17 +103,16 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 phoneNumbers = NumberController.sharedController.getMobileNumberFormatedForUserRecordName(contact.phoneNumbers)
             } else {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    self.presentContactHasNoMobilePhone(name)
-                    print("no phone number")
-                    return
+                self.presentContactHasNoMobilePhone(name)
+                print("no phone number")
+                return
                 
             }
             // Make sure a number has been extracted from Contacts.
             if phoneNumbers.count < 1 {
                 dispatch_async(dispatch_get_main_queue(), {
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                        self.presentContactHasNoMobilePhone(name)
-                    
+                    self.presentContactHasNoMobilePhone(name)
                 })
                 return
             }
@@ -124,9 +123,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     dispatch_async(dispatch_get_main_queue(), {
                         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                         self.presentContactHasNoMobilePhone(name)
-
-                        
-                   
                     })
                     return
                 }
@@ -141,10 +137,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     if hasContactAlready && isCKContact {
                         dispatch_async(dispatch_get_main_queue(), {
                             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                                self.presenthasContactAlreadyAlert(name)
-                                return
-                            })
-                        
+                            self.presenthasContactAlreadyAlert(name)
+                            return
+                        })
                         
                     } else if hasContactAlready && !isCKContact {
                         UserController.sharedController.fetchCloudKitUserWithNumber(phoneNumber, completion: { (contact) in
@@ -171,9 +166,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             })
                             
                         })
-                        
-                        
-                        
                     } else {
                         // Create Contact and Save Contact to CoreData
                         let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
@@ -199,9 +191,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             }
                             UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
-                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                                    self.presentUserHasAccount(newContact)
-                                
+                                    dispatch_async(dispatch_get_main_queue(), {
+                                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                                        self.presentUserHasAccount(newContact)
+                                    })
+                                    
                                 }
                             })
                         })
@@ -323,7 +317,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func presentNoUserAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
         
-        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? formatedPhoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
+        let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? formatedPhoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime?", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel) { (_) in
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -342,7 +336,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     noUserAccountAlert.view.tintColor = UIColor ( red: 0.5004, green: 1.0, blue: 0.556, alpha: 1.0 )
                 })
             } else {
-                
+                self.showMessage("We're sorry there was a problem accessing Messages.")
             }
         }
         noUserAccountAlert.addAction(dismissAction)
@@ -371,7 +365,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     func presentContactHasNoMobilePhone(name: String) {
-        let alert = UIAlertController(title: "No Mobile Number Found", message: "\(name)'s number in your Contact's needs to be in a Mobile field and no more than 11 digits long.", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "No Number Found", message: "\(name)'s number in your Contact's needs to be at least 10 digits and no longer than 11.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
         alert.addAction(action)
         
