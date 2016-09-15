@@ -35,46 +35,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ContactsTableViewController.swift"
-            timestampString = "495583410.378658"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495606451.232979"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "contactPicker(_:didSelectContact:)"
+            startingLineNumber = "555"
+            endingLineNumber = "555"
+            landmarkName = "deleteAccountFromCoreData()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #2).(closure #2)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495604709.476287"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "1295">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.ContactsTableViewController.(contactPicker (__ObjC.CNContactPickerViewController, didSelectContact : __ObjC.CNContact) -&gt; ()).(closure #2).(closure #2).(closure #3)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/ContactsTableViewController.swift"
-                  timestampString = "495604709.476469"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "53">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

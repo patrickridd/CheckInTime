@@ -102,7 +102,7 @@ class UserController {
             
             self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                 // Subscribe to Message Changes.
-                 MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
+               //  MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
                 guard let _ = record else {
                     completion(hasAccount: true, hasConnection: false)
                     return
@@ -551,7 +551,7 @@ class UserController {
                 
                 return
         }
-        
+        self.contacts.removeAll()
         self.deleteContactsFromCoreData(deletedUsers)
         UIApplication.sharedApplication().cancelAllLocalNotifications()
         

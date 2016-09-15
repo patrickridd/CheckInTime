@@ -113,8 +113,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 dispatch_async(dispatch_get_main_queue(), {
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                         self.presentContactHasNoMobilePhone(name)
-                        return
+                    
                 })
+                return
             }
             
             var contactPhoneNumber = phoneNumbers[0]
@@ -124,9 +125,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                         self.presentContactHasNoMobilePhone(name)
 
-                        return
+                        
                    
                     })
+                    return
                 }
                 // Add phone number to new contact.
                 let phoneNumber = contactPhoneNumber
