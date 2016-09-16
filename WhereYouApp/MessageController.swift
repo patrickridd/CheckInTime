@@ -27,9 +27,10 @@ class MessageController {
     func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
         let sortDescriptor = NSSortDescriptor(key: "timeDue", ascending: false)
+        let sortDescriptorHasResponded = NSSortDescriptor(key: "hasResponded", ascending: true)
         let sortDescriptorSender = NSSortDescriptor(key: "senderID", ascending: false)
         
-        request.sortDescriptors = [sortDescriptor, sortDescriptorSender]
+        request.sortDescriptors = [sortDescriptorSender, sortDescriptorHasResponded,sortDescriptor]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID", cacheName: nil)
         let _ = try? fetchedResultsController.performFetch()

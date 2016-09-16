@@ -112,6 +112,7 @@ class Message: NSManagedObject {
         self.hasResponded = hasResponded
         self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         self.recordName = record.recordID.recordName
+        self.senderID = senderID
 
         
         UserController.sharedController.fetchCoreDataUserWithNumber(senderID, completion: { (user) in
@@ -121,7 +122,6 @@ class Message: NSManagedObject {
                 self.recordName = ""
             }
         
-            self.senderID = self.sender.phoneNumber
 
         })
         UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) { (user) in
