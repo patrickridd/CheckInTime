@@ -220,7 +220,7 @@ class UserController {
         }
         var deletedUsers = [User]()
         for user in users {
-            checkIfContactHasAccount(user, completion: { (record) in
+            checkIfContactHasAccount(user.phoneNumber, completion: { (record) in
                 if record == nil {
                     deletedUsers.append(user)
                 }
@@ -344,9 +344,9 @@ class UserController {
     }
     
     /// Checks if Contact has downloaded this app so User know if they can communicate with each other.
-    func checkIfContactHasAccount(newContact: User, completion: (record: CKRecord?) -> Void) {
+    func checkIfContactHasAccount(newContactPhone: String, completion: (record: CKRecord?) -> Void) {
         
-        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [newContact.phoneNumber])
+        let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [newContactPhone])
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
             
             }, completion: { (records, error) in

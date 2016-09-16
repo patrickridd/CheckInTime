@@ -53,7 +53,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     func presentCouldNotGetCKAccount() {
-        let alert = UIAlertController(title: "Connection Lost", message: "This could be a problem with your connection and you may want to restart the application. This could also because we lost track of your account. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Connection Lost", message: "There is a potential problem with your connection and you may want to restart your application. This could also be because we've lost connection to your account. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
         let createNewOneAction = UIAlertAction(title: "Create New Account", style: .Default) { (_) in
             let areYouSureAlert = UIAlertController(title: "Are You Sure You Want to Delete Local Account and Create a New One?", message: nil, preferredStyle: .Alert)
             let noAction = UIAlertAction(title: "No", style: .Cancel, handler: { (_) in

@@ -50,6 +50,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         setupView()
         setupImage()
+    
         setupFetchController(contact)
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
@@ -59,12 +60,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         nc.addObserver(self, selector: #selector(self.updatedMessage(_:)), name: UpdatedMessages, object: nil)
     }
     
-    
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        // self.navigationController?.tabBarController?.
-    }
     
     func updatedMessage(notification: NSNotification){
         self.tableView.reloadData()
@@ -80,7 +75,20 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             self.nameLabel.text = contact.name ?? formattedPhoneNumber 
         }
+    }
+    
+    func setupFetchController(contact: User) {
         
+        let request = NSFetchRequest(entityName: "Message")
+        let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
+        request.sortDescriptors = [descriptor]
+        let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
+        let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
+        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
+        request.predicate = compoundPredicate
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeDue" , cacheName: nil  )
+        
+        let _ = try? fetchedResultsController.performFetch()
         
     }
     
@@ -109,11 +117,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             UserController.sharedController.saveContext()
             editButtonLabel.tintColor = UIColor.whiteColor()
             UserController.sharedController.contacts = UserController.sharedController.contacts
-            
         }
-    
     }
  
+    /// Presents to the user that the contact they have chosen doesn't have the App
     func presentNoUserAccount(newContact: User) {
         
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
@@ -141,24 +148,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
         })
-        
-    }
-
-    
-    
-    func setupFetchController(contact: User) {
-        
-        let request = NSFetchRequest(entityName: "Message")
-        let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
-        request.sortDescriptors = [descriptor]
-        let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
-        let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
-        request.predicate = compoundPredicate
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeDue" , cacheName: nil  )
-        
-        let _ = try? fetchedResultsController.performFetch()
-        
         
     }
     

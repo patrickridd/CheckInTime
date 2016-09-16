@@ -433,11 +433,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
     }
     
-    
-    
-    
-    
-    
     @IBAction func reportButtonTapped(sender: AnyObject) {
         let alert = UIAlertController(title: "Are you sure you want to report this user?", message: nil, preferredStyle: .ActionSheet)
         let noAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)

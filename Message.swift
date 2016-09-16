@@ -121,6 +121,8 @@ class Message: NSManagedObject {
                 self.recordName = ""
             }
         
+            self.senderID = self.sender.phoneNumber
+
         })
         UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) { (user) in
             if let receiver = user {

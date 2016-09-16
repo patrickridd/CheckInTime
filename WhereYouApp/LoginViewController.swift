@@ -23,6 +23,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupImage()
         numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
@@ -158,12 +159,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                             if let error = error {
                                 print("Error deleting User's Record. Error: \(error.localizedDescription)")
                             }
-                            completion(hasAccount: false)
                             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            completion(hasAccount: false)
                         })
                     }
                 })
             } else {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 completion(hasAccount: false)
             }
         }
@@ -174,14 +176,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
-                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-50
+                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-45
+                self.imageView.layoutIfNeeded()
+
             })
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
         UIView.animateWithDuration(0.8) {
+            
             self.numberFieldButtomConstraint.constant = 15
+            self.imageView.layoutIfNeeded()
         }
     }
     
@@ -192,7 +198,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         
         imageView.image = image
-        setupView()
+        setupImage()
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -298,21 +304,21 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         buttonView.layer.masksToBounds = true
         buttonView.layer.cornerRadius = 8
         
-        
-        
-        let minSideSize = min(imageView.frame.size.width, imageView.frame.size.height)
-        let radius = minSideSize / 2
-        self.imageView.layer.masksToBounds = true
-        self.imageView.layer.cornerRadius = radius
-        self.imageView.clipsToBounds = true
-        
-        
-        
     }
     
     
+    func setupImage() {
+        
+        let radius = imageView.frame.size.width/2
+        self.imageView.layer.masksToBounds = true
+        self.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = radius
+
+    }
+
     /// Presents a loading screen when creating account.
     func loadingAlert(message: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
         
         alert.view.tintColor = UIColor.blackColor()
@@ -324,7 +330,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         alert.view.addSubview(loadingIndicator)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
-            
         })
     }
     

@@ -168,7 +168,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         })
                     } else {
                         // Create Contact and Save Contact to CoreData
-                        let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
+                        
                         MessageController.sharedController.saveContext()
                         guard let  loggedInUser = UserController.sharedController.loggedInUser else {
                             print("Couldn't get logged in user and/or record")
@@ -176,8 +176,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                             return
                         }
                         // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
-                        UserController.sharedController.checkIfContactHasAccount(newContact, completion: { (record) in
+                        UserController.sharedController.checkIfContactHasAccount(phoneNumber, completion: { (record) in
                             guard let contactRecord = record else {
+                                let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
                                 newContact.hasAppAccount = false
                                 // Add contact to Logged In User's contact
                                 loggedInUser.contacts.append(newContact)
@@ -189,6 +190,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                 })
                                 return
                             }
+                            guard let newContact = User(record: contactRecord) else {
+                                self.presentFailedToAddContact()
+                                return
+                            }
+                            newContact.name = name
                             UserController.sharedController.saveNewContactToCloudKit(newContact, contactRecord: contactRecord, completion: { (savedSuccessfully) in
                                 if savedSuccessfully {
                                     dispatch_async(dispatch_get_main_queue(), {
@@ -410,7 +416,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
         return cell
     }
-    
     
     func setupNavBar() {
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )

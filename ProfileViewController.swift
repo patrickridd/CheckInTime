@@ -146,8 +146,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func setupImage() {
-        
-        
         let radius = imageView.frame.width/2.0
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.cornerRadius = radius

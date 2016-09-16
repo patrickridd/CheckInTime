@@ -27,7 +27,7 @@ class MessageController {
     func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
         let sortDescriptor = NSSortDescriptor(key: "timeDue", ascending: false)
-        let sortDescriptorSender = NSSortDescriptor(key: "sender", ascending: false)
+        let sortDescriptorSender = NSSortDescriptor(key: "senderID", ascending: false)
         
         request.sortDescriptors = [sortDescriptor, sortDescriptorSender]
         
@@ -60,7 +60,7 @@ class MessageController {
         message.record = messageRecord
         message.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(messageRecord.recordID)
         message.hasBeenSeen = 1
-        
+        message.senderID = sender.phoneNumber
         // Get records From Sender and Receiver
         UserController.sharedController.fetchUsersCloudKitRecord(sender) { (record) in
             guard let record = record else {
