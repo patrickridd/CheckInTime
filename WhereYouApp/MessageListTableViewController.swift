@@ -75,14 +75,19 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             
         }
         let tryToFindAgain = UIAlertAction(title: "Try Again", style: .Default) { (_) in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             guard let user = UserController.sharedController.loggedInUser else {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+
                 self.presentGeneralError()
                 return
             }
             UserController.sharedController.fetchUsersCloudKitRecord(user, completion: { (record) in
                 if let _ = record {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     self.presentSuccessfullyFoundAccount()
                 } else {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     self.presentCouldNotGetCKAccount()
                 }
             })

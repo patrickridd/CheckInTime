@@ -50,7 +50,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         setupView()
         setupImage()
-    
+        
         setupFetchController(contact)
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
@@ -71,9 +71,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         self.contactImage.image = contact.photo
         if contact.name == contact.phoneNumber {
-        self.nameLabel.text = formattedPhoneNumber
+            self.nameLabel.text = formattedPhoneNumber
         } else {
-            self.nameLabel.text = contact.name ?? formattedPhoneNumber 
+            self.nameLabel.text = contact.name ?? formattedPhoneNumber
         }
     }
     
@@ -94,14 +94,15 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     @IBAction func editButtonTapped(sender: AnyObject) {
         
-        if editButtonLabel.title == "EditName" {
-        nameLabel.hidden = true
-        nameTextField.enabled = true
-        nameTextField.text = ""
-        nameTextField.placeholder = "Edit name..."
-        nameTextField.borderStyle = .RoundedRect
-        editButtonLabel.title = "Save"
-        editButtonLabel.tintColor = UIColor ( red: 1.0, green: 0.1629, blue: 0.4057, alpha: 1.0 )
+        if editButtonLabel.title == "Edit Name" {
+            nameLabel.hidden = true
+            nameTextField.hidden = false
+            nameTextField.enabled = true
+            nameTextField.text = ""
+            nameTextField.placeholder = "Edit name..."
+            nameTextField.borderStyle = .RoundedRect
+            editButtonLabel.title = "Save"
+            editButtonLabel.tintColor = UIColor ( red: 1.0, green: 0.1629, blue: 0.4057, alpha: 1.0 )
         } else {
             if let text = nameTextField.text where text.characters.count > 1  {
                 nameLabel.text = text
@@ -110,8 +111,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             nameTextField.text = ""
             nameTextField.placeholder = ""
             nameTextField.borderStyle = .None
+            nameTextField.hidden = true
             nameTextField.enabled = false
-            editButtonLabel.title = "Edit"
+            editButtonLabel.title = "Edit Name"
             contact?.name = nameLabel.text
             
             UserController.sharedController.saveContext()
@@ -119,7 +121,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             UserController.sharedController.contacts = UserController.sharedController.contacts
         }
     }
- 
+    
     /// Presents to the user that the contact they have chosen doesn't have the App
     func presentNoUserAccount(newContact: User) {
         
@@ -173,7 +175,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
         
-            dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), {
             MessageController.sharedController.createMessage(sender, receiver: receiver, timeDue: self.dueDatePicker.date, completion: { (messageSent, messageRecord, message) in
                 
                 if !messageSent {
@@ -181,7 +183,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             })
         })
-
+        
     }
     
     func presentMessageNotSent(messageRecord: CKRecord, message: Message) {
@@ -204,24 +206,32 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
-
+    
     
     @IBAction func screenTapped(sender: AnyObject) {
         dateTextField.resignFirstResponder()
-      //  dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
+        //  dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
     }
     
     func setupView() {
+        nameTextField.hidden = true
         nameLabel.layer.masksToBounds = true
-        nameLabel.layer.cornerRadius = 20
+        nameLabel.layer.cornerRadius = 5
         nameTextField.enabled = false
-      //  UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+        //  UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         profileViewBox.layer.masksToBounds = true
         profileViewBox.layer.cornerRadius = 8
-        editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
-        let iconImage = UIImage(named: "ContactDetailIcon")
-        let imageView = UIImageView(image: iconImage)
-        self.navigationItem.titleView = imageView
+       // editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+        
+        if contact?.hasAppAccount == 1 {
+            let iconImage = UIImage(named: "ContactDetailIcon2")
+            let imageView = UIImageView(image: iconImage)
+            self.navigationItem.titleView = imageView
+        } else {
+            let iconImage = UIImage(named: "doesntHaveApp2")
+            let imageView = UIImageView(image: iconImage)
+            self.navigationItem.titleView = imageView
+        }
         
     }
     
@@ -233,7 +243,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         self.contactImage.clipsToBounds = true
     }
     
-
+    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         guard let sections = fetchedResultsController.sections else {
@@ -253,12 +263,12 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? ContactTableViewCell, let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
             return UITableViewCell()
         }
-      
+        
         cell.updateWith(message)
         
         return cell
     }
-   
+    
     
     // Override to support editing the table view.
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -317,7 +327,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }
-
+    
     
     
     

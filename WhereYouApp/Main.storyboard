@@ -90,6 +90,7 @@
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RQu-VD-BBd">
                                                 <rect key="frame" x="93" y="36" width="200" height="17"/>
+                                                <color key="backgroundColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -365,7 +366,7 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="umW-YK-LGZ">
-                        <barButtonItem key="rightBarButtonItem" title="EditName" id="Srh-sa-LBh">
+                        <barButtonItem key="rightBarButtonItem" title="Edit Name" id="Srh-sa-LBh">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="editButtonTapped:" destination="BSJ-RI-4EC" id="huQ-fx-Kws"/>
