@@ -17,7 +17,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var buttonView: UIView!
     
     let imagePicker = UIImagePickerController()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 self.presentICloudAlert()
             }
         }
-        findUsersCloudKitAccountAndRetore()
+        findUsersCloudKitAccountAndRetore { (hasAccount) in }
         numberTextField.delegate = self
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
@@ -83,7 +83,14 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     
     @IBAction func findAccountButtonTapped(sender: AnyObject) {
-        findUsersCloudKitAccountAndRetore()
+        findUsersCloudKitAccountAndRetore { (hasAccount) in
+            if !hasAccount {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentNoAccountFound()
+                })
+            }
+            
+        }
     }
     
     
@@ -108,11 +115,21 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
     }
     
-    func findUsersCloudKitAccountAndRetore() {
+    func findUsersCloudKitAccountAndRetore(completion: (hasAccount: Bool) ->Void) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
             if hasCloudKitAccount {
-                guard let userRecord = userRecord else { return }
+                guard let userRecord = userRecord else {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    completion(hasAccount: false)
+                    return
+                }
                 self.presentRestoreUser(userRecord, completion: { (restoredUser) in
+                    guard let restoredUser = restoredUser else {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        completion(hasAccount: true)
+                        return
+                    }
                     if restoredUser {
                         UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
                             if hasUsers {
@@ -120,15 +137,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                                     print("Messages restored")
                                     dispatch_async(dispatch_get_main_queue(), {
                                         self.dismissViewControllerAnimated(true, completion: {
+                                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                                             self.dismissViewControllerAnimated(true, completion: nil)
-                                            
+                                            completion(hasAccount: true)
                                         })
                                     })
                                 })
                             } else {
                                 dispatch_async(dispatch_get_main_queue(), {
+                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                                     self.dismissViewControllerAnimated(true, completion: {
                                         self.dismissViewControllerAnimated(true, completion: nil)
+                                        completion(hasAccount: true)
                                     })
                                 })
                             }
@@ -138,10 +158,15 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                             if let error = error {
                                 print("Error deleting User's Record. Error: \(error.localizedDescription)")
                             }
+                            completion(hasAccount: false)
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            
                         })
                         
                     }
                 })
+            } else {
+                completion(hasAccount: false)
             }
         }
         
@@ -153,7 +178,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
-                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-47
+                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-50
             })
         }
     }
@@ -219,7 +244,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
-    func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool) -> Void) {
+    func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool?) -> Void) {
         let alert = UIAlertController(title: "We have found a user account linked with your iCloud Account. Would you like to restore it on this device?", message: nil
             , preferredStyle: .Alert)
         
@@ -247,11 +272,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 
             })
         }
-        let cancelAction = UIAlertAction(title: "Create New User", style: .Cancel) { (_) in
-           
+        let createNewUserAction = UIAlertAction(title: "Create New User", style: .Default) { (_) in
+            
             
             completion(restoredUser: false)
         }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in
+            
+            completion(restoredUser: nil)
+        }
+        alert.addAction(createNewUserAction)
         alert.addAction(restoreAction)
         alert.addAction(cancelAction)
         dispatch_async(dispatch_get_main_queue(), {
@@ -274,14 +304,14 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         buttonView.layer.cornerRadius = 8
         
         
-            
-            let minSideSize = min(imageView.frame.size.width, imageView.frame.size.height)
-            let radius = minSideSize / 2
-            self.imageView.layer.masksToBounds = true
-            self.imageView.layer.cornerRadius = radius
-            self.imageView.clipsToBounds = true
         
-
+        let minSideSize = min(imageView.frame.size.width, imageView.frame.size.height)
+        let radius = minSideSize / 2
+        self.imageView.layer.masksToBounds = true
+        self.imageView.layer.cornerRadius = radius
+        self.imageView.clipsToBounds = true
+        
+        
         
     }
     
@@ -351,9 +381,15 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
-        
-        
-        
+    }
+    
+    func presentNoAccountFound() {
+        let alert = UIAlertController(title: "No Account Found", message: "It could potentially be a problem with your connection. If you believe this is the case, please try again.", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     

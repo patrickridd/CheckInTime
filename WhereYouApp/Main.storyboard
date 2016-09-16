@@ -661,9 +661,9 @@
                                 </variation>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7gk-7p-h8n">
-                                <rect key="frame" x="91" y="409" width="138" height="24"/>
+                                <rect key="frame" x="91" y="404" width="139" height="26"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
-                                <state key="normal" title="already have an account?">
+                                <state key="normal" title="Already have an account?">
                                     <color key="titleColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -696,10 +696,10 @@
                             <constraint firstItem="k4k-2i-PyO" firstAttribute="width" secondItem="ZKF-PA-3Xv" secondAttribute="height" multiplier="37:62" constant="100" id="Rqp-Bh-1vu"/>
                             <constraint firstItem="k4k-2i-PyO" firstAttribute="centerY" secondItem="ZKF-PA-3Xv" secondAttribute="centerY" id="Uew-X6-OeT"/>
                             <constraint firstItem="k4k-2i-PyO" firstAttribute="centerY" secondItem="ZKF-PA-3Xv" secondAttribute="centerY" id="VCY-lk-k17"/>
-                            <constraint firstItem="LY2-nd-Ubl" firstAttribute="top" secondItem="7gk-7p-h8n" secondAttribute="bottom" constant="7" id="YNm-Pv-Qe1"/>
+                            <constraint firstItem="LY2-nd-Ubl" firstAttribute="top" secondItem="7gk-7p-h8n" secondAttribute="bottom" constant="10" id="YNm-Pv-Qe1"/>
                             <constraint firstItem="ZKF-PA-3Xv" firstAttribute="centerY" secondItem="VYl-fw-L3a" secondAttribute="centerY" id="cbD-i6-AJb"/>
                             <constraint firstItem="wQl-S0-SzK" firstAttribute="top" secondItem="zna-nf-KBf" secondAttribute="bottom" constant="5" id="hr4-BD-oJd"/>
-                            <constraint firstItem="7gk-7p-h8n" firstAttribute="top" secondItem="ohH-Gz-OES" secondAttribute="bottom" constant="10" id="iWP-it-WSA"/>
+                            <constraint firstItem="7gk-7p-h8n" firstAttribute="top" secondItem="ohH-Gz-OES" secondAttribute="bottom" constant="5" id="iWP-it-WSA"/>
                             <constraint firstItem="k4k-2i-PyO" firstAttribute="height" secondItem="ohH-Gz-OES" secondAttribute="height" id="j5c-iw-f2a"/>
                             <constraint firstItem="wQl-S0-SzK" firstAttribute="leading" secondItem="VYl-fw-L3a" secondAttribute="leadingMargin" constant="-10" id="jSl-Mu-fWv"/>
                             <constraint firstItem="cbw-4A-CDT" firstAttribute="height" secondItem="ohH-Gz-OES" secondAttribute="height" id="mPV-d3-hdn"/>
