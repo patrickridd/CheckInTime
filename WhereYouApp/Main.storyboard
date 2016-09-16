@@ -732,6 +732,7 @@
                         <outlet property="imageView" destination="ZKF-PA-3Xv" id="tyF-0z-ZCg"/>
                         <outlet property="numberFieldButtomConstraint" destination="iWP-it-WSA" id="0vw-ai-zly"/>
                         <outlet property="numberTextField" destination="ohH-Gz-OES" id="2cv-7x-yGi"/>
+                        <outlet property="tapPhotoButton" destination="k4k-2i-PyO" id="dAS-NY-m08"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="96N-nK-Wtx" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -15,6 +15,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var numberTextField: UITextField!
     @IBOutlet weak var numberFieldButtomConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
+    @IBOutlet weak var tapPhotoButton: UIButton!
     
     let imagePicker = UIImagePickerController()
     
@@ -47,12 +48,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         var formatedNumber = NumberController.sharedController.formatNumberFromLoginForRecordName(phoneNumber)
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
-                self.loadingAlert()
+                self.loadingAlert("Creating Your Profile...")
                 
                 UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image, completion: { (success, user) in
                     if success {
                         dispatch_async(dispatch_get_main_queue(), {
-                            
                             self.dismissViewControllerAnimated(true, completion: {
                                 self.dismissViewControllerAnimated(true, completion: nil)
                                 let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
@@ -95,9 +95,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
+        self.tapPhotoButton.hidden = true
+
         imagePicker.delegate = self
+
         let alert = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .ActionSheet)
-        
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
             self.imagePicker.sourceType = .PhotoLibrary
             self.presentViewController(self.imagePicker, animated: true, completion: nil)
@@ -109,9 +111,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             alert.popoverPresentationController?.sourceView = self.view
             alert.popoverPresentationController?.sourceRect = self.view.bounds
             // this is the center of the screen currently but it can be any point in the view
-            
             self.presentViewController(alert, animated: true, completion: nil)
-            
         })
     }
     
@@ -160,22 +160,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                             }
                             completion(hasAccount: false)
                             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            
                         })
-                        
                     }
                 })
             } else {
                 completion(hasAccount: false)
             }
         }
-        
     }
     
     
     func keyboardWillShowNotification(notification: NSNotification) {
         if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
-            
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
                 self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-50
@@ -186,7 +182,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     func keyboardWillHide(notification: NSNotification) {
         UIView.animateWithDuration(0.8) {
             self.numberFieldButtomConstraint.constant = 15
-            
         }
     }
     
@@ -254,7 +249,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 completion(restoredUser: false)
                 return
             }
-            self.loadingAlert()
+            self.loadingAlert("Restoring User...")
             user.name = ""
             UserController.sharedController.loggedInUser = user
             UserController.sharedController.loggedInUser?.cloudKitRecord = record
@@ -317,8 +312,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     
     /// Presents a loading screen when creating account.
-    func loadingAlert() {
-        let alert = UIAlertController(title: nil, message: "Creating Your Profile...", preferredStyle: .Alert)
+    func loadingAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
         
         alert.view.tintColor = UIColor.blackColor()
         let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(10, 5, 50, 50)) as UIActivityIndicatorView
