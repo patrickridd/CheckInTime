@@ -22,6 +22,6 @@ extension User {
     @NSManaged var recordName: String
     @NSManaged var timeCreated: NSDate
     @NSManaged var hasAppAccount: NSNumber
-    @NSManaged var messages: NSSet?
+    @NSManaged var messages: NSOrderedSet?
 
 }

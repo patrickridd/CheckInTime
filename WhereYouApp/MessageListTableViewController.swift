@@ -31,13 +31,11 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 self.presentCouldNotGetCKAccount()
             }
         })
+        setupRightButton()
         setupTabBar()
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(updatedMessage), name: UpdatedMessages, object: nil)
-
-         setupNavBar()
-        setupRightButton()
-
+        setupNavBar()
 
     }
     
@@ -48,8 +46,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
             return
         }
         rightProfileButtonImage.setImage(user.photo, forState: .Normal)
-
-
     }
     
     func updatedMessage(notification: NSNotification) {
@@ -57,7 +53,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     func presentCouldNotGetCKAccount() {
-        let alert = UIAlertController(title: "We couldn't find your Check In Account on Our Server", message: "This could be a problem with your connection and you may want to restart the application. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Connection Lost", message: "This could be a problem with your connection and you may want to restart the application. This could also because we lost track of your account. Do you want us to try to find your account again, or do you want to create a new one?", preferredStyle: .Alert)
         let createNewOneAction = UIAlertAction(title: "Create New Account", style: .Default) { (_) in
             let areYouSureAlert = UIAlertController(title: "Are You Sure You Want to Delete Local Account and Create a New One?", message: nil, preferredStyle: .Alert)
             let noAction = UIAlertAction(title: "No", style: .Cancel, handler: { (_) in
@@ -110,7 +106,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     func presentSuccessfullyFoundAccount() {
-        let alert = UIAlertController(title: "Successfully found your Account", message: "Please Restart Curfew Check", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Your Account is Connected", message: nil, preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
@@ -146,14 +142,17 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     func setupRightButton() {
-        guard let user = UserController.sharedController.loggedInUser else {
-            return
+      
+        if let user = UserController.sharedController.loggedInUser {
+        rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
+        } else {
+            let image = UIImage(named: "profile")
+            rightProfileButtonImage.setBackgroundImage(image, forState: .Normal)
         }
 
         rightProfileButtonImage.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         rightProfileButtonImage.layer.cornerRadius = 20
         rightProfileButtonImage.layer.masksToBounds = true
-        rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
 
         let minSideSize = min(rightProfileButtonImage.frame.size.width, rightProfileButtonImage.frame.size.height)
         let radius = minSideSize / 2
@@ -209,7 +208,19 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
- 
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let sections = MessageController.sharedController.fetchedResultsController.sections,
+        user = UserController.sharedController.loggedInUser else {
+            return nil
+        }
+       
+    
+        if sections[section].name == user.phoneNumber {
+            return "Sent CheckInTimes to Contacts"
+        } else {
+            return "Received CheckingInTimes from Contacts"
+        }
+    }
     
     // MARK: NSFetchedResultsControllerDelegate
     

@@ -32,7 +32,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
             if hasCloudKitAccount {
-                self.presentRestoreUser(userRecord!, completion: { (restoredUser) in
+                guard let userRecord = userRecord else { return }
+                self.presentRestoreUser(userRecord, completion: { (restoredUser) in
                     if restoredUser {
                         UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
                             if hasUsers {
@@ -53,6 +54,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                                 })
                             }
                         })
+                    } else {
+                        CloudKitManager.cloudKitController.deleteRecordWithID(userRecord.recordID, completion: { (recordID, error) in
+                            if let error = error {
+                                print("Error deleting User's Record. Error: \(error.localizedDescription)")
+                            }
+                        })
+                        
                     }
                 })
             }
@@ -134,7 +142,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
-                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-51
+                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-47
             })
         }
     }
@@ -201,7 +209,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool) -> Void) {
-        let alert = UIAlertController(title: "You have an existing User account in CloudKit, would you like to restore it on this device?", message: nil
+        let alert = UIAlertController(title: "We have found a user account linked with your iCloud Account. Would you like to restore it on this device?", message: nil
             , preferredStyle: .Alert)
         
         let restoreAction = UIAlertAction(title: "Restore", style: .Default) { (_) in
@@ -229,6 +237,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             })
         }
         let cancelAction = UIAlertAction(title: "Create New User", style: .Cancel) { (_) in
+           
+            
             completion(restoredUser: false)
         }
         alert.addAction(restoreAction)
@@ -324,7 +334,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     func presentFailedToSave() {
-        let alert = UIAlertController(title: "We're Sorry. There was a problem saving your account.", message: "Please try again.", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "We're Sorry. There was a problem saving your account.", message: "You may already have an account with us.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {

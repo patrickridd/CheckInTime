@@ -27,11 +27,11 @@ class MessageController {
     func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
         let sortDescriptor = NSSortDescriptor(key: "timeDue", ascending: false)
-       // let sortDescriptorBool = NSSortDescriptor(key: "hasResponded", ascending: false)
+        let sortDescriptorSender = NSSortDescriptor(key: "sender", ascending: false)
         
-        request.sortDescriptors = [sortDescriptor]
+        request.sortDescriptors = [sortDescriptor, sortDescriptorSender]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeDue", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID", cacheName: nil)
         let _ = try? fetchedResultsController.performFetch()
         
     }

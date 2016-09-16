@@ -78,7 +78,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if contact.name == contact.phoneNumber {
         self.nameLabel.text = formattedPhoneNumber
         } else {
-            self.nameLabel.text = contact.name!
+            self.nameLabel.text = contact.name ?? formattedPhoneNumber 
         }
         
         
