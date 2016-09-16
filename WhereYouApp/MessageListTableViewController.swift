@@ -222,6 +222,16 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? UITableViewHeaderFooterView else {
+            return
+        }
+        
+        headerView.textLabel?.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+        headerView.textLabel?.font = UIFont(name: "Helvetica", size: 15.0)
+        headerView.contentView.backgroundColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+    }
+    
     // MARK: NSFetchedResultsControllerDelegate
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
@@ -262,9 +272,11 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         
     }
     
+    
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }
+    
     
     // MARK: - Navigation
     
