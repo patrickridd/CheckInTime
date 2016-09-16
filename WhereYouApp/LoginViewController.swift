@@ -13,12 +13,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var numberTextField: UITextField!
-    let imagePicker = UIImagePickerController()
-    
     @IBOutlet weak var numberFieldButtomConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
     
-    
+    let imagePicker = UIImagePickerController()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,47 +28,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 self.presentICloudAlert()
             }
         }
-        
-        CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
-            if hasCloudKitAccount {
-                guard let userRecord = userRecord else { return }
-                self.presentRestoreUser(userRecord, completion: { (restoredUser) in
-                    if restoredUser {
-                        UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
-                            if hasUsers {
-                                MessageController.sharedController.fetchAllMessagesFromCloudKit({
-                                    print("Messages restored")
-                                    dispatch_async(dispatch_get_main_queue(), {
-                                        self.dismissViewControllerAnimated(true, completion: {
-                                            self.dismissViewControllerAnimated(true, completion: nil)
-                                            
-                                        })
-                                    })
-                                })
-                            } else {
-                                dispatch_async(dispatch_get_main_queue(), {
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        self.dismissViewControllerAnimated(true, completion: nil)
-                                    })
-                                })
-                            }
-                        })
-                    } else {
-                        CloudKitManager.cloudKitController.deleteRecordWithID(userRecord.recordID, completion: { (recordID, error) in
-                            if let error = error {
-                                print("Error deleting User's Record. Error: \(error.localizedDescription)")
-                            }
-                        })
-                        
-                    }
-                })
-            }
-        }
+        findUsersCloudKitAccountAndRetore()
         numberTextField.delegate = self
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
     }
+    
     
     @IBAction func submitButtonTapped(sender: AnyObject) {
         guard let image = self.imageView.image else {
@@ -115,6 +80,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
+    
+    
+    @IBAction func findAccountButtonTapped(sender: AnyObject) {
+        findUsersCloudKitAccountAndRetore()
+    }
+    
+    
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
         imagePicker.delegate = self
         let alert = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .ActionSheet)
@@ -134,6 +106,45 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             self.presentViewController(alert, animated: true, completion: nil)
             
         })
+    }
+    
+    func findUsersCloudKitAccountAndRetore() {
+        CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
+            if hasCloudKitAccount {
+                guard let userRecord = userRecord else { return }
+                self.presentRestoreUser(userRecord, completion: { (restoredUser) in
+                    if restoredUser {
+                        UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
+                            if hasUsers {
+                                MessageController.sharedController.fetchAllMessagesFromCloudKit({
+                                    print("Messages restored")
+                                    dispatch_async(dispatch_get_main_queue(), {
+                                        self.dismissViewControllerAnimated(true, completion: {
+                                            self.dismissViewControllerAnimated(true, completion: nil)
+                                            
+                                        })
+                                    })
+                                })
+                            } else {
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    self.dismissViewControllerAnimated(true, completion: {
+                                        self.dismissViewControllerAnimated(true, completion: nil)
+                                    })
+                                })
+                            }
+                        })
+                    } else {
+                        CloudKitManager.cloudKitController.deleteRecordWithID(userRecord.recordID, completion: { (recordID, error) in
+                            if let error = error {
+                                print("Error deleting User's Record. Error: \(error.localizedDescription)")
+                            }
+                        })
+                        
+                    }
+                })
+            }
+        }
+        
     }
     
     
