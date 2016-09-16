@@ -339,6 +339,7 @@ class UserController {
             let contacts = records.flatMap({User(record: $0)})
             UserController.sharedController.contacts = contacts
             loggedInUser.contacts = contacts
+            self.saveContext()
             completion(hasUsers: true)
         }
     }

@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
-        
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
         self.window?.backgroundColor = .whiteColor()
         
         return true

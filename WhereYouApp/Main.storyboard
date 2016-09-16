@@ -92,7 +92,7 @@
                                                 <rect key="frame" x="93" y="36" width="200" height="17"/>
                                                 <color key="backgroundColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -188,7 +188,7 @@
                                 </constraints>
                                 <color key="separatorColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="62" id="qPD-cW-tmy" customClass="ContactTableViewCell" customModule="CheckInTime" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="62" id="qPD-cW-tmy" customClass="ContactDetailTableViewCell" customModule="CheckInTime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="320" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qPD-cW-tmy" id="2d5-F0-EOO">
@@ -198,7 +198,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="hasResponded" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2U-KQ-lMW">
                                                     <rect key="frame" x="9" y="8" width="101" height="16.5"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="14"/>
-                                                    <color key="textColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="timeSent" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clr-qf-ED1">
@@ -223,7 +223,7 @@
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
-                                            <color key="tintColor" red="0.1450980392" green="0.62745098040000002" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="tintColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="g8I-D8-xLo" firstAttribute="centerY" secondItem="o2U-KQ-lMW" secondAttribute="centerY" id="0W9-4b-Lk2"/>
                                                 <constraint firstItem="yHc-50-OuG" firstAttribute="top" secondItem="clr-qf-ED1" secondAttribute="bottom" constant="1" id="G7L-eu-DVe"/>
@@ -240,10 +240,10 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="hasRespondedLabel" destination="o2U-KQ-lMW" id="02t-g6-IO5"/>
-                                            <outlet property="newMessageIcon" destination="g8I-D8-xLo" id="bOE-gE-Dgh"/>
-                                            <outlet property="shouldRespondByLabel" destination="yHc-50-OuG" id="dcs-vQ-MY5"/>
-                                            <outlet property="timeSentLabel" destination="clr-qf-ED1" id="K2a-3F-0kP"/>
+                                            <outlet property="hasRespondedLabel" destination="o2U-KQ-lMW" id="El0-Yi-9bq"/>
+                                            <outlet property="newMessageIcon" destination="g8I-D8-xLo" id="Gp5-yd-ZHZ"/>
+                                            <outlet property="shouldRespondByLabel" destination="yHc-50-OuG" id="hpk-wq-gzT"/>
+                                            <outlet property="timeSentLabel" destination="clr-qf-ED1" id="OJd-Ha-Vlf"/>
                                             <segue destination="ovw-5G-6fs" kind="show" identifier="messageSegue" id="NFt-RW-uyj"/>
                                         </connections>
                                     </tableViewCell>
@@ -552,6 +552,7 @@
                         <outlet property="mapView" destination="CNa-Ia-dRJ" id="4IK-YZ-tB9"/>
                         <outlet property="messageLabel" destination="rdE-33-zLI" id="Yok-U0-kL7"/>
                         <outlet property="messageTextView" destination="Lp6-hf-qxg" id="qP8-UT-7eg"/>
+                        <outlet property="reportButton" destination="qbT-xc-Z9i" id="Nr6-Ka-8SW"/>
                         <outlet property="sendButton" destination="DYc-Xk-5XT" id="A57-FX-MIc"/>
                         <outlet property="timeDueLabel" destination="PBt-gj-EVs" id="jOW-WN-PeI"/>
                         <outlet property="titleLabel" destination="PP0-zM-HvV" id="0jg-q0-UI0"/>
@@ -769,15 +770,15 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="256" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="hasResponded" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="36s-Oc-fu6">
                                                     <rect key="frame" x="104" y="52" width="158" height="14"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-BoldOblique" family="Helvetica" pointSize="12"/>
-                                                    <color key="textColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                                                    <color key="textColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="timeResponded" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="YQJ-39-wbc">
                                                     <rect key="frame" x="119" y="82" width="188" height="14"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" name="Helvetica-LightOblique" family="Helvetica" pointSize="12"/>
-                                                    <color key="textColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newMessageIcon" translatesAutoresizingMaskIntoConstraints="NO" id="ain-XH-UqM">

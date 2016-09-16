@@ -81,12 +81,14 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         let request = NSFetchRequest(entityName: "Message")
         let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
-        request.sortDescriptors = [descriptor]
+        let descriptorSenderID = NSSortDescriptor(key: "senderID", ascending: false)
+
+        request.sortDescriptors = [descriptor, descriptorSenderID]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
         request.predicate = compoundPredicate
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "timeDue" , cacheName: nil  )
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID" , cacheName: nil  )
         
         let _ = try? fetchedResultsController.performFetch()
         
@@ -260,7 +262,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? ContactTableViewCell, let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
+        guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? ContactDetailTableViewCell, let message = fetchedResultsController.objectAtIndexPath(indexPath) as? Message else {
             return UITableViewCell()
         }
         
@@ -281,10 +283,34 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             
         }
     }
-    
-    
-    
+ 
     // MARK: NSFetchedResultsControllerDelegate
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let sections = MessageController.sharedController.fetchedResultsController.sections,
+            user = UserController.sharedController.loggedInUser else {
+                return nil
+        }
+        
+        if sections[section].name == user.phoneNumber {
+            return "Sent"
+        } else {
+            return "Received"
+        }
+    }
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? UITableViewHeaderFooterView else {
+            return
+        }
+        
+        headerView.textLabel?.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+        headerView.textLabel?.font = UIFont(name: "Helvetica", size: 15.0)
+        headerView.contentView.backgroundColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+        headerView.textLabel?.textAlignment = .Center
+    }
+
+    
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         tableView.beginUpdates()

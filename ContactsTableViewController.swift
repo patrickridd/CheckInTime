@@ -24,6 +24,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         UserController.sharedController.checkIfContactsHaveDeletedApp { (haveDeletedApp, updatedUsers) in
             if haveDeletedApp {
                 self.presentContactsHaveDeletedApp(updatedUsers!)
+            } else {
+                print("No one has deleted their app")
+
             }
         }
         UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
@@ -31,7 +34,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 UserController.sharedController.contacts = UserController.sharedController.contacts
                 self.presentNewAppAcctUsers(updatedUsers!)
             } else {
-                print("no new app users from contacts")
+                print("No greyed out contacts have downloaded app")
             }
         }
     }

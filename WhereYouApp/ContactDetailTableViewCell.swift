@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ContactTableViewCell: UITableViewCell {
+class ContactDetailTableViewCell: UITableViewCell {
 
     var loggedInUser: User?
     var userContact: User?

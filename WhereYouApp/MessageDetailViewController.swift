@@ -23,6 +23,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     let tabBarView = UIView()
 
     
+    @IBOutlet weak var reportButton: UIBarButtonItem!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var timeDueLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
@@ -82,11 +83,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         messageTextView.delegate = self
         setupView()
         setupTabBar()
-        
+        locationManager = CLLocationManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
 
-        
+     
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -254,7 +255,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         } else {
         self.timeDueLabel.text = "\(usersContact!.name!) sent you a CheckInTime for \(dateFormatter.stringFromDate(message.timeDue))"
         }
-        locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         checkCoreLocationPermission()
@@ -434,7 +434,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     }
     
     @IBAction func reportButtonTapped(sender: AnyObject) {
-        let alert = UIAlertController(title: "Are you sure you want to report this user?", message: nil, preferredStyle: .ActionSheet)
+        let alert = UIAlertController(title: "Are you sure you want to report this user for abusive content or behavior?", message: nil, preferredStyle: .ActionSheet)
         let noAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)
         let yesAction = UIAlertAction(title: "Yes", style: .Default) { (_) in
             guard let usersContact = self.usersContact else {

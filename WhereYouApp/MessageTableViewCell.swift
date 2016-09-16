@@ -64,7 +64,7 @@ class MessageTableViewCell: UITableViewCell {
         if userContact.phoneNumber == userContact.name {
             self.contactName.text = formatedPhoneNumber
         } else {
-            self.contactName.text = userContact.name
+            self.contactName.text = userContact.name ?? formatedPhoneNumber
         }
         
         self.profileImage.image = userContact.photo

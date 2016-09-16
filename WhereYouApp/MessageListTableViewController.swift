@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class MessageListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate  {
     
@@ -36,6 +37,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(updatedMessage), name: UpdatedMessages, object: nil)
         setupNavBar()
+       
 
     }
     
@@ -218,12 +220,11 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         user = UserController.sharedController.loggedInUser else {
             return nil
         }
-       
-    
+        
         if sections[section].name == user.phoneNumber {
-            return "Sent CheckInTimes to Contacts"
+            return "Sent"
         } else {
-            return "Received CheckingInTimes from Contacts"
+            return "Received"
         }
     }
     
@@ -233,8 +234,9 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         }
         
         headerView.textLabel?.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
-        headerView.textLabel?.font = UIFont(name: "Helvetica", size: 15.0)
+        headerView.textLabel?.font = UIFont(name: "Helvetica Neue", size: 15.0)
         headerView.contentView.backgroundColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+        headerView.textLabel?.textAlignment = .Center
     }
     
     // MARK: NSFetchedResultsControllerDelegate
