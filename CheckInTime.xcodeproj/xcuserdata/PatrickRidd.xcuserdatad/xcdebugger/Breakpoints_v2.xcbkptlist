@@ -61,5 +61,149 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495765830.90981"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckInTime.UserController.fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "CheckInTime"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
+                  timestampString = "495765832.005434"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "269"
+                  endingLineNumber = "269"
+                  offsetFromSymbolStart = "356">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckInTime.UserController.fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "CheckInTime"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
+                  timestampString = "495765832.00557"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "269"
+                  endingLineNumber = "269"
+                  offsetFromSymbolStart = "576">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495765830.90981"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
+            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckInTime.UserController.fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "CheckInTime"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
+                  timestampString = "495765832.006333"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "272"
+                  endingLineNumber = "272"
+                  offsetFromSymbolStart = "1264">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CheckInTime.UserController.(fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()).(closure #1)"
+                  moduleName = "CheckInTime"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
+                  timestampString = "495765832.006456"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "273"
+                  endingLineNumber = "273"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495765830.90981"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "287"
+            endingLineNumber = "287"
+            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495765830.90981"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495765830.90981"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

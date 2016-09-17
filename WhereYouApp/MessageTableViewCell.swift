@@ -46,8 +46,10 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         
+        
+        
         self.loggedInUser = loggedInUser
-        if message.sender.phoneNumber == loggedInUser.phoneNumber {
+        if message.senderID == loggedInUser.phoneNumber {
             self.userContact = message.receiver
         } else {
             self.userContact = message.sender
@@ -56,6 +58,7 @@ class MessageTableViewCell: UITableViewCell {
         
         
         guard let userContact = self.userContact else {
+            
             print("No contact in MessageTableViewCell")
             return
         }

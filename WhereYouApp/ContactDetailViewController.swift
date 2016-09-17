@@ -82,8 +82,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let request = NSFetchRequest(entityName: "Message")
         let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
         let descriptorSenderID = NSSortDescriptor(key: "senderID", ascending: false)
+        let sortDescriptorHasResponded = NSSortDescriptor(key: "hasResponded", ascending: true)
 
-        request.sortDescriptors = [descriptor, descriptorSenderID]
+
+        request.sortDescriptors = [descriptorSenderID, sortDescriptorHasResponded, descriptor]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])

@@ -306,7 +306,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 let user = UserController.sharedController.loggedInUser else {
                     return
             }
-            
             profileVC.loggedInUser = user
             
         }

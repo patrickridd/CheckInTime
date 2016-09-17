@@ -25,7 +25,6 @@ class User: NSManagedObject {
     var contactReferences: [CKReference] = []
     var messageReferences: [CKReference] = []
     
-    var contacts = [User]() 
         
     // User Record
     var cloudKitRecord: CKRecord?

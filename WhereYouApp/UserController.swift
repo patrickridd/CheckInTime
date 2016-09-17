@@ -99,7 +99,6 @@ class UserController {
             return
         }
         self.fetchContactsFromCoreData { (contacts) in
-            self.loggedInUser?.contacts = contacts
             self.contacts = contacts
             
             self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
@@ -285,6 +284,7 @@ class UserController {
                 })
                 return
         }
+        saveContext()
         completion(user: user)
         
     }
@@ -338,7 +338,6 @@ class UserController {
             }
             let contacts = records.flatMap({User(record: $0)})
             UserController.sharedController.contacts = contacts
-            loggedInUser.contacts = contacts
             self.saveContext()
             completion(hasUsers: true)
         }
@@ -435,7 +434,6 @@ class UserController {
             // guard let reference = contact.cloudKitReference,
             guard let loggedInUser = self.loggedInUser else {
                 print("no logged In user")
-                self.deleteContactsFromCoreData([contact])
                 return
             }
             
@@ -589,10 +587,14 @@ class UserController {
     
     func deleteContactsFromCoreData(users: [User]) {
         
+        
         for user in users {
+            if let moc = user.managedObjectContext {
             moc.deleteObject(user)
+                saveContext()
+                print("HI")
+            }
         }
-        saveContext()
     }
     
     
@@ -600,7 +602,6 @@ class UserController {
         newContact.hasAppAccount = true
         // Add contact to Logged In User's contact
         guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else { return }
-        loggedInUser.contacts.append(newContact)
         UserController.sharedController.contacts.append(newContact)
         UserController.sharedController.saveContext()
         
@@ -625,7 +626,6 @@ class UserController {
                 } else {
                     // If modifying records are successful present success alert to user.
                     newContact.hasAppAccount = true
-                    UserController.sharedController.contacts = loggedInUser.contacts
                     UserController.sharedController.saveContext()
                     completion(savedSuccessfully: true)
                 }

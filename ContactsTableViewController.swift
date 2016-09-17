@@ -26,7 +26,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 self.presentContactsHaveDeletedApp(updatedUsers!)
             } else {
                 print("No one has deleted their app")
-
+                
             }
         }
         UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
@@ -34,7 +34,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 UserController.sharedController.contacts = UserController.sharedController.contacts
                 self.presentNewAppAcctUsers(updatedUsers!)
             } else {
-                print("No greyed out contacts have downloaded app")
+                print("No greyed out contacts have downloaded their app")
             }
         }
     }
@@ -78,12 +78,12 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
+    
+    
     func showMessage(alert: String) {
         let alertController = UIAlertController(title: "CheckInTime", message: alert, preferredStyle: UIAlertControllerStyle.Alert)
-        
         let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) -> Void in
         }
-        
         alertController.addAction(dismissAction)
         self.presentViewController(alertController, animated: true, completion: nil)
         
@@ -167,24 +167,16 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                     return
                                 }
                             })
-                            
                         })
                     } else {
                         // Create Contact and Save Contact to CoreData
-                        
                         MessageController.sharedController.saveContext()
-                        guard let  loggedInUser = UserController.sharedController.loggedInUser else {
-                            print("Couldn't get logged in user and/or record")
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            return
-                        }
                         // Check to see if the Contact has an app account and if not ask user to recommend contact to download app
                         UserController.sharedController.checkIfContactHasAccount(phoneNumber, completion: { (record) in
                             guard let contactRecord = record else {
                                 let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
                                 newContact.hasAppAccount = false
                                 // Add contact to Logged In User's contact
-                                loggedInUser.contacts.append(newContact)
                                 UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
                                 dispatch_async(dispatch_get_main_queue(), {
@@ -425,7 +417,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let image = UIImage(named: "ContactsTitleSmall")
         let imageView = UIImageView(image: image)
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
-
+        
         self.navigationItem.titleView = imageView
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
     }
@@ -437,7 +429,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             // Delete the row from the data source
             let contact = UserController.sharedController.contacts[indexPath.row]
             UserController.sharedController.deleteContactFromCloudKit(contact)
+            UserController.sharedController.deleteContactsFromCoreData([contact])
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
             
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view

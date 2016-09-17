@@ -450,8 +450,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
                     self.presentSuccess()
                 }
             })
-            
-            
         }
         alert.addAction(noAction)
         alert.addAction(yesAction)
