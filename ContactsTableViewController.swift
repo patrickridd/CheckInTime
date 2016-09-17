@@ -23,8 +23,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         super.viewDidLoad()
         setupFetchResultsController()
         setupNavBar()
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
         checkForContactUpdates()
     }
     
@@ -49,7 +47,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         let _ = try? fetchedResultsController?.performFetch()
         
     }
-
+    
+    /// Opens the User's Contacts
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
         requestForAccess { (accessGranted) in
             if accessGranted {
@@ -61,6 +60,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
     }
     
+    /// Checks whether or not the User has given the App permission to access their contacts.
     func requestForAccess(completionHandler: (accessGranted: Bool) -> Void) {
         let authorizationStatus = CNContactStore.authorizationStatusForEntityType(CNEntityType.Contacts)
         
@@ -372,6 +372,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         
     }
+    
+    /// Tells the User that the contact they selected doesn't have the app and that they can recommend it to them or not.
     func presentNoUserAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
         
@@ -408,7 +410,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     
-    
+    /// Tells the User that the Contact they selected has the App account.
     func presentUserHasAccount(newContact: User) {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(newContact.phoneNumber)
         
@@ -419,10 +421,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             self.presentViewController(alert, animated: true, completion: nil)
             
         })
-        
     }
     
-    //
+    /// Tells the User that the Contact has no number saved.
     func presentContactHasNoMobilePhone(name: String) {
         let alert = UIAlertController(title: "No Number Found", message: "\(name)'s number in your Contact's needs to be at least 10 digits and no longer than 11.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
@@ -433,11 +434,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
     }
     
-    func newContactAdded(notification: NSNotification){
-        dispatch_async(dispatch_get_main_queue(), {
-            self.tableView.reloadData()
-        })
-    }
     
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

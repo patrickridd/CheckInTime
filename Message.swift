@@ -106,7 +106,6 @@ class Message: NSManagedObject {
         
         self.init(entity: entity, insertIntoManagedObjectContext: context)
 
-       
         self.timeDue = timeDue
         self.timeSent = timeSent
         self.hasResponded = hasResponded
@@ -115,7 +114,7 @@ class Message: NSManagedObject {
         self.senderID = senderID
 
         
-        UserController.sharedController.fetchCoreDataUserWithNumber(senderID, completion: { (user) in
+        UserController.sharedController.fetchUsersForMessage(senderID, completion: { (user) in
             if let sender = user  {
                 self.sender = sender
             } else {
@@ -124,7 +123,7 @@ class Message: NSManagedObject {
         
 
         })
-        UserController.sharedController.fetchCoreDataUserWithNumber(receiverID) { (user) in
+        UserController.sharedController.fetchUsersForMessage(receiverID) { (user) in
             if let receiver = user {
                 self.receiver = receiver
             } else {
