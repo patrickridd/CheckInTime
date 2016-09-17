@@ -246,10 +246,8 @@ class UserController {
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
         request.predicate = predicate
         
-        
         guard let fetchedUsers = (try? moc.executeFetchRequest(request) as? [User]),
             let users = fetchedUsers, user = users.first  else {
-                
                 print("Couldn't fetch user")
                 self.fetchCloudKitUserWithNumber(number, completion: { (contact) in
                     
@@ -258,12 +256,10 @@ class UserController {
                         guard let image = UIImage(named: "profile"), let imageData = UIImagePNGRepresentation(image) else {
                             return
                         }
-                        
                         let user = User(name: number, phoneNumber: number, imageData: imageData, hasAppAccount: true)
                         completion(user: user)
                         return
                     }
-                    
                     contact.name = number
                     completion(user: contact)
                     return
@@ -272,7 +268,6 @@ class UserController {
         }
         saveContext()
         completion(user: user)
-        
     }
     
     /// Fetches Contact in CloudKit with phone number.
@@ -381,7 +376,6 @@ class UserController {
                     completion(isCKContact: false)
                     return
             }
-            
             for loggedInUserReference in loggedInUserReferences {
                 if loggedInUserReference.recordID.recordName == contactReference.recordID.recordName {
                     self.deleteContactsFromCoreData([contact])
@@ -480,7 +474,6 @@ class UserController {
                             }
                             self.saveContext()
                             self.deleteContactsFromCoreData([contact])
-
                     })
                 })
             }

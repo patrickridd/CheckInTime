@@ -38,7 +38,6 @@ class ContactDetailTableViewCell: UITableViewCell {
         return formatter
     }()
     
-    
     // Updates View with Message Details
     func updateWith(message: Message) {
         guard let user = UserController.sharedController.loggedInUser else {
@@ -78,8 +77,6 @@ class ContactDetailTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        
-      
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
         if userContact.name == userContact.phoneNumber {
@@ -97,10 +94,9 @@ class ContactDetailTableViewCell: UITableViewCell {
             hasRespondedLabel.text = "Time for \(userContact.name ?? formatedPhoneNumber) to CheckIn..."
             hasRespondedLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
             shouldRespondByLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
-            
+        
         } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
-            
         }
     }
     
@@ -139,7 +135,6 @@ class ContactDetailTableViewCell: UITableViewCell {
             return
         }
         
-    
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
         if userContact.name == userContact.phoneNumber {
@@ -149,16 +144,12 @@ class ContactDetailTableViewCell: UITableViewCell {
             hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) Check In!"
         }
         
-        
         shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
-        
         guard let timeResponded = message.timeResponded else {
             return
         }
         timeSentLabel.text = "Checked In \(dateFormatter.stringFromDate(timeResponded))"
         newMessageIcon.image = UIImage(named: "checkedIn")
-        
-        
     }
     
     // Cell tell user that they responded to the contacts WhereYouApp request
