@@ -45,27 +45,27 @@ class ContactDetailTableViewCell: UITableViewCell {
             return
         }
         self.loggedInUser = user
-        if message.sender.phoneNumber == user.phoneNumber {
+        if message.sender?.phoneNumber == user.phoneNumber {
             self.userContact = message.receiver
         } else {
             self.userContact = message.sender
         }
         
         // Sender is looking at message that has not been responded to
-        if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
+        if message.timeResponded == nil && message.sender?.phoneNumber == loggedInUser?.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
         }
             // Receiver is looking at message that needs to be filled out and responded to
-        else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
+        else if message.timeResponded == nil && message.receiver?.phoneNumber == loggedInUser?.phoneNumber {
             updateWithYouHaveANewMessage(message)
         }
             
             // Contact Responded to Logged In User's request.
-        else if message.timeResponded != nil && message.receiver.phoneNumber != loggedInUser?.phoneNumber{
+        else if message.timeResponded != nil && message.receiver?.phoneNumber != loggedInUser?.phoneNumber{
             updateWithContactRespondedToRequest(message)
         }
             // Logged In User responded to a message request
-        else if message.timeResponded != nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
+        else if message.timeResponded != nil && message.receiver?.phoneNumber == loggedInUser?.phoneNumber {
             updateWithUserRespondedToContactsRequest(message)
         }
         
@@ -85,7 +85,7 @@ class ContactDetailTableViewCell: UITableViewCell {
         if userContact.name == userContact.phoneNumber {
         hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to Check In"
         } else {
-            hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber ) to Check In"
+            hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber) to Check In"
         }
         
         timeSentLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )

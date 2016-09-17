@@ -250,8 +250,8 @@ class MessageController {
                 let message = Message(record: record)!
                 message.hasBeenSeen = 0
                 scheduleLocalNotificationToCheckIn(message)
-                if message.sender.name == nil {
-                    message.sender.name = message.sender.phoneNumber
+                if message.sender?.name == nil {
+                    message.sender?.name = message.sender?.phoneNumber
                 }
                 saveContext()
                 return
@@ -267,14 +267,17 @@ class MessageController {
     
     /// Schedules a notification to remind someone to check in at a specific time.
     func scheduleLocalNotificationToCheckIn(message: Message) {
-        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.sender.phoneNumber)
+        guard let sender = message.sender else {
+            return
+        }
+        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(sender.phoneNumber)
         let localNotification = UILocalNotification()
         localNotification.alertTitle = "CheckInTime"
-        if message.sender.name == message.sender.phoneNumber || message.sender.name == "" {
+        if message.sender?.name == message.sender?.phoneNumber || message.sender?.name == "" {
             localNotification.alertBody =   "\(formattedPhoneNumber) wants you to check in now."
         } else {
             
-            localNotification.alertBody =   "\(message.sender.name ?? formattedPhoneNumber) wants you to check in now."
+            localNotification.alertBody =   "\(sender.name ?? formattedPhoneNumber) wants you to check in now."
         }
 
         localNotification.fireDate = message.timeDue
@@ -288,14 +291,17 @@ class MessageController {
     
     /// Notifies someone when someone has checked in.
     func scheduleLocalNotificationForResponseCheckIn(message: Message) {
-        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(message.receiver.phoneNumber)
+        guard let receiver = message.receiver else {
+            return
+        }
+        let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(receiver.phoneNumber)
 
         let localNotification = UILocalNotification()
         localNotification.alertTitle = "CheckInTime"
-        if message.receiver.name == message.receiver.phoneNumber {
+        if message.receiver?.name == message.receiver?.phoneNumber {
             localNotification.alertBody =   "\(formattedPhoneNumber) checked in."
         } else {
-            localNotification.alertBody =   "\(message.receiver.name ?? formattedPhoneNumber) checked in."
+            localNotification.alertBody =   "\(receiver.name ?? formattedPhoneNumber) checked in."
         }
         message.hasBeenSeen = 0
         localNotification.category = "ResponseToCheckIn"

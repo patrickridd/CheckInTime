@@ -48,10 +48,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             self.presentNoUserAccount(contact)
         }
         
+        setupFetchController(contact)
         setupView()
         setupImage()
         
-        setupFetchController(contact)
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
         updateWith(contact)
@@ -83,8 +83,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
         let descriptorSenderID = NSSortDescriptor(key: "senderID", ascending: false)
         let sortDescriptorHasResponded = NSSortDescriptor(key: "hasResponded", ascending: true)
-
-
+        
+        
         request.sortDescriptors = [descriptorSenderID, sortDescriptorHasResponded, descriptor]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
@@ -97,33 +97,35 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @IBAction func editButtonTapped(sender: AnyObject) {
-        
-        if editButtonLabel.title == "Edit Name" {
-            nameLabel.hidden = true
-            nameTextField.hidden = false
-            nameTextField.enabled = true
-            nameTextField.text = ""
-            nameTextField.placeholder = "Edit name..."
-            nameTextField.borderStyle = .RoundedRect
-            editButtonLabel.title = "Save"
-            editButtonLabel.tintColor = UIColor ( red: 1.0, green: 0.1629, blue: 0.4057, alpha: 1.0 )
-        } else {
-            if let text = nameTextField.text where text.characters.count > 1  {
-                nameLabel.text = text
+        dispatch_async(dispatch_get_main_queue(), {
+            if self.editButtonLabel.title == "Edit Name" {
+                self.nameLabel.hidden = true
+                self.nameTextField.hidden = false
+                self.nameTextField.enabled = true
+                self.nameTextField.text = ""
+                self.nameTextField.placeholder = "Edit name..."
+                self.nameTextField.borderStyle = .RoundedRect
+                self.editButtonLabel.title = "Save"
+                self.editButtonLabel.tintColor = UIColor ( red: 1.0, green: 0.1629, blue: 0.4057, alpha: 1.0 )
+            } else {
+                if let text = self.nameTextField.text where text.characters.count > 0  {
+                    self.nameLabel.text = text
+                }
+                self.nameLabel.hidden = false
+                self.nameTextField.text = ""
+                self.nameTextField.placeholder = ""
+                self.nameTextField.borderStyle = .None
+                self.nameTextField.hidden = true
+                self.nameTextField.enabled = false
+                self.editButtonLabel.title = "Edit Name"
+                self.contact?.name = self.nameLabel.text
+                
+                UserController.sharedController.saveContext()
+                self.editButtonLabel.tintColor = UIColor.whiteColor()
+                UserController.sharedController.contacts = UserController.sharedController.contacts
+                self.tableView.reloadData()
             }
-            nameLabel.hidden = false
-            nameTextField.text = ""
-            nameTextField.placeholder = ""
-            nameTextField.borderStyle = .None
-            nameTextField.hidden = true
-            nameTextField.enabled = false
-            editButtonLabel.title = "Edit Name"
-            contact?.name = nameLabel.text
-            
-            UserController.sharedController.saveContext()
-            editButtonLabel.tintColor = UIColor.whiteColor()
-            UserController.sharedController.contacts = UserController.sharedController.contacts
-        }
+        })
     }
     
     /// Presents to the user that the contact they have chosen doesn't have the App
@@ -187,8 +189,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             })
         })
-        
     }
+    
     
     func presentMessageNotSent(messageRecord: CKRecord, message: Message) {
         let alert = UIAlertController(title: "Failed to Send", message: "There might be something wrong with your connection", preferredStyle: .Alert)
@@ -225,7 +227,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         //  UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         profileViewBox.layer.masksToBounds = true
         profileViewBox.layer.cornerRadius = 8
-       // editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
+        // editButtonLabel.tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         
         if contact?.hasAppAccount == 1 {
             let iconImage = UIImage(named: "ContactDetailIcon2")
@@ -246,8 +248,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         self.contactImage.layer.cornerRadius = radius
         self.contactImage.clipsToBounds = true
     }
-    
-    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         guard let sections = fetchedResultsController.sections else {
@@ -285,7 +285,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             
         }
     }
- 
+    
     // MARK: NSFetchedResultsControllerDelegate
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -311,7 +311,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         headerView.contentView.backgroundColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         headerView.textLabel?.textAlignment = .Center
     }
-
+    
     
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {

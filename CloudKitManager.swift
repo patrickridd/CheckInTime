@@ -47,14 +47,13 @@ class CloudKitManager {
   
         self.fetchLoggedInUserRecord { (record, error) in
             guard let record = record else {
+                completion(hasCloudKitAccount: false, userRecord: nil)
                 return
             }
             let reference = CKReference(recordID: record.recordID, action: .None)
             let predicate = NSPredicate(format: "identifier == %@", argumentArray: [reference])
             self.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-                
-                
-                
+
                 }, completion: { (records, error) in
                     guard let records = records, record = records.first else {
                         print("No custom user associated with iCloud Account")

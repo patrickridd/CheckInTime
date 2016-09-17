@@ -25,7 +25,7 @@ extension Message {
     @NSManaged var timeResponded: NSDate?
     @NSManaged var timeSent: NSDate
     @NSManaged var senderID: String
-    @NSManaged var receiver: User
-    @NSManaged var sender: User
+    @NSManaged var receiver: User?
+    @NSManaged var sender: User?
 
 }

@@ -107,13 +107,13 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         self.message = message
         // Put the Name of whoever isn't the loggedInUser in the titleLabel
         
-        if message.sender.name ?? message.sender.phoneNumber == user.name ?? user.phoneNumber {
+        if message.sender?.name ?? message.sender?.phoneNumber == user.name ?? user.phoneNumber {
             self.usersContact = message.receiver
         } else {
             self.usersContact = message.sender
         }
 
-        if message.sender.name == nil || message.receiver.name == nil {
+        if message.sender?.name == nil || message.receiver?.name == nil {
             timeDueLabel.text = "Sent by a Deleted Contact"
             return
         }
@@ -139,11 +139,11 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
 
         // Sender is looking at message that has not been responded to
-        if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser?.phoneNumber {
+        if message.timeResponded == nil && message.sender?.phoneNumber == loggedInUser?.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
         }
         // Receiver is looking at message that needs to be filled out and responded to
-        else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser?.phoneNumber {
+        else if message.timeResponded == nil && message.receiver?.phoneNumber == loggedInUser?.phoneNumber {
             updateWithAToBeFilledRequestMessage(message)
         }
         // Message is filled out and looks the same to reciever and sender

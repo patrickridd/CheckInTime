@@ -81,8 +81,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
-    
-    
     @IBAction func findAccountButtonTapped(sender: AnyObject) {
         findUsersCloudKitAccountAndRetore { (hasAccount) in
             if !hasAccount {

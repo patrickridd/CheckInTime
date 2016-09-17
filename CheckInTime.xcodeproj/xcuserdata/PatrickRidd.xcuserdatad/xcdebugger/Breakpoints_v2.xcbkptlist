@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/MessageController.swift"
-            timestampString = "495754268.504441"
+            timestampString = "495777737.864401"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "289"
-            endingLineNumber = "289"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "MessageController"
             landmarkType = "3">
          </BreakpointContent>
@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/MessageController.swift"
-            timestampString = "495754268.504441"
+            timestampString = "495777737.864401"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "302"
-            endingLineNumber = "302"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
             landmarkName = "scheduleLocalNotificationForResponseCheckIn(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,43 +68,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495765830.90981"
+            timestampString = "495780781.377804"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
-            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
+            landmarkName = "fetchCloudKitContacts(_:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.UserController.fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "CheckInTime.UserController.fetchCloudKitContacts ((hasUsers : Swift.Bool) -&gt; ()) -&gt; ()"
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495765832.005434"
+                  timestampString = "495780881.352618"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "269"
-                  endingLineNumber = "269"
-                  offsetFromSymbolStart = "356">
+                  startingLineNumber = "316"
+                  endingLineNumber = "316"
+                  offsetFromSymbolStart = "88">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.UserController.fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "CheckInTime.UserController.fetchCloudKitContacts ((hasUsers : Swift.Bool) -&gt; ()) -&gt; ()"
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495765832.00557"
+                  timestampString = "495780881.352868"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "269"
-                  endingLineNumber = "269"
-                  offsetFromSymbolStart = "576">
+                  startingLineNumber = "316"
+                  endingLineNumber = "316"
+                  offsetFromSymbolStart = "136">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -116,43 +116,75 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495765830.90981"
+            timestampString = "495780783.156088"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "272"
-            endingLineNumber = "272"
-            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
+            landmarkName = "fetchCloudKitContacts(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495780783.981693"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "323"
+            endingLineNumber = "323"
+            landmarkName = "fetchCloudKitContacts(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WhereYouApp/UserController.swift"
+            timestampString = "495780828.11959"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "337"
+            endingLineNumber = "337"
+            landmarkName = "fetchCloudKitContacts(_:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.UserController.fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "CheckInTime.UserController.(fetchCloudKitContacts ((hasUsers : Swift.Bool) -&gt; ()) -&gt; ()).(closure #2)"
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495765832.006333"
+                  timestampString = "495780881.356713"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "272"
-                  endingLineNumber = "272"
-                  offsetFromSymbolStart = "1264">
+                  startingLineNumber = "337"
+                  endingLineNumber = "337"
+                  offsetFromSymbolStart = "204">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.UserController.(fetchCoreDataUserWithNumber (Swift.String, completion : (user : Swift.Optional&lt;CheckInTime.User&gt;) -&gt; ()) -&gt; ()).(closure #1)"
+                  symbolName = "CheckInTime.UserController.(fetchCloudKitContacts ((hasUsers : Swift.Bool) -&gt; ()) -&gt; ()).(closure #2).(closure #1)"
                   moduleName = "CheckInTime"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495765832.006456"
+                  timestampString = "495780881.356799"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "273"
-                  endingLineNumber = "273"
-                  offsetFromSymbolStart = "44">
+                  startingLineNumber = "337"
+                  endingLineNumber = "337"
+                  offsetFromSymbolStart = "16">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -164,44 +196,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495765830.90981"
+            timestampString = "495780834.040003"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
-            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495765830.90981"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
-            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495765830.90981"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
-            landmarkName = "fetchCoreDataUserWithNumber(_:completion:)"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
+            landmarkName = "fetchCloudKitContacts(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

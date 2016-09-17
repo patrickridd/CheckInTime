@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		21188A491D88A9F600DABF57 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21188A481D88A9F600DABF57 /* Main.storyboard */; };
+		21488A461D8CFE3000434E4E /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */; };
 		216B8AF71D7F83E700FB33CF /* ContactDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8AF61D7F83E700FB33CF /* ContactDetailTableViewCell.swift */; };
 		216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8B161D81084100FB33CF /* CustomImageView.swift */; };
 		216EB9611D8241E200592649 /* NumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216EB9601D8241E200592649 /* NumberController.swift */; };
-		219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */; };
 		21A9B82C1D8B7A5D009ED78C /* Message+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A9B82B1D8B7A5D009ED78C /* Message+CoreDataProperties.swift */; };
 		21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AEA87B1D736770005EF030 /* AppDelegate.swift */; };
 		21AEA8831D736770005EF030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA8821D736770005EF030 /* Assets.xcassets */; };
@@ -35,10 +35,10 @@
 
 /* Begin PBXFileReference section */
 		21188A481D88A9F600DABF57 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		216B8AF61D7F83E700FB33CF /* ContactDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDetailTableViewCell.swift; sourceTree = "<group>"; };
 		216B8B161D81084100FB33CF /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomImageView.swift; path = "../../../DevMt/Unit 6/Day 2/NewAnimations/NewAnimations/CustomImageView.swift"; sourceTree = "<group>"; };
 		216EB9601D8241E200592649 /* NumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberController.swift; sourceTree = "<group>"; };
-		219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21A9B82B1D8B7A5D009ED78C /* Message+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Message+CoreDataProperties.swift"; path = "../Message+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21AEA8781D736770005EF030 /* CheckInTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CheckInTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21AEA87B1D736770005EF030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				21A9B82B1D8B7A5D009ED78C /* Message+CoreDataProperties.swift */,
-				219FFAFB1D7E51CF006B94BB /* User+CoreDataProperties.swift */,
+				21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */,
 				21D477091D75FD390094FCBC /* Stack.swift */,
 				21D476B71D74D1010094FCBC /* Model.xcdatamodeld */,
 			);
@@ -248,7 +248,6 @@
 				21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */,
 				21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */,
 				21D476B11D74CF230094FCBC /* ContactDetailViewController.swift in Sources */,
-				219FFAFC1D7E51CF006B94BB /* User+CoreDataProperties.swift in Sources */,
 				216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */,
 				21A9B82C1D8B7A5D009ED78C /* Message+CoreDataProperties.swift in Sources */,
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
@@ -258,6 +257,7 @@
 				21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */,
 				216B8AF71D7F83E700FB33CF /* ContactDetailTableViewCell.swift in Sources */,
 				21D477031D75FC580094FCBC /* User.swift in Sources */,
+				21488A461D8CFE3000434E4E /* User+CoreDataProperties.swift in Sources */,
 				21D477071D75FC580094FCBC /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

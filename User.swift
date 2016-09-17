@@ -96,7 +96,6 @@ class User: NSManagedObject {
         self.timeCreated = NSDate()
         self.phoneNumber = phoneNumber
         self.hasAppAccount = 1
-        self.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
         guard let photoData = NSData(contentsOfURL: image.fileURL) else {
             self.imageData = NSData()
             return

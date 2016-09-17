@@ -76,20 +76,20 @@ class MessageTableViewCell: UITableViewCell {
         setupImage()
         
         // Sender is looking at message that has not been responded to
-        if message.timeResponded == nil && message.sender.phoneNumber == loggedInUser.phoneNumber {
+        if message.timeResponded == nil && message.sender?.phoneNumber == loggedInUser.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
         }
             // Receiver is looking at message that needs to be filled out and responded to
-        else if message.timeResponded == nil && message.receiver.phoneNumber == loggedInUser.phoneNumber {
+        else if message.timeResponded == nil && message.receiver?.phoneNumber == loggedInUser.phoneNumber {
             updateWithYouHaveANewMessage(message)
         }
             
             // Contact Responded to Logged In User's request.
-        else if message.timeResponded != nil && message.receiver.phoneNumber != loggedInUser.phoneNumber{
+        else if message.timeResponded != nil && message.receiver?.phoneNumber != loggedInUser.phoneNumber{
             updateWithContactRespondedToRequest(message)
         }
             // Logged In User responded to a message request
-        else if message.timeResponded != nil && message.receiver.phoneNumber == loggedInUser.phoneNumber {
+        else if message.timeResponded != nil && message.receiver?.phoneNumber == loggedInUser.phoneNumber {
             updateWithUserRespondedToContactsRequest(message)
         }
         

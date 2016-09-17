@@ -29,17 +29,15 @@ class UserController {
         }
     }
     
+    
+    //
+    
+    
     /// Creates the Logged In User
     func createUser(name: String, phoneNumber: String, image: UIImage, completion: (success: Bool, user: User?) -> Void) {
         
-        CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
-            guard let record = record else {
-                completion(success: false, user: nil)
-                print("Not signed in to cloudkit")
-                return
-                
-            }
-            guard let imageData = UIImagePNGRepresentation(image) else {
+        fetchAppleUser { (record) in
+            guard let record = record, imageData = UIImagePNGRepresentation(image) else {
                 print("Cant get NSData from Image")
                 completion(success: false, user: nil)
                 return
@@ -50,15 +48,9 @@ class UserController {
             let recordID = CKRecordID(recordName: user.phoneNumber)
             let customUserRecord = CKRecord(recordType:"User",recordID: recordID)
             user.cloudKitRecord = customUserRecord
-            
             // create reference to Current User's cloudkit ID to be able to fetch Custom Record.
             let reference = CKReference(recordID: record.recordID, action: .None)
             customUserRecord["identifier"] = reference
-            
-            // Save Custom Record's Record ID into core data by converting it to NSData
-            user.ckRecordID = NSKeyedArchiver.archivedDataWithRootObject(customUserRecord.recordID)
-            // Save Original record's record id as reference in core data.
-            user.originalRecordID = NSKeyedArchiver.archivedDataWithRootObject(record.recordID)
             
             // Save user properties to cloudkit
             customUserRecord[User.nameKey] = user.name ?? user.phoneNumber
@@ -70,12 +62,25 @@ class UserController {
                     print("Error saving to cloudkit. Error: \(error.localizedDescription)")
                     completion(success: false, user: user)
                 } else {
-                user.hasAppAccount = 1
-                MessageController.sharedController.subscribeToMessages()
-                self.saveContext()
-                completion(success: true, user: user)
+                    user.hasAppAccount = 1
+                    MessageController.sharedController.subscribeToMessages()
+                    self.saveContext()
+                    completion(success: true, user: user)
                 }
             })
+        }
+    }
+    
+    
+    
+    func fetchAppleUser(completion: (appleUserRecord: CKRecord?)->Void) {
+        CloudKitManager.cloudKitController.fetchLoggedInUserRecord { (record, error) in
+            guard let record = record else {
+                completion(appleUserRecord: nil)
+                print("Not signed in to cloudkit")
+                return
+            }
+            completion(appleUserRecord: record)
         }
     }
     
@@ -103,7 +108,7 @@ class UserController {
             
             self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                 // Subscribe to Message Changes.
-               //  MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
+                //  MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
                 guard let _ = record else {
                     completion(hasAccount: true, hasConnection: false)
                     return
@@ -199,7 +204,6 @@ class UserController {
         guard let loggedInUser = loggedInUser else {
             return
         }
-        
         // Fetch all users who have app AND isn't the logged in user.
         let request = NSFetchRequest(entityName: "User")
         let predicate = NSPredicate(format: "hasAppAccount == 1")
@@ -223,8 +227,6 @@ class UserController {
                 if record == nil {
                     deletedUsers.append(user)
                 }
-                
-                
                 if deletedUsers.count < 1 {
                     completion(haveDeletedApp: false, updatedUsers: nil)
                 } else {
@@ -237,7 +239,6 @@ class UserController {
                 }
             })
         }
-        
     }
     
     
@@ -273,6 +274,7 @@ class UserController {
                     guard let contact = contact else {
                         let photoData = UIImagePNGRepresentation(UIImage(named: "profile")!)
                         let user = User(name: number, phoneNumber: number, imageData: photoData!,hasAppAccount: true)
+                        self.contacts.append(user)
                         completion(user: user)
                         return
                     }
@@ -320,13 +322,13 @@ class UserController {
                 completion(hasUsers: false)
                 return
         }
-       
+        
         loggedInUser.contactReferences = references
         let predicate = NSPredicate(format: "recordID IN %@", argumentArray: [references])
-       
+        
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
-        
-        
+            
+            
         }) { (records, error) in
             guard let records = records else {
                 completion(hasUsers: false)
@@ -407,7 +409,6 @@ class UserController {
                     return
                 }
             }
-            
             if loggedInUserReferences.count < 1 {
                 self.deleteContactsFromCoreData([contact])
                 completion(isCKContact: false)
@@ -421,6 +422,7 @@ class UserController {
             print("Couldn't find index for Contact")
             return
         }
+        // Removes contact from Contact list
         self.contacts.removeAtIndex(index)
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record else {
@@ -430,13 +432,11 @@ class UserController {
             }
             let contactRecordName = record.recordID.recordName
             contact.cloudKitRecord = record
-            
             // guard let reference = contact.cloudKitReference,
             guard let loggedInUser = self.loggedInUser else {
                 print("no logged In user")
                 return
             }
-            
             if let record = loggedInUser.cloudKitRecord {
                 guard var references = record[User.contactsKey] as? [CKReference] else {
                     print("No references in CloudKit")
@@ -483,7 +483,6 @@ class UserController {
                     loggedInUser.contactReferences = references
                     let recordNames = references.flatMap({$0.recordID.recordName})
                     
-                    
                     guard let index = recordNames.indexOf(contactRecordName) else {
                         self.deleteContactsFromCoreData([contact])
                         return
@@ -509,6 +508,8 @@ class UserController {
         }
     }
     
+    
+    
     /// Deletes the Current User Account from CloudKit, CoreData, and Cancels all notifications.
     func deleteAccount(completion: ()->Void) {
         guard let loggedInUser = loggedInUser,
@@ -516,7 +517,9 @@ class UserController {
                 completion()
                 return
         }
+        
         self.deleteAccountFromCoreData()
+        // Deletes Logged In User's CKRecord
         CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
             if let error = error {
                 print("Error Deleting User Record. Error: \(error.localizedDescription)")
@@ -531,21 +534,31 @@ class UserController {
     
     func deleteAccountFromCoreData() {
         let messageRequest = NSFetchRequest(entityName: "Message")
-        guard let messages = (try? moc.executeFetchRequest(messageRequest) as? [Message]),
-            messagesToDelete = messages else {
-                return
+        guard let fetchMessages = try? moc.executeFetchRequest(messageRequest) as? [Message],
+           let messages = fetchMessages else {
+            return
         }
-        MessageController.sharedController.deleteMessagesFromCoreData(messagesToDelete)
+        // Deletes messages already loaded into MOC
+        MessageController.sharedController.deleteMessagesFromCoreData(messages)
         
+        // Deletes Message entity
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: messageRequest)
+        do {
+            try moc.executeRequest(deleteRequest)
+        } catch let error as NSError {
+            debugPrint(error)
+        }
+        // Deletes Users
         let usersRequest = NSFetchRequest(entityName: "User")
-        guard let users = (try? moc.executeFetchRequest(usersRequest) as? [User]),
-            deletedUsers = users else {
-                return
-        }
         self.contacts.removeAll()
-        self.deleteContactsFromCoreData(deletedUsers)
-        UIApplication.sharedApplication().cancelAllLocalNotifications()
         
+        let usersDeleteRequest = NSBatchDeleteRequest(fetchRequest: usersRequest)
+        do {
+            try moc.executeRequest(usersDeleteRequest)
+        } catch let error as NSError {
+            debugPrint(error)
+        }
+        UIApplication.sharedApplication().cancelAllLocalNotifications()
     }
     
     /* Updates Local Contact's hasAppAccount Bool. If Contact has App, Contact is saved into User's CK contacts property.
@@ -586,13 +599,10 @@ class UserController {
     }
     
     func deleteContactsFromCoreData(users: [User]) {
-        
-        
         for user in users {
             if let moc = user.managedObjectContext {
-            moc.deleteObject(user)
+                moc.deleteObject(user)
                 saveContext()
-                print("HI")
             }
         }
     }
@@ -641,8 +651,6 @@ class UserController {
         }catch let error as NSError {
             print("Error saving to context. Error: \(error.localizedDescription)")
         }
-        
-        
     }
     
 }
