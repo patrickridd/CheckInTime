@@ -122,7 +122,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 
                 UserController.sharedController.saveContext()
                 self.editButtonLabel.tintColor = UIColor.whiteColor()
-                UserController.sharedController.contacts = UserController.sharedController.contacts
                 self.tableView.reloadData()
             }
         })

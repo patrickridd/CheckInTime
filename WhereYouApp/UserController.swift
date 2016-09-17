@@ -21,23 +21,12 @@ class UserController {
     let moc = Stack.sharedStack.managedObjectContext
     
     
-    // Contacts Used to fill ContactTableViewController
-    var contacts: [User] = [] {
-        didSet {
-            let nc = NSNotificationCenter.defaultCenter()
-            nc.postNotificationName(NewContactAdded, object: nil)
-        }
-    }
-    
-    
-    //
-    
-    
     /// Creates the Logged In User
     func createUser(name: String, phoneNumber: String, image: UIImage, completion: (success: Bool, user: User?) -> Void) {
         
         fetchAppleUser { (record) in
-            guard let record = record, imageData = UIImagePNGRepresentation(image) else {
+            guard let record = record,
+                imageData = UIImagePNGRepresentation(image) else {
                 print("Cant get NSData from Image")
                 completion(success: false, user: nil)
                 return
@@ -104,8 +93,6 @@ class UserController {
             return
         }
         self.fetchContactsFromCoreData { (contacts) in
-            self.contacts = contacts
-            
             self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                 // Subscribe to Message Changes.
                 //  MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
@@ -125,16 +112,7 @@ class UserController {
             })
         }
     }
-    
-    /// Adds contact to Contacts and then orders the contacts with the new Contact alphabetically.
-    func addContactAndOrderList(contact: User) {
-        var contactList = UserController.sharedController.contacts
-        contactList.append(contact)
-        
-        let orderedList = contactList.sort{$0.0.name < $0.1.name}
-        UserController.sharedController.contacts = orderedList
-        
-    }
+   
     /// Fetches all users in core data except the Logged In User
     func fetchContactsFromCoreData(completion: (contacts: [User]) -> Void) {
         let contactRequest = NSFetchRequest(entityName: "User")
@@ -267,20 +245,26 @@ class UserController {
         let request = NSFetchRequest(entityName: "User")
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
         request.predicate = predicate
+        
+        
         guard let fetchedUsers = (try? moc.executeFetchRequest(request) as? [User]),
-            let users = fetchedUsers, user = users.first else {
+            let users = fetchedUsers, user = users.first  else {
+                
                 print("Couldn't fetch user")
                 self.fetchCloudKitUserWithNumber(number, completion: { (contact) in
+                    
                     guard let contact = contact else {
-                        let photoData = UIImagePNGRepresentation(UIImage(named: "profile")!)
-                        let user = User(name: number, phoneNumber: number, imageData: photoData!,hasAppAccount: true)
-                        self.contacts.append(user)
+                        
+                        guard let image = UIImage(named: "profile"), let imageData = UIImagePNGRepresentation(image) else {
+                            return
+                        }
+                        
+                        let user = User(name: number, phoneNumber: number, imageData: imageData, hasAppAccount: true)
                         completion(user: user)
                         return
                     }
                     
                     contact.name = number
-                    self.contacts.append(contact)
                     completion(user: contact)
                     return
                 })
@@ -296,15 +280,13 @@ class UserController {
         
         let predicate = NSPredicate(format: "phoneNumber == %@", argumentArray: [number])
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
+            
             let contact = User(record: record)
             contact?.cloudKitRecord = record
             completion(contact: contact)
             self.saveContext()
         }) { (records, error) in
-            if let _ = error {
-                
-            } else {
-                print("Couldn't fetch CKRecord in fetchCloudKitUserWithNumber")
+            if records?.count < 1 {
                 completion(contact: nil)
             }
         }
@@ -338,8 +320,7 @@ class UserController {
                 completion(hasUsers: false)
                 return
             }
-            let contacts = records.flatMap({User(record: $0)})
-            UserController.sharedController.contacts = contacts
+            let _ = records.flatMap({User(record: $0)})
             self.saveContext()
             completion(hasUsers: true)
         }
@@ -416,23 +397,21 @@ class UserController {
         }
     }
     
+    
     /// Deletes User's Contact From CloudKit contacts property.
     func deleteContactFromCloudKit(contact: User) {
-        guard let index = self.contacts.indexOf(contact) else {
-            print("Couldn't find index for Contact")
-            return
-        }
-        // Removes contact from Contact list
-        self.contacts.removeAtIndex(index)
+        
+        
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record else {
                 print("Couldn't find Contact's record to delete his reference")
                 self.deleteContactsFromCoreData([contact])
                 return
             }
+            self.deleteContactsFromCoreData([contact])
             let contactRecordName = record.recordID.recordName
             contact.cloudKitRecord = record
-            // guard let reference = contact.cloudKitReference,
+
             guard let loggedInUser = self.loggedInUser else {
                 print("no logged In user")
                 return
@@ -501,7 +480,7 @@ class UserController {
                             }
                             self.saveContext()
                             self.deleteContactsFromCoreData([contact])
-                            
+
                     })
                 })
             }
@@ -550,7 +529,6 @@ class UserController {
         }
         // Deletes Users
         let usersRequest = NSFetchRequest(entityName: "User")
-        self.contacts.removeAll()
         
         let usersDeleteRequest = NSBatchDeleteRequest(fetchRequest: usersRequest)
         do {
@@ -558,6 +536,7 @@ class UserController {
         } catch let error as NSError {
             debugPrint(error)
         }
+        moc.reset()
         UIApplication.sharedApplication().cancelAllLocalNotifications()
     }
     
@@ -600,11 +579,10 @@ class UserController {
     
     func deleteContactsFromCoreData(users: [User]) {
         for user in users {
-            if let moc = user.managedObjectContext {
                 moc.deleteObject(user)
                 saveContext()
             }
-        }
+        
     }
     
     
@@ -612,7 +590,6 @@ class UserController {
         newContact.hasAppAccount = true
         // Add contact to Logged In User's contact
         guard let loggedInUser = loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else { return }
-        UserController.sharedController.contacts.append(newContact)
         UserController.sharedController.saveContext()
         
         // If User has account add contact reference to User's CKrecord

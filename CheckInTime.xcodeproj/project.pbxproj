@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		21188A491D88A9F600DABF57 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21188A481D88A9F600DABF57 /* Main.storyboard */; };
 		21488A461D8CFE3000434E4E /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */; };
+		21488A4B1D8DBDA100434E4E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21488A4A1D8DBDA100434E4E /* CloudKit.framework */; };
 		216B8AF71D7F83E700FB33CF /* ContactDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8AF61D7F83E700FB33CF /* ContactDetailTableViewCell.swift */; };
 		216B8B171D81084100FB33CF /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216B8B161D81084100FB33CF /* CustomImageView.swift */; };
 		216EB9611D8241E200592649 /* NumberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216EB9601D8241E200592649 /* NumberController.swift */; };
@@ -30,12 +31,13 @@
 		21D477161D7603650094FCBC /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477151D7603650094FCBC /* MessageController.swift */; };
 		21D477191D7603850094FCBC /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D477181D7603850094FCBC /* CloudKitManager.swift */; };
 		21D4773D1D7638AB0094FCBC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4773C1D7638AB0094FCBC /* LoginViewController.swift */; };
-		21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D477431D767DD40094FCBC /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		21188A481D88A9F600DABF57 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		21488A491D8DBD0100434E4E /* CheckInTime.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CheckInTime.entitlements; sourceTree = "<group>"; };
+		21488A4A1D8DBDA100434E4E /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		216B8AF61D7F83E700FB33CF /* ContactDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDetailTableViewCell.swift; sourceTree = "<group>"; };
 		216B8B161D81084100FB33CF /* CustomImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomImageView.swift; path = "../../../DevMt/Unit 6/Day 2/NewAnimations/NewAnimations/CustomImageView.swift"; sourceTree = "<group>"; };
 		216EB9601D8241E200592649 /* NumberController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberController.swift; sourceTree = "<group>"; };
@@ -60,7 +62,6 @@
 		21D477181D7603850094FCBC /* CloudKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudKitManager.swift; path = ../CloudKitManager.swift; sourceTree = "<group>"; };
 		21D4773C1D7638AB0094FCBC /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		21D477421D767DC00094FCBC /* WhereYouApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WhereYouApp.entitlements; sourceTree = "<group>"; };
-		21D477431D767DD40094FCBC /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21D477441D767DD40094FCBC /* CloudKit.framework in Frameworks */,
+				21488A4B1D8DBDA100434E4E /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +79,8 @@
 		21AEA86F1D736770005EF030 = {
 			isa = PBXGroup;
 			children = (
-				21D477431D767DD40094FCBC /* CloudKit.framework */,
+				21488A4A1D8DBDA100434E4E /* CloudKit.framework */,
+				21488A491D8DBD0100434E4E /* CheckInTime.entitlements */,
 				21AEA87A1D736770005EF030 /* WhereYouApp */,
 				21AEA8791D736770005EF030 /* Products */,
 			);
@@ -365,11 +367,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = WhereYouApp/WhereYouApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CheckInTime.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WhereYouApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.PatrickMichaelRidd.CheckInTime;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RiddDev.CheckInTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -379,11 +381,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = WhereYouApp/WhereYouApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CheckInTime.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WhereYouApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.PatrickMichaelRidd.CheckInTime;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RiddDev.CheckInTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

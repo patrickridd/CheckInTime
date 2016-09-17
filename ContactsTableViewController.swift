@@ -11,33 +11,46 @@ import CloudKit
 import Contacts
 import ContactsUI
 import MessageUI
+import CoreData
 
-class ContactsTableViewController: UITableViewController, CNContactPickerDelegate, MFMessageComposeViewControllerDelegate  {
+class ContactsTableViewController: UITableViewController, CNContactPickerDelegate, MFMessageComposeViewControllerDelegate, NSFetchedResultsControllerDelegate  {
     
     var contactStore = CNContactStore()
+    var fetchedResultsController: NSFetchedResultsController?
+    let moc = Stack.sharedStack.managedObjectContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupFetchResultsController()
         setupNavBar()
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.newContactAdded(_:)), name: NewContactAdded, object: nil)
-        UserController.sharedController.checkIfContactsHaveDeletedApp { (haveDeletedApp, updatedUsers) in
-            if haveDeletedApp {
-                self.presentContactsHaveDeletedApp(updatedUsers!)
-            } else {
-                print("No one has deleted their app")
-                
-            }
-        }
-        UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
-            if newAppAcctUsers {
-                UserController.sharedController.contacts = UserController.sharedController.contacts
-                self.presentNewAppAcctUsers(updatedUsers!)
-            } else {
-                print("No greyed out contacts have downloaded their app")
-            }
-        }
+        checkForContactUpdates()
     }
+    
+    
+    // FetchContacts for ContactTableViewController.
+    func setupFetchResultsController() {
+        guard let loggedInUser = UserController.sharedController.loggedInUser else {
+            return
+        }
+        
+        
+        let request = NSFetchRequest(entityName: "User")
+        let predicate = NSPredicate(format: "phoneNumber != %@", argumentArray: [loggedInUser.phoneNumber])
+        request.predicate = predicate
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.moc, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+
+        
+        let _ = try? fetchedResultsController?.performFetch()
+        
+    }
+    
+
     
     @IBAction func addContactsButtonTapped(sender: AnyObject) {
         requestForAccess { (accessGranted) in
@@ -45,7 +58,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 let contactPickerViewController = CNContactPickerViewController()
                 contactPickerViewController.delegate = self
                 contactPickerViewController.displayedPropertyKeys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactImageDataKey, CNContactPhoneNumbersKey]
-                
                 self.presentViewController(contactPickerViewController, animated: true, completion: nil)
             }
         }
@@ -72,14 +84,33 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                     }
                 }
             })
-            
         default:
             completionHandler(accessGranted: false)
         }
     }
     
     
+    /// Calls two functions that check if a particular contact has signed up or deleted the App.
+    func checkForContactUpdates() {
+        UserController.sharedController.checkIfContactsHaveDeletedApp { (haveDeletedApp, updatedUsers) in
+            if haveDeletedApp {
+                self.presentContactsHaveDeletedApp(updatedUsers!)
+            } else {
+                print("No one has deleted their app")
+                
+            }
+        }
+        UserController.sharedController.checkIfContactsHaveSignedUpForApp { (newAppAcctUsers, updatedUsers) in
+            if newAppAcctUsers {
+                self.presentNewAppAcctUsers(updatedUsers!)
+            } else {
+                print("No greyed out contacts have downloaded their app")
+            }
+        }
+
+    }
     
+    /// Message that can be customized depending on what is needed to be said.
     func showMessage(alert: String) {
         let alertController = UIAlertController(title: "CheckInTime", message: alert, preferredStyle: UIAlertControllerStyle.Alert)
         let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) -> Void in
@@ -89,6 +120,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
     }
     
+    /// Delegate function that is called when a contact is selected.
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         if contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.isKeyAvailable(CNContactImageDataKey) {
             
@@ -177,7 +209,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                                 let newContact = User(name: name, phoneNumber: phoneNumber, imageData: imageData, hasAppAccount: false)
                                 newContact.hasAppAccount = false
                                 // Add contact to Logged In User's contact
-                                UserController.sharedController.addContactAndOrderList(newContact)
                                 UserController.sharedController.saveContext()
                                 dispatch_async(dispatch_get_main_queue(), {
                                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -205,6 +236,20 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             })
         }
     }
+    
+    
+    
+    /// Sets titile Icon and color scheme.
+    func setupNavBar() {
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
+        let image = UIImage(named: "ContactsTitleSmall")
+        let imageView = UIImageView(image: image)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        
+        self.navigationItem.titleView = imageView
+        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
+    }
+
     
     /// Presents a loading alert to let the user know that it is adding a contact.
     func loadingAlert() {
@@ -239,7 +284,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
     }
     
-    ///
+    /// Dismisses the Messages app and comes back to CheckInTime
     func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
         
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -372,7 +417,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
-            
         })
     }
     
@@ -386,15 +430,16 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     // MARK: - Table view data source
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
-        return UserController.sharedController.contacts.count
+        return self.fetchedResultsController?.fetchedObjects?.count ?? 0
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("contactCell", forIndexPath: indexPath)
         
-        let contact = UserController.sharedController.contacts[indexPath.row]
+        guard let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) else {
+            return UITableViewCell()
+        }
         if contact.hasAppAccount == false {
             
             cell.textLabel?.textColor = UIColor.lightGrayColor()
@@ -412,25 +457,17 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         return cell
     }
     
-    func setupNavBar() {
-        UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
-        let image = UIImage(named: "ContactsTitleSmall")
-        let imageView = UIImageView(image: image)
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
-        
-        self.navigationItem.titleView = imageView
-        UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
-    }
     
     
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            let contact = UserController.sharedController.contacts[indexPath.row]
+            guard let contact = fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
+                return
+                
+            }
             UserController.sharedController.deleteContactFromCloudKit(contact)
-            UserController.sharedController.deleteContactsFromCoreData([contact])
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
             
         } else if editingStyle == .Insert {
@@ -438,6 +475,55 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         }
 
     }
+    
+    
+    // MARK: NSFetchedResultsControllerDelegate
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView.beginUpdates()
+    }
+    
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        switch type {
+        case .Delete:
+            tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
+        case .Insert:
+            tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
+        default: break
+        }
+        
+    }
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
+        
+        switch type {
+        case .Delete:
+            guard let indexPath = indexPath else { return }
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        case .Insert:
+            guard let newIndexPath = newIndexPath else { return }
+            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+        case .Update:
+            guard let indexPath = indexPath else { return }
+            
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        case .Move:
+            guard let indexPath = indexPath, newIndexPath = newIndexPath else { return }
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+        }
+        
+    }
+    
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
+    }
+
+    
+    
     
     
     // MARK: - Navigation
@@ -448,11 +534,11 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         if segue.identifier == "contactSegue" {
             // Get the new view controller using segue.destinationViewController.
             guard let contactDetailVC = segue.destinationViewController as? ContactDetailViewController,
-                let indexPath = tableView.indexPathForSelectedRow else {
+                let indexPath = tableView.indexPathForSelectedRow, contact = fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
                     return
             }
             
-            let contact = UserController.sharedController.contacts[indexPath.row]
+           
             
             contactDetailVC.contact = contact
             // Pass the selected object to the new view controller.
