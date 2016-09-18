@@ -100,45 +100,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495847577.575321"
+            timestampString = "495849097.165518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "checkIfContactsHaveDeletedApp(_:)"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "fetchUsersForMessage(_:completion:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.UserController.(checkIfContactsHaveDeletedApp ((haveDeletedApp : Swift.Bool, updatedUsers : Swift.Optional&lt;Swift.Array&lt;CheckInTime.User&gt;&gt;) -&gt; ()) -&gt; ()).(closure #1)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495847801.908133"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "195"
-                  endingLineNumber = "195"
-                  offsetFromSymbolStart = "555">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CheckInTime.UserController.(checkIfContactsHaveDeletedApp ((haveDeletedApp : Swift.Bool, updatedUsers : Swift.Optional&lt;Swift.Array&lt;CheckInTime.User&gt;&gt;) -&gt; ()) -&gt; ()).(closure #1).(closure #1)"
-                  moduleName = "CheckInTime"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/PatrickRidd/Programming/Swift%20Programs/App%20Store%20Apps/CheckInTime/WhereYouApp/UserController.swift"
-                  timestampString = "495847801.90826"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "193"
-                  endingLineNumber = "193"
-                  offsetFromSymbolStart = "42">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

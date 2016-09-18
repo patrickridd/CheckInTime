@@ -401,87 +401,36 @@ class UserController {
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record else {
                 print("Couldn't find Contact's record to delete his reference")
-                self.deleteContactsFromCoreData([contact])
                 return
             }
-            self.deleteContactsFromCoreData([contact])
             let contactRecordName = record.recordID.recordName
             contact.cloudKitRecord = record
-            
-            guard let loggedInUser = self.loggedInUser else {
+            guard let loggedInUser = self.loggedInUser, let userRecord = loggedInUser.cloudKitRecord, var references = userRecord[User.contactsKey] as? [CKReference]   else {
                 print("no logged In user")
                 return
             }
-            if let record = loggedInUser.cloudKitRecord {
-                guard var references = record[User.contactsKey] as? [CKReference] else {
-                    print("No references in CloudKit")
-                    self.deleteContactsFromCoreData([contact])
-                    
-                    return
-                }
-                
                 loggedInUser.contactReferences = references
                 let names = references.flatMap({$0.recordID.recordName})
                 self.moc.deleteObject(contact)
                 self.saveContext()
                 guard let index = names.indexOf(contactRecordName) else {
                     print("No index")
-                    self.deleteContactsFromCoreData([contact])
                     return
                 }
                 references.removeAtIndex(index)
-                record[User.contactsKey] = references
+                userRecord[User.contactsKey] = references
                 loggedInUser.contactReferences = references
                 CloudKitManager.cloudKitController.modifyRecords([record], perRecordCompletion: { (record, error) in
-                    
                     }, completion: { (records, error) in
                         if let error = error {
                             print("Error Deleting Contact Reference. Error: \(error.localizedDescription)")
                         } else {
                             print("Successfully deleted contact reference")
                         }
-                        self.deleteContactsFromCoreData([contact])
                         self.saveContext()
                 })
-                
-            } else {
-                self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
-                    guard let record = record else {
-                        self.deleteContactsFromCoreData([contact])
-                        return
-                    }
-                    guard var references = record[User.contactsKey] as? [CKReference] else {
-                        print("No references in CloudKit")
-                        self.deleteContactsFromCoreData([contact])
-                        return
-                    }
-                    loggedInUser.contactReferences = references
-                    let recordNames = references.flatMap({$0.recordID.recordName})
-                    
-                    guard let index = recordNames.indexOf(contactRecordName) else {
-                        self.deleteContactsFromCoreData([contact])
-                        return
-                    }
-                    references.removeAtIndex(index)
-                    
-                    record[User.contactsKey] = references
-                    CloudKitManager.cloudKitController.modifyRecords([record], perRecordCompletion: { (record, error) in
-                        
-                        }, completion: { (records, error) in
-                            if let error = error {
-                                print("Error Deleting Contact Reference. Error: \(error.localizedDescription)")
-                                self.deleteContactsFromCoreData([contact])
-                            } else {
-                                print("Successfully deleted contact reference")
-                            }
-                            self.saveContext()
-                            self.deleteContactsFromCoreData([contact])
-                    })
-                })
-            }
         }
     }
-    
     
     
     /// Deletes the Current User Account from CloudKit, CoreData, and Cancels all notifications.
@@ -491,7 +440,6 @@ class UserController {
                 completion()
                 return
         }
-        
         self.deleteAccountFromCoreData()
         // Deletes Logged In User's CKRecord
         CloudKitManager.cloudKitController.deleteRecordWithID(loggedInUserRecord.recordID) { (recordID, error) in
@@ -506,6 +454,7 @@ class UserController {
     }
     
     
+    /// Deletes the User's Contacts and Messages from CoreData.
     func deleteAccountFromCoreData() {
         let messageRequest = NSFetchRequest(entityName: "Message")
         guard let fetchMessages = try? moc.executeFetchRequest(messageRequest) as? [Message],
@@ -574,6 +523,8 @@ class UserController {
         }
     }
     
+    
+    /// Deletes contacs from CoreData.
     func deleteContactsFromCoreData(users: [User]) {
         for user in users {
             moc.deleteObject(user)
@@ -582,7 +533,7 @@ class UserController {
         
     }
     
-    
+    /// Saves a new Contact to the Users Contact's Property in Cloudkit.
     func saveNewContactToCloudKit(newContact: User, contactRecord: CKRecord, completion: (savedSuccessfully: Bool)-> Void) {
         newContact.hasAppAccount = true
         // Add contact to Logged In User's contact
@@ -614,8 +565,7 @@ class UserController {
         })
     }
     
-    // Saves the ManagedObject Context
-    
+    /// Saves the ManagedObject Context
     func saveContext() {
         do{
             try moc.save()

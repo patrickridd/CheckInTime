@@ -13,6 +13,14 @@ class MessageTableViewCell: UITableViewCell {
     var loggedInUser: User?
     var userContact: User?
     
+    let dateFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = .ShortStyle
+        formatter.doesRelativeDateFormatting = true
+        formatter.timeStyle = .ShortStyle
+        return formatter
+    }()
+    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var contactName: UILabel!
     @IBOutlet weak var hasRespondedLabel: UILabel!
@@ -31,23 +39,11 @@ class MessageTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    let dateFormatter: NSDateFormatter = {
-        let formatter = NSDateFormatter()
-        formatter.dateStyle = .ShortStyle
-        formatter.doesRelativeDateFormatting = true
-        formatter.timeStyle = .ShortStyle
-        return formatter
-    }()
-    
-    
     // Updates View with Message Details
     func updateWith(message: Message) {
         guard let loggedInUser = UserController.sharedController.loggedInUser else {
             return
         }
-        
-        
-        
         self.loggedInUser = loggedInUser
         if message.senderID == loggedInUser.phoneNumber {
             self.userContact = message.receiver
@@ -55,10 +51,7 @@ class MessageTableViewCell: UITableViewCell {
             self.userContact = message.sender
         }
     
-        
-        
         guard let userContact = self.userContact else {
-            
             print("No contact in MessageTableViewCell")
             return
         }
@@ -92,7 +85,6 @@ class MessageTableViewCell: UITableViewCell {
         else if message.timeResponded != nil && message.receiver?.phoneNumber == loggedInUser.phoneNumber {
             updateWithUserRespondedToContactsRequest(message)
         }
-        
     }
     
     
@@ -102,17 +94,13 @@ class MessageTableViewCell: UITableViewCell {
             print("User's contact was nil")
             return
         }
-        
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-        
         if userContact.name == userContact.phoneNumber {
         hasRespondedLabel.textColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         hasRespondedLabel.text = "You sent \(formatedPhoneNumber) a CheckInTime"
         } else {
             hasRespondedLabel.text = "You sent \(userContact.name ?? formatedPhoneNumber) a CheckInTime"
-
         }
-        
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
             newMessageIcon.image = UIImage(named: "notCheckedInPink")
             hasRespondedLabel.text = "Time for \(userContact.name ?? formatedPhoneNumber) to CheckIn..."
@@ -120,10 +108,8 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
         }
-        
         timeResponded.text = ""
         shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
-        
     }
     
     // Cell tells you your contact wants to know WhereYouApp
@@ -133,10 +119,8 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         timeResponded.text = ""
-        
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
         if userContact.name == userContact.phoneNumber {
-           
             shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
             hasRespondedLabel.text = "\(formatedPhoneNumber) wants you to CheckIn"
             
@@ -146,7 +130,6 @@ class MessageTableViewCell: UITableViewCell {
             } else {
                 newMessageIcon.image = UIImage(named: "checkedInPending")
             }
-            
         } else {
             shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
             hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) sent you a CheckInTime"
@@ -167,7 +150,6 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
         if userContact.name == userContact.phoneNumber {
             hasRespondedLabel.text = formatedPhoneNumber
             hasRespondedLabel.text = "\(formatedPhoneNumber) has CheckedIn."
@@ -180,7 +162,6 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         timeResponded.text = " CheckedIn at \(dateFormatter.stringFromDate(checkInAt))"
-        
     }
     
     
@@ -192,26 +173,22 @@ class MessageTableViewCell: UITableViewCell {
             return
         }
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
-
         if userContact.name == userContact.phoneNumber{
             hasRespondedLabel.text = "You CheckedIn with \(formatedPhoneNumber)"
         } else {
             hasRespondedLabel.text = "You CheckedIn with \(userContact.name ?? formatedPhoneNumber)"
         }
         newMessageIcon.image = UIImage(named: "checkedIn")
-
         timeResponded.text = "You CheckedIn \(dateFormatter.stringFromDate(checkedInAt))"
         shouldRespondByLabel.text = ""
     }
     
+    /// Sets up the contacts profile image. 
     func setupImage() {
-        
         let radius = self.profileImage.frame.size.height/2
         self.profileImage?.layer.masksToBounds = true
         self.profileImage?.layer.cornerRadius = radius
         self.profileImage?.clipsToBounds = true
-        
-       
     }
     
     

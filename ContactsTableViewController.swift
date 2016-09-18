@@ -473,10 +473,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             // Delete the row from the data source
             guard let contact = fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
                 return
-                
             }
-            UserController.sharedController.deleteContactFromCloudKit(contact)
             
+            UserController.sharedController.deleteContactFromCloudKit(contact)
+            moc.deleteObject(contact as NSManagedObject)
             
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
