@@ -170,11 +170,14 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     @IBAction func SendCheckInTime(sender: AnyObject) {
         guard let sender = UserController.sharedController.loggedInUser,
             receiver = contact else {
-                print("No logged in user or contact")
                 return
         }
         if receiver.hasAppAccount == 0 {
             self.presentNoUserAccount(receiver)
+            return
+        }
+        if dueDatePicker.date.timeIntervalSince1970+5 < NSDate().timeIntervalSince1970 {
+            self.presentDateHasToBeInFuture()
             return
         }
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
@@ -189,6 +192,13 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
+    
+    func presentDateHasToBeInFuture() {
+            let alert = UIAlertController(title: "Time Conflict", message: "The CheckInTime can't be before the current time.", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        self.navigationController?.presentViewController(alert, animated: true, completion: nil)
+    }
     
     func presentMessageNotSent(messageRecord: CKRecord, message: Message) {
         let alert = UIAlertController(title: "Failed to Send", message: "There might be something wrong with your connection", preferredStyle: .Alert)

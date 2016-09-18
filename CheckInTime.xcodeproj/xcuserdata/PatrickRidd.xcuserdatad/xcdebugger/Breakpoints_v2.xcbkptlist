@@ -84,22 +84,6 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/UserController.swift"
-            timestampString = "495847577.575321"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "createUser(_:phoneNumber:image:completion:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WhereYouApp/UserController.swift"
             timestampString = "495849097.165518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"

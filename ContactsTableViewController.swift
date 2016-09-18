@@ -27,7 +27,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     }
     
     
-    // FetchContacts for ContactTableViewController.
+    /// FetchContacts for ContactTableViewController.
     func setupFetchResultsController() {
         guard let loggedInUser = UserController.sharedController.loggedInUser else {
             return
@@ -196,12 +196,10 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         contact.name = name
                         UserController.sharedController.saveNewContactToCloudKit(contact, contactRecord: contact.cloudKitRecord!, completion: { (savedSuccessfully) in
                             if savedSuccessfully {
-                                print("Saved Contact Successfully to CloudKit")
                                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                                 self.presentAddedContactSuccessfully()
                                 return
                             } else {
-                                print("Failed to save contact to cloudkit. Try again.")
                                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                                 self.presentFailedToAddContact()
                                 return
@@ -419,7 +417,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
-            
         })
     }
     
@@ -503,8 +500,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         
     }
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        
-        
         switch type {
         case .Delete:
             guard let indexPath = indexPath else { return }
@@ -529,11 +524,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.endUpdates()
     }
-    
-    
-    
-    
-    
+
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -545,8 +536,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 let indexPath = tableView.indexPathForSelectedRow, contact = fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
                     return
             }
-            
-            
             
             contactDetailVC.contact = contact
             // Pass the selected object to the new view controller.

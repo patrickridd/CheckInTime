@@ -39,7 +39,7 @@ class MessageTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    // Updates View with Message Details
+    /// Updates View with Message Details
     func updateWith(message: Message) {
         guard let loggedInUser = UserController.sharedController.loggedInUser else {
             return
@@ -50,12 +50,10 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             self.userContact = message.sender
         }
-    
         guard let userContact = self.userContact else {
             print("No contact in MessageTableViewCell")
             return
         }
-        
         // Set contactlabel and image to the name of the loggedInUser's contact
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
         if userContact.phoneNumber == userContact.name {
@@ -63,11 +61,9 @@ class MessageTableViewCell: UITableViewCell {
         } else {
             self.contactName.text = userContact.name ?? formatedPhoneNumber
         }
-        
         self.profileImage.image = userContact.photo
         self.layoutIfNeeded()
         setupImage()
-        
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender?.phoneNumber == loggedInUser.phoneNumber {
             updateWithWaitingForReceiverResponse(message)
@@ -88,7 +84,7 @@ class MessageTableViewCell: UITableViewCell {
     }
     
     
-    // Cell tells you that your request hasn't been responded to yet
+    /// Cell tells you that your request hasn't been responded to yet
     func updateWithWaitingForReceiverResponse(message: Message) {
         guard let userContact = userContact else {
             print("User's contact was nil")
@@ -112,7 +108,7 @@ class MessageTableViewCell: UITableViewCell {
         shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
     }
     
-    // Cell tells you your contact wants to know WhereYouApp
+    /// Cell tells you your contact wants to know WhereYouApp
     func updateWithYouHaveANewMessage(message: Message) {
         guard let userContact = userContact else {
             print("User's contact was nil")
@@ -143,7 +139,7 @@ class MessageTableViewCell: UITableViewCell {
         }
     }
     
-    // Cell tells User that user's contact responded to WhereYouApp request
+    /// Cell tells User that user's contact responded to WhereYouApp request
     func updateWithContactRespondedToRequest(message: Message) {
         guard let userContact = userContact else {
             print("User's contact was nil")
@@ -166,7 +162,7 @@ class MessageTableViewCell: UITableViewCell {
     
     
     
-    // Cell tell user that they responded to the contacts WhereYouApp request
+    /// Cell tell user that they responded to the contacts WhereYouApp request
     func updateWithUserRespondedToContactsRequest(message: Message) {
         guard let userContact = userContact, checkedInAt = message.timeResponded else {
             print("User's contact was nil")
