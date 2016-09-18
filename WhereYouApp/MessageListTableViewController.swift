@@ -143,7 +143,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         let image = UIImage(named: "CheckInTimeTitleWhiteSmall")
         let imageView = UIImageView(image: image)
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
-        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().tintColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
 
         self.navigationItem.titleView = imageView
     }

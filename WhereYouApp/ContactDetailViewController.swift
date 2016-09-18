@@ -192,7 +192,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
-    
+    /// Tells user that they can't sent CheckInTimes before the present time.
     func presentDateHasToBeInFuture() {
             let alert = UIAlertController(title: "Time Conflict", message: "The CheckInTime can't be before the current time.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
@@ -200,6 +200,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         self.navigationController?.presentViewController(alert, animated: true, completion: nil)
     }
     
+    /// Tells User that the message couldn't be sent.
     func presentMessageNotSent(messageRecord: CKRecord, message: Message) {
         let alert = UIAlertController(title: "Failed to Send", message: "There might be something wrong with your connection", preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in
@@ -220,7 +221,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
-    
+ 
     
     @IBAction func screenTapped(sender: AnyObject) {
         dateTextField.resignFirstResponder()

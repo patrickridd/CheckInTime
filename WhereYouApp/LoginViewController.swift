@@ -91,9 +91,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
+    @IBAction func screenTapped(sender: AnyObject) {
+        numberTextField.resignFirstResponder()
+    }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
-        self.tapPhotoButton.hidden = true
         
         imagePicker.delegate = self
         
