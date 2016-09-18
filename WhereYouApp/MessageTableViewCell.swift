@@ -52,6 +52,8 @@ class MessageTableViewCell: UITableViewCell {
         }
         guard let userContact = self.userContact else {
             print("No contact in MessageTableViewCell")
+            hasRespondedLabel.textColor = UIColor ( red: 1.0, green: 0.5294, blue: 0.5686, alpha: 1.0 )
+            hasRespondedLabel.text = "CheckInTime message from deleted contact."
             return
         }
         // Set contactlabel and image to the name of the loggedInUser's contact

@@ -11,7 +11,7 @@ import CoreData
 import MessageUI
 import CloudKit
 
-class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate {
+class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
     
     var contact: User?
@@ -40,7 +40,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        nameTextField.delegate = self
         guard let contact = contact else {
             return
         }
@@ -125,6 +125,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 self.tableView.reloadData()
             }
         })
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        return nameTextField.resignFirstResponder()
     }
     
     /// Presents to the user that the contact they have chosen doesn't have the App

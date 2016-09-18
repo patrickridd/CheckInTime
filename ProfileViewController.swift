@@ -58,7 +58,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
-        
         loadingAlert("Updating Profile...")
         
         guard let newImage = imageView.image,
@@ -68,9 +67,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 self.dismissViewControllerAnimated(true, completion: nil)
                 return
         }
-        
         loggedInUser.imageData = newImageData
-        
+        loggedInUserRecord[User.imageKey] = loggedInUser.imageAsset
         CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
             
         }) { (records, error) in
@@ -79,16 +77,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             } else {
                 print("Successfully saved profile changes to CloudKit")
                 UserController.sharedController.saveContext()
-                
             }
             dispatch_async(dispatch_get_main_queue(), {
                 self.dismissViewControllerAnimated(true, completion: { 
                     
                     self.dismissViewControllerAnimated(true, completion: nil)
-
                 })
             })
-            
         }
     }
     

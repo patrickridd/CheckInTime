@@ -87,7 +87,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                     self.presentNoAccountFound()
                 })
             }
-            
         }
     }
     

@@ -74,6 +74,8 @@ class ContactDetailTableViewCell: UITableViewCell {
     // Cell tells you that your request hasn't been responded to yet
     func updateWithWaitingForReceiverResponse(message: Message) {
         guard let userContact = userContact else {
+            hasRespondedLabel.textColor = UIColor ( red: 1.0, green: 0.5294, blue: 0.5686, alpha: 1.0 )
+            hasRespondedLabel.text = "I'm sorry, we've lost information about this message."
             print("User's contact was nil")
             return
         }
