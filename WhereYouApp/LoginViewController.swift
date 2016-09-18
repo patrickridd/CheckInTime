@@ -30,6 +30,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 self.presentICloudAlert()
             }
         }
+        
         findUsersCloudKitAccountAndRetore { (hasAccount) in }
         numberTextField.delegate = self
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
@@ -37,11 +38,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
     }
     
-    
+    /// When User taps the Submit button it checks if the number entered was formatted correctly and then saves a User record.
     @IBAction func submitButtonTapped(sender: AnyObject) {
-        guard let image = self.imageView.image else {
-            return
-        }
+        guard let image = self.imageView.image else { return }
         guard let phoneNumber = self.numberTextField.text else {
             self.presentNumberAlert()
             return
@@ -50,14 +49,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         NumberController.sharedController.checkIfPhoneHasTheRightAmountOfDigits(&formatedNumber) { (isFormattedCorrectly, formatedNumber) in
             if isFormattedCorrectly {
                 self.loadingAlert("Creating Your Profile...")
-                
                 UserController.sharedController.createUser("", phoneNumber: formatedNumber, image: image, completion: { (success, user) in
                     if success {
                         dispatch_async(dispatch_get_main_queue(), {
                             self.dismissViewControllerAnimated(true, completion: {
                                 self.dismissViewControllerAnimated(true, completion: nil)
-                                let messageListTVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("messageList") as! MessageListTableViewController
-                                self.navigationController?.pushViewController(messageListTVC, animated: true)
                             })
                         })
                     }
@@ -81,6 +77,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
+    
+    /* When user taps "Already have an account?" it calls findUsersCloudKitAccountAndRetore to check if the iCloud acct has CheckInTime acct
+    */
     @IBAction func findAccountButtonTapped(sender: AnyObject) {
         findUsersCloudKitAccountAndRetore { (hasAccount) in
             if !hasAccount {
@@ -95,9 +94,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
         self.tapPhotoButton.hidden = true
-
+        
         imagePicker.delegate = self
-
+        
         let alert = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .ActionSheet)
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
             self.imagePicker.sourceType = .PhotoLibrary
@@ -114,6 +113,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
     }
     
+    
+    /// Checks if the iCloud User has already made an account.
     func findUsersCloudKitAccountAndRetore(completion: (hasAccount: Bool) ->Void) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         CloudKitManager.cloudKitController.checkForCloudKitUserAccount { (hasCloudKitAccount, userRecord) in
@@ -130,34 +131,12 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                         return
                     }
                     if restoredUser {
-                        UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
-                            if hasUsers {
-                                MessageController.sharedController.fetchAllMessagesFromCloudKit({
-                                    print("Messages restored")
-                                    dispatch_async(dispatch_get_main_queue(), {
-                                        self.dismissViewControllerAnimated(true, completion: {
-                                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                                            self.dismissViewControllerAnimated(true, completion: nil)
-                                            completion(hasAccount: true)
-                                        })
-                                    })
-                                })
-                            } else {
-                                dispatch_async(dispatch_get_main_queue(), {
-                                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                                    self.dismissViewControllerAnimated(true, completion: {
-                                        self.dismissViewControllerAnimated(true, completion: nil)
-                                        completion(hasAccount: true)
-                                    })
-                                })
-                            }
+                        self.wantsToRestoreTheirAccount({
+                            completion(hasAccount: true)
+                            
                         })
                     } else {
-                        CloudKitManager.cloudKitController.deleteRecordWithID(userRecord.recordID, completion: { (recordID, error) in
-                            if let error = error {
-                                print("Error deleting User's Record. Error: \(error.localizedDescription)")
-                            }
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        self.choseToCreateNewAccount(userRecord.recordID, completion: {
                             completion(hasAccount: false)
                         })
                     }
@@ -170,17 +149,60 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     
+    
+    /// Helper method that deletes the User account if they have an account and want to create a new one.
+    func choseToCreateNewAccount(userRecordID: CKRecordID, completion: ()->Void) {
+        CloudKitManager.cloudKitController.deleteRecordWithID(userRecordID, completion: { (recordID, error) in
+            if let error = error {
+                print("Error deleting User's Record. Error: \(error.localizedDescription)")
+            }
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            completion()
+        })
+    }
+    
+    
+    /// Helper method that is performed if the User wants to restore their account on the device.
+    func wantsToRestoreTheirAccount(completion: ()->Void) {
+        UserController.sharedController.fetchCloudKitContacts({ (hasUsers) in
+            if hasUsers {
+                MessageController.sharedController.fetchAllMessagesFromCloudKit({
+                    print("Messages restored")
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.dismissViewControllerAnimated(true, completion: {
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                            completion()
+                        })
+                    })
+                })
+            } else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                        completion()
+                    })
+                })
+            }
+        })
+    }
+    
+    
+    
+    /// Raises the number textField above the keyboard.
     func keyboardWillShowNotification(notification: NSNotification) {
         if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
                 self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-45
                 self.imageView.layoutIfNeeded()
-
+                
             })
         }
     }
     
+    /// Lowers the number textField before the keyboard is hidden.
     func keyboardWillHide(notification: NSNotification) {
         UIView.animateWithDuration(0.8) {
             
@@ -200,12 +222,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
+    /// Formats the input from the User
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         if (textField == numberTextField) {
             let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
             let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
-            
             let decimalString = components.joinWithSeparator("") as NSString
             let length = decimalString.length
             let hasLeadingOne = length > 0 && decimalString.characterAtIndex(0) == (1 as unichar)
@@ -232,7 +253,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 formattedString.appendFormat("%@-", prefix)
                 index += 3
             }
-            
             let remainder = decimalString.substringFromIndex(index)
             formattedString.appendString(remainder)
             textField.text = formattedString as String
@@ -243,10 +263,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
+    /// Presents  message letting the User know that they already have an Account and that it can be restored.
     func presentRestoreUser(record: CKRecord, completion: (restoredUser: Bool?) -> Void) {
         let alert = UIAlertController(title: "We have found a user account linked with your iCloud Account. Would you like to restore it on this device?", message: nil
             , preferredStyle: .Alert)
-        
         let restoreAction = UIAlertAction(title: "Restore", style: .Default) { (_) in
             guard let user = User(record: record) else {
                 print("Could not restore user")
@@ -257,7 +277,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             user.name = ""
             UserController.sharedController.loggedInUser = user
             UserController.sharedController.loggedInUser?.cloudKitRecord = record
-            
             UserController.sharedController.saveContext()
             print("Restored User")
             CloudKitManager.cloudKitController.fetchSubscription("My Messages", completion: { (subscription, error) in
@@ -268,16 +287,12 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 }
                 print("Subcribed to Subscription: \(subscription)")
                 completion(restoredUser: true)
-                
             })
         }
         let createNewUserAction = UIAlertAction(title: "Create New User", style: .Default) { (_) in
-            
-            
             completion(restoredUser: false)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in
-            
             completion(restoredUser: nil)
         }
         alert.addAction(createNewUserAction)
@@ -286,8 +301,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
-        
     }
+    
+    
     
     /// Sets up the titleView with the logo
     func setupView() {
@@ -311,9 +327,9 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = radius
-
+        
     }
-
+    
     /// Presents a loading screen when creating account.
     func loadingAlert(message: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -340,7 +356,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             let settingsUrl = NSURL(string: "prefs:root=CASTLE")
             if let url = settingsUrl {
                 UIApplication.sharedApplication().openURL(url)
-                
             }
         }
         alert.addAction(settingsAction)

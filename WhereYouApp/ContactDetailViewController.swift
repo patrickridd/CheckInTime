@@ -129,7 +129,6 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     /// Presents to the user that the contact they have chosen doesn't have the App
     func presentNoUserAccount(newContact: User) {
-        
         let noUserAccountAlert = UIAlertController(title: "\(newContact.name ?? newContact.phoneNumber) doesn't have CheckInTime", message: "Would you like to suggest that they download CheckInTime", preferredStyle: .Alert)
         
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
@@ -155,8 +154,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(noUserAccountAlert, animated: true, completion: nil)
         })
-        
     }
+    
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)

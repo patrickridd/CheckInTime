@@ -310,7 +310,6 @@ class UserController {
         }
         loggedInUser.contactReferences = references
         let predicate = NSPredicate(format: "recordID IN %@", argumentArray: [references])
-        
         CloudKitManager.cloudKitController.fetchRecordsWithType(User.recordType, predicate: predicate, recordFetchedBlock: { (record) in
             
         }) { (records, error) in
@@ -496,7 +495,6 @@ class UserController {
             contact.hasAppAccount = 1
         }
         saveContext()
-        
         fetchUsersCloudKitRecord(contact) { (record) in
             guard let record = record, loggedInUser = self.loggedInUser, loggedInUserRecord = loggedInUser.cloudKitRecord else {
                 print("Couldn't fetch Contact's Record to add to User's Contacts in CK")
@@ -522,6 +520,7 @@ class UserController {
             })
         }
     }
+    
     
     
     /// Deletes contacs from CoreData.
