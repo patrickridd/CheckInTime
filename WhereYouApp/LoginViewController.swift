@@ -353,13 +353,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
-        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
-            let settingsUrl = NSURL(string: "prefs:root=CASTLE")
-            if let url = settingsUrl {
-                UIApplication.sharedApplication().openURL(url)
-            }
-        }
-        alert.addAction(settingsAction)
+//        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
+//            let settingsUrl = NSURL(string: "prefs:root=CASTLE")
+//            if let url = settingsUrl {
+//                UIApplication.sharedApplication().openURL(url)
+//            }
+//        }
+//        alert.addAction(settingsAction)
         alert.addAction(dismissAction)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)

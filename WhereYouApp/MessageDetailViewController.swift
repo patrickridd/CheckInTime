@@ -294,11 +294,12 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     func geoCodeLocation(location: CLLocation) {
         geocoder?.reverseGeocodeLocation(location) { (placemarks, error) in
             guard let placemark = placemarks?.last,
-                thoroughfare = placemark.thoroughfare  else {
+                thoroughfare = placemark.thoroughfare, let subThoroughfare = placemark.subThoroughfare,
+                   let postalCode = placemark.postalCode else {
                     print("Can't get placemark for address")
                     return
             }
-            self.addressLabel.text = placemark.subThoroughfare!  + " " + thoroughfare + ", " + placemark.postalCode!
+            self.addressLabel.text = subThoroughfare  + " " + thoroughfare + ", " + postalCode
         }
     }
 

@@ -68,10 +68,10 @@ class User: NSManagedObject {
         
         let temporaryDirectory = NSTemporaryDirectory()
         let temporaryDirectoryURL = NSURL(fileURLWithPath: temporaryDirectory)
-        let fileURL = temporaryDirectoryURL.URLByAppendingPathComponent(NSUUID().UUIDString).URLByAppendingPathExtension("jpg")
-        imageData.writeToURL(fileURL, atomically: true)
+        let fileURL = temporaryDirectoryURL.URLByAppendingPathComponent(NSUUID().UUIDString)!.URLByAppendingPathExtension("jpg")
+        imageData.writeToURL(fileURL!, atomically: true)
         
-        return fileURL
+        return fileURL!
     }
     
     var imageAsset: CKAsset {
@@ -84,7 +84,7 @@ class User: NSManagedObject {
  
     convenience init?(record: CKRecord) {
         guard let phoneNumber = record[User.phoneNumberKey] as? String,
-            image = record[User.imageKey] as? CKAsset else {
+            let image = record[User.imageKey] as? CKAsset else {
                 return nil
         }
         

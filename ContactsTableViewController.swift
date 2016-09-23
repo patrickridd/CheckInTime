@@ -55,7 +55,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                 let contactPickerViewController = CNContactPickerViewController()
                 contactPickerViewController.delegate = self
                 contactPickerViewController.displayedPropertyKeys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactImageDataKey, CNContactPhoneNumbersKey]
-                self.presentViewController(contactPickerViewController, animated: true, completion: nil)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(contactPickerViewController, animated: true, completion: nil)
+                })
             }
         }
     }
@@ -81,7 +83,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         })
                     }
                 }
-            })
+                })
         default:
             completionHandler(accessGranted: false)
         }
@@ -242,7 +244,6 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
                         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                         self.presentUserHasAccount(newContact)
                     })
-                    
                 }
             })
         })
@@ -442,7 +443,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("contactCell", forIndexPath: indexPath)
         
-        guard let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) else {
+        guard let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
             return UITableViewCell()
         }
         if contact.hasAppAccount == false {
@@ -512,7 +513,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         case .Move:
-            guard let indexPath = indexPath, newIndexPath = newIndexPath else { return }
+            guard let indexPath = indexPath, let newIndexPath = newIndexPath else { return }
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
@@ -533,7 +534,7 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         if segue.identifier == "contactSegue" {
             // Get the new view controller using segue.destinationViewController.
             guard let contactDetailVC = segue.destinationViewController as? ContactDetailViewController,
-                let indexPath = tableView.indexPathForSelectedRow, contact = fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
+                let indexPath = tableView.indexPathForSelectedRow, let contact = fetchedResultsController?.objectAtIndexPath(indexPath) as? User else {
                     return
             }
             
