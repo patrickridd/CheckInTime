@@ -37,7 +37,7 @@ class NumberController {
     }
 
     /// Formats Phone Correctly
-    func checkIfPhoneHasTheRightAmountOfDigits(inout phoneNumber: String, completion: (isFormattedCorrectly: Bool, formatedNumber: String) -> Void) {
+    func checkIfPhoneHasTheRightAmountOfDigits( inout phoneNumber: String, completion: (isFormattedCorrectly: Bool, formatedNumber: String) -> Void) {
         
         
         // If number has a 1 before the area code and phone number remove it.

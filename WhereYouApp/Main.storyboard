@@ -48,7 +48,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tn8-Ll-I2f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="873" y="1009"/>
+            <point key="canvasLocation" x="675" y="1139"/>
         </scene>
         <!--Contact Detail View Controller-->
         <scene sceneID="rgT-dW-tjE">
@@ -157,7 +157,7 @@
                                     <barButtonItem title="Send CheckInTime" width="292" id="NED-SW-COJ">
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <action selector="SendCheckInTime:" destination="BSJ-RI-4EC" id="6SP-Dd-MYX"/>
+                                            <action selector="SendCheckInTimeWithSender:" destination="BSJ-RI-4EC" id="lZN-4j-RS3"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Tdm-CH-rzW"/>
@@ -315,13 +315,13 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="9oz-6n-6kO"/>
-                                <exclude reference="LDl-XT-ufk"/>
-                                <exclude reference="eHp-Ga-Le9"/>
-                                <exclude reference="hH8-Np-fn8"/>
-                                <exclude reference="jIQ-Ti-X2S"/>
-                                <exclude reference="q6O-Cu-jud"/>
-                                <exclude reference="rmv-gh-nDa"/>
+                                <exclude reference="6RK-kJ-K4N"/>
+                                <exclude reference="DpS-HG-Ids"/>
+                                <exclude reference="Pzi-QQ-Bw5"/>
+                                <exclude reference="eBV-hi-zrD"/>
+                                <exclude reference="gjT-9C-Lv0"/>
+                                <exclude reference="w3Z-P7-7G1"/>
+                                <exclude reference="z10-Z9-NPO"/>
                                 <exclude reference="6Pw-h5-9Ro"/>
                                 <exclude reference="73q-Gz-Xmg"/>
                                 <exclude reference="Dg9-78-gz4"/>
@@ -334,16 +334,16 @@
                                 <exclude reference="jM5-ke-obE"/>
                                 <exclude reference="wZ0-gm-CKq"/>
                                 <exclude reference="zYh-qh-pWE"/>
+                                <exclude reference="9oz-6n-6kO"/>
+                                <exclude reference="LDl-XT-ufk"/>
+                                <exclude reference="eHp-Ga-Le9"/>
+                                <exclude reference="hH8-Np-fn8"/>
+                                <exclude reference="jIQ-Ti-X2S"/>
+                                <exclude reference="q6O-Cu-jud"/>
+                                <exclude reference="rmv-gh-nDa"/>
                                 <exclude reference="BiU-rb-J7A"/>
                                 <exclude reference="ErA-6T-lBq"/>
                                 <exclude reference="t0r-ef-a1a"/>
-                                <exclude reference="6RK-kJ-K4N"/>
-                                <exclude reference="DpS-HG-Ids"/>
-                                <exclude reference="Pzi-QQ-Bw5"/>
-                                <exclude reference="eBV-hi-zrD"/>
-                                <exclude reference="gjT-9C-Lv0"/>
-                                <exclude reference="w3Z-P7-7G1"/>
-                                <exclude reference="z10-Z9-NPO"/>
                                 <exclude reference="Y45-JF-QVF"/>
                                 <exclude reference="rXx-wB-a4I"/>
                                 <exclude reference="xZX-1R-QwC"/>
@@ -358,14 +358,14 @@
                         <barButtonItem key="rightBarButtonItem" title="Edit Name" id="Srh-sa-LBh">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
-                                <action selector="editButtonTapped:" destination="BSJ-RI-4EC" id="huQ-fx-Kws"/>
+                                <action selector="editButtonTappedWithSender:" destination="BSJ-RI-4EC" id="Afe-wt-Y2y"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="bottomDateTextField" destination="FB2-QB-3Nh" id="sP9-Kj-FY4"/>
-                        <outlet property="contactImage" destination="jj6-Ph-LVi" id="q8p-CR-JSu"/>
+                        <outlet property="contactImage" destination="jj6-Ph-LVi" id="gXy-D6-38r"/>
                         <outlet property="dateTextField" destination="1Bk-9e-3tf" id="0SF-Rg-erQ"/>
                         <outlet property="dueDatePicker" destination="i5v-BK-YiP" id="fAE-Dp-57b"/>
                         <outlet property="editButtonLabel" destination="Srh-sa-LBh" id="EC3-9c-tKM"/>
@@ -385,11 +385,12 @@
                 </datePicker>
                 <tapGestureRecognizer id="ame-3B-q5a">
                     <connections>
+                        <action selector="screenTappedWithSender:" destination="BSJ-RI-4EC" id="bOc-hJ-hIu"/>
                         <outlet property="delegate" destination="BSJ-RI-4EC" id="sdg-vt-f6u"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1381" y="1016"/>
+            <point key="canvasLocation" x="1449" y="1140"/>
         </scene>
         <!--Message Detail View Controller-->
         <scene sceneID="Pir-8o-8Tv">
@@ -403,10 +404,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tUn-r9-XHG">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tUn-r9-XHG">
+                                <frame key="frameInset" minX="-4" minY="417" width="328" height="22"/>
                                 <color key="backgroundColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdE-33-zLI">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rdE-33-zLI">
+                                <frame key="frameInset" minX="6" minY="438" width="308"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="Eea-e1-BAZ"/>
                                 </constraints>
@@ -419,7 +422,8 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="PBt-gj-EVs">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="PBt-gj-EVs">
+                                <frame key="frameInset" minX="16" minY="418" width="288" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="8Tv-bh-hqH"/>
                                 </constraints>
@@ -465,7 +469,8 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lp6-hf-qxg">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lp6-hf-qxg">
+                                <frame key="frameInset" minY="439" width="320" height="1"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert" returnKeyType="done"/>
@@ -510,9 +515,9 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="nX7-vN-Zp2"/>
-                                <exclude reference="tDf-ph-FZY"/>
                                 <exclude reference="Cqo-cb-Zez"/>
                                 <exclude reference="Kgk-WI-XQH"/>
+                                <exclude reference="tDf-ph-FZY"/>
                                 <exclude reference="cRr-8w-VUs"/>
                                 <exclude reference="jsp-kq-BnQ"/>
                             </mask>
@@ -541,7 +546,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mgS-H4-Lsa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2158" y="680"/>
+            <point key="canvasLocation" x="2265" y="830"/>
         </scene>
         <!--Messages -->
         <scene sceneID="5RO-BO-Fyd">
@@ -926,8 +931,8 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="M8t-n3-NsL"/>
                                 <exclude reference="Rds-RO-EUQ"/>
+                                <exclude reference="M8t-n3-NsL"/>
                             </mask>
                         </variation>
                     </view>
@@ -942,7 +947,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2831" y="190"/>
+            <point key="canvasLocation" x="2931" y="546"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="XpZ-ZF-PLd">
@@ -950,6 +955,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="ptP-AN-0In" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="hS5-AH-wXJ">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>

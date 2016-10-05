@@ -32,10 +32,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
         
         findUsersCloudKitAccountAndRetore { (hasAccount) in }
+        setupTextFieldNotifications()
         numberTextField.delegate = self
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
-        
     }
     
     /// When User taps the Submit button it checks if the number entered was formatted correctly and then saves a User record.
@@ -95,9 +93,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     @IBAction func changePhotoButtonTapped(sender: AnyObject) {
-        
         imagePicker.delegate = self
-        
         let alert = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .ActionSheet)
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
             self.imagePicker.sourceType = .PhotoLibrary
@@ -114,7 +110,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
     }
     
-    
+    func setupTextFieldNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+    }
+
     /// Checks if the iCloud User has already made an account.
     func findUsersCloudKitAccountAndRetore(completion: (hasAccount: Bool) ->Void) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -134,7 +134,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                     if restoredUser {
                         self.wantsToRestoreTheirAccount({
                             completion(hasAccount: true)
-                            
                         })
                     } else {
                         self.choseToCreateNewAccount(userRecord.recordID, completion: {
@@ -351,10 +350,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     /// Alerts to User that they need to sign into iCloud
     func presentICloudAlert() {
         
-        let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To send and receive messages you need to be signed into your cloudkit account. Sign in and realaunch app", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To create an account you need to be signed into your cloudkit account. Please sign in and realaunch app", preferredStyle: .Alert)
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
 //        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
-//            let settingsUrl = NSURL(string: "prefs:root=CASTLE")
+//            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
 //            if let url = settingsUrl {
 //                UIApplication.sharedApplication().openURL(url)
 //            }

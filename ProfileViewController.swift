@@ -61,9 +61,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         loadingAlert("Updating Profile...")
         
         guard let newImage = imageView.image,
-            loggedInUser = loggedInUser,
-            newImageData = UIImagePNGRepresentation(newImage),
-            loggedInUserRecord = loggedInUser.cloudKitRecord  else {
+            let loggedInUser = loggedInUser,
+            let newImageData = UIImagePNGRepresentation(newImage),
+            let loggedInUserRecord = loggedInUser.cloudKitRecord  else {
                 self.dismissViewControllerAnimated(true, completion: nil)
                 return
         }

@@ -26,12 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerForRemoteNotifications()
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         self.window?.backgroundColor = .whiteColor()
-        
         return true
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        
+    
         guard let remoteDictionary = userInfo as? [String: NSObject] else {
             return
         }

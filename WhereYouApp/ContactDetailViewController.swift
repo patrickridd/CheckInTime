@@ -51,11 +51,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         setupFetchController(contact)
         setupView()
         setupImage()
-        
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
         updateWith(contact)
-        
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.updatedMessage(_:)), name: UpdatedMessages, object: nil)
     }
@@ -78,12 +76,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func setupFetchController(contact: User) {
-        
         let request = NSFetchRequest(entityName: "Message")
         let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
         let descriptorSenderID = NSSortDescriptor(key: "senderID", ascending: false)
         let sortDescriptorHasResponded = NSSortDescriptor(key: "hasResponded", ascending: true)
-        
         
         request.sortDescriptors = [descriptorSenderID, sortDescriptorHasResponded, descriptor]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
@@ -96,7 +92,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
-    @IBAction func editButtonTapped(sender: AnyObject) {
+    @IBAction func editButtonTappedWithSender(sender: AnyObject) {
         dispatch_async(dispatch_get_main_queue(), {
             if self.editButtonLabel.title == "Edit Name" {
                 self.nameLabel.hidden = true
@@ -171,7 +167,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         return true
     }
     
-    @IBAction func SendCheckInTime(sender: AnyObject) {
+    @IBAction func SendCheckInTimeWithSender(sender: AnyObject) {
         guard let sender = UserController.sharedController.loggedInUser,
             receiver = contact else {
                 return
@@ -227,7 +223,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
  
     
-    @IBAction func screenTapped(sender: AnyObject) {
+    @IBAction func screenTappedWithSender(sender: AnyObject) {
         dateTextField.resignFirstResponder()
         //  dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
     }
@@ -256,10 +252,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     func setupImage() {
         
-        let radius = self.contactImage.frame.size.height/2
-        self.contactImage.layer.masksToBounds = true
-        self.contactImage.layer.cornerRadius = radius
-        self.contactImage.clipsToBounds = true
+//        let radius = self.contactImage.frame.size.height/2
+//        self.contactImage.layer.masksToBounds = true
+//        self.contactImage.layer.cornerRadius = radius
+//        self.contactImage.clipsToBounds = true
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
