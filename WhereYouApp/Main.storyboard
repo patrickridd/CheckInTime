@@ -91,11 +91,19 @@
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ezy-Vd-uOn">
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                                <state key="normal" title="Edit Nickname">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="RQu-VD-BBd" firstAttribute="height" secondItem="ktJ-ad-oY9" secondAttribute="height" id="Zjj-BR-H2E"/>
+                                            <constraint firstItem="Ezy-Vd-uOn" firstAttribute="centerX" secondItem="RQu-VD-BBd" secondAttribute="centerX" id="qdT-9v-Nff"/>
                                             <constraint firstItem="RQu-VD-BBd" firstAttribute="width" secondItem="ktJ-ad-oY9" secondAttribute="width" id="rSE-qE-uAs"/>
+                                            <constraint firstItem="Ezy-Vd-uOn" firstAttribute="top" secondItem="RQu-VD-BBd" secondAttribute="bottom" constant="5" id="w6Y-o1-9lW"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -170,45 +178,41 @@
                                     <constraint firstAttribute="height" constant="0.5" id="tRe-5A-1lw"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="62" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Kxo-ug-x5D">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="96" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Kxo-ug-x5D">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="267" id="t0T-TL-zFO"/>
                                 </constraints>
                                 <color key="separatorColor" red="0.20784313730000001" green="0.72941176470000002" blue="0.73725490199999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="62" id="qPD-cW-tmy" customClass="ContactDetailTableViewCell" customModule="CheckInTime" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="62"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="96" id="qPD-cW-tmy" customClass="ContactDetailTableViewCell" customModule="CheckInTime" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qPD-cW-tmy" id="2d5-F0-EOO">
-                                            <frame key="frameInset" width="320" height="61"/>
+                                            <frame key="frameInset" width="320" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2U-KQ-lMW">
-                                                    <frame key="frameInset" minX="9" minY="8" width="101" height="16.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2U-KQ-lMW">
                                                     <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="14"/>
                                                     <color key="textColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clr-qf-ED1">
-                                                    <frame key="frameInset" minX="8" minY="32" width="297" height="12"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clr-qf-ED1">
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                                     <color key="textColor" red="0.1058823529" green="0.12549019610000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yHc-50-OuG">
-                                                    <frame key="frameInset" minX="8" minY="45" width="296" height="12"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yHc-50-OuG">
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-MediumItalic" family="Helvetica Neue" pointSize="10"/>
                                                     <color key="textColor" red="0.18823529410000001" green="0.2274509804" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="checkedInPending" translatesAutoresizingMaskIntoConstraints="NO" id="g8I-D8-xLo">
-                                                    <frame key="frameInset" minX="275" minY="2" width="30" height="30"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkedInPending" translatesAutoresizingMaskIntoConstraints="NO" id="g8I-D8-xLo">
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="UME-mf-UDI"/>
-                                                        <constraint firstAttribute="width" constant="30" id="xIK-fu-6HN"/>
+                                                        <constraint firstAttribute="height" constant="50" id="UME-mf-UDI"/>
+                                                        <constraint firstAttribute="width" constant="50" id="xIK-fu-6HN"/>
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
@@ -216,11 +220,10 @@
                                             <constraints>
                                                 <constraint firstItem="g8I-D8-xLo" firstAttribute="centerY" secondItem="o2U-KQ-lMW" secondAttribute="centerY" id="0W9-4b-Lk2"/>
                                                 <constraint firstItem="yHc-50-OuG" firstAttribute="top" secondItem="clr-qf-ED1" secondAttribute="bottom" constant="1" id="G7L-eu-DVe"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="yHc-50-OuG" secondAttribute="bottom" constant="-3.5" id="P2K-Yv-jvA"/>
                                                 <constraint firstItem="yHc-50-OuG" firstAttribute="leading" secondItem="2d5-F0-EOO" secondAttribute="leadingMargin" id="RfR-U8-IVJ"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="yHc-50-OuG" secondAttribute="trailing" constant="8" id="b9e-QA-28U"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="g8I-D8-xLo" secondAttribute="trailing" constant="7" id="fr0-MT-tZA"/>
-                                                <constraint firstItem="clr-qf-ED1" firstAttribute="top" secondItem="g8I-D8-xLo" secondAttribute="bottom" id="n66-au-YDT"/>
+                                                <constraint firstItem="clr-qf-ED1" firstAttribute="top" secondItem="g8I-D8-xLo" secondAttribute="bottom" constant="5" id="n66-au-YDT"/>
                                                 <constraint firstItem="clr-qf-ED1" firstAttribute="leading" secondItem="2d5-F0-EOO" secondAttribute="leadingMargin" id="pxZ-8m-cRT"/>
                                                 <constraint firstItem="o2U-KQ-lMW" firstAttribute="top" secondItem="2d5-F0-EOO" secondAttribute="topMargin" id="rNl-sb-103"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="clr-qf-ED1" secondAttribute="trailing" constant="7" id="rtL-lx-o8n"/>
@@ -228,6 +231,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="yHc-50-OuG" secondAttribute="bottom" constant="5" id="amD-KI-eSN"/>
+                                        </constraints>
                                         <connections>
                                             <outlet property="hasRespondedLabel" destination="o2U-KQ-lMW" id="El0-Yi-9bq"/>
                                             <outlet property="newMessageIcon" destination="g8I-D8-xLo" id="Gp5-yd-ZHZ"/>
@@ -390,7 +396,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1449" y="1140"/>
+            <point key="canvasLocation" x="1447.5" y="1140"/>
         </scene>
         <!--Message Detail View Controller-->
         <scene sceneID="Pir-8o-8Tv">
