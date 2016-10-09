@@ -34,8 +34,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var profileViewBox: UIView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var editButtonLabel: UIBarButtonItem!
     @IBOutlet weak var bottomDateTextField: NSLayoutConstraint!
+    @IBOutlet weak var editButtonLabel: UIButton!
     
     
     override func viewDidLoad() {
@@ -89,19 +89,18 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID" , cacheName: nil  )
         
         let _ = try? fetchedResultsController.performFetch()
-        
     }
     
-    @IBAction func editButtonTappedWithSender(sender: AnyObject) {
+    @IBAction func editButtonTapped(sender: AnyObject) {
         dispatch_async(dispatch_get_main_queue(), {
-            if self.editButtonLabel.title == "Edit Name" {
+            if self.editButtonLabel.titleLabel?.text == "Edit" {
+                self.editButtonLabel.setTitle("Save", forState: .Normal)
                 self.nameLabel.hidden = true
                 self.nameTextField.hidden = false
                 self.nameTextField.enabled = true
                 self.nameTextField.text = ""
                 self.nameTextField.placeholder = "Edit name..."
                 self.nameTextField.borderStyle = .RoundedRect
-                self.editButtonLabel.title = "Save"
                 self.editButtonLabel.tintColor = UIColor ( red: 1.0, green: 0.1629, blue: 0.4057, alpha: 1.0 )
             } else {
                 if let text = self.nameTextField.text where text.characters.count > 0  {
@@ -113,7 +112,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
                 self.nameTextField.borderStyle = .None
                 self.nameTextField.hidden = true
                 self.nameTextField.enabled = false
-                self.editButtonLabel.title = "Edit Name"
+                self.editButtonLabel.setTitle("Edit", forState: .Normal)
                 self.contact?.name = self.nameLabel.text
                 
                 UserController.sharedController.saveContext()
@@ -156,6 +155,51 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
+    @IBAction func reportButtonTapped(sender: AnyObject) {
+        let alert = UIAlertController(title: "Are you sure you want to report this user for abusive content or behavior?", message: nil, preferredStyle: .ActionSheet)
+        let noAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)
+        let yesAction = UIAlertAction(title: "Yes", style: .Default) { (_) in
+            guard let usersContact = self.contact else {
+                return
+            }
+            let reportContactRecord = CKRecord(recordType: "ReportedContact")
+            reportContactRecord["PhoneNumber"] = usersContact.phoneNumber
+            CloudKitManager.cloudKitController.saveRecord(reportContactRecord, completion: { (record, error) in
+                if let error = error {
+                    print("Error saving record. Error: \(error.localizedDescription)")
+                    self.presentTryAgain()
+                } else {
+                    self.presentSuccess()
+                }
+            })
+        }
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
+    func presentTryAgain() {
+        let alert = UIAlertController(title: "Something Went wrong. Please Try Again.", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+        
+    }
+    
+    
+    func presentSuccess() {
+        let alert = UIAlertController(title: "Successfully Reported User!", message: nil, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
+        alert.addAction(action)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+    }
+    
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
@@ -192,9 +236,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
+    
     /// Tells user that they can't sent CheckInTimes before the present time.
     func presentDateHasToBeInFuture() {
-            let alert = UIAlertController(title: "Time Conflict", message: "The CheckInTime can't be before the current time.", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Time Conflict", message: "The CheckInTime can't be before the current time.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alert.addAction(action)
         self.navigationController?.presentViewController(alert, animated: true, completion: nil)
@@ -221,7 +266,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
- 
+    
     
     @IBAction func screenTappedWithSender(sender: AnyObject) {
         dateTextField.resignFirstResponder()
@@ -252,10 +297,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     func setupImage() {
         
-//        let radius = self.contactImage.frame.size.height/2
-//        self.contactImage.layer.masksToBounds = true
-//        self.contactImage.layer.cornerRadius = radius
-//        self.contactImage.clipsToBounds = true
+        //        let radius = self.contactImage.frame.size.height/2
+        //        self.contactImage.layer.masksToBounds = true
+        //        self.contactImage.layer.cornerRadius = radius
+        //        self.contactImage.clipsToBounds = true
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

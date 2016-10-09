@@ -16,6 +16,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var numberFieldButtomConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var tapPhotoButton: UIButton!
+    @IBOutlet weak var submitButton: UIButton!
     
     let imagePicker = UIImagePickerController()
     
@@ -23,7 +24,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupImage()
+      //  setupImage()
         numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
@@ -195,7 +196,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
-                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-45
+                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-120
                 self.imageView.layoutIfNeeded()
                 
             })
@@ -315,19 +316,17 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         self.navigationItem.titleView = imageViewImage
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
         
-        buttonView.layer.masksToBounds = true
-        buttonView.layer.cornerRadius = 8
+        submitButton.layer.masksToBounds = true
+        submitButton.layer.cornerRadius = 8
         
     }
     
     
     func setupImage() {
-        
         let radius = imageView.frame.size.width/2
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = radius
-        
     }
     
     /// Presents a loading screen when creating account.
@@ -388,7 +387,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     func presentFailedToSave() {
-        let alert = UIAlertController(title: "We're Sorry. There was a problem saving your account.", message: "You may already have an account with us.", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "We're Sorry. There was a problem saving your account.", message: "You may already have an account with us or may not be signed in to iCloud.", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
         alert.addAction(action)
         dispatch_async(dispatch_get_main_queue(), {
