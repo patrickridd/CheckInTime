@@ -536,20 +536,20 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="PP0-zM-HvV">
-                        <barButtonItem key="rightBarButtonItem" title="Report" id="qbT-xc-Z9i">
-                            <color key="tintColor" red="1" green="0.2533796948" blue="0.44136510010000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <barButtonItem key="rightBarButtonItem" title="Call" id="qbT-xc-Z9i">
+                            <color key="tintColor" red="0.18665885925292969" green="0.22574791312217712" blue="0.31290793418884277" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
-                                <action selector="reportButtonTapped:" destination="ovw-5G-6fs" id="7kc-WT-HTK"/>
+                                <action selector="callButtonTapped:" destination="ovw-5G-6fs" id="PrL-mP-uWh"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addressLabel" destination="wVG-bb-7Dj" id="4QA-3K-LSv"/>
                         <outlet property="addressLabelTopConstraint" destination="Gae-dx-tmw" id="UIB-ed-yte"/>
+                        <outlet property="callButton" destination="qbT-xc-Z9i" id="tMv-20-kAn"/>
                         <outlet property="mapView" destination="CNa-Ia-dRJ" id="4IK-YZ-tB9"/>
                         <outlet property="messageLabel" destination="rdE-33-zLI" id="Yok-U0-kL7"/>
                         <outlet property="messageTextView" destination="Lp6-hf-qxg" id="qP8-UT-7eg"/>
-                        <outlet property="reportButton" destination="qbT-xc-Z9i" id="Nr6-Ka-8SW"/>
                         <outlet property="sendButton" destination="DYc-Xk-5XT" id="A57-FX-MIc"/>
                         <outlet property="timeDueLabel" destination="PBt-gj-EVs" id="jOW-WN-PeI"/>
                         <outlet property="titleLabel" destination="PP0-zM-HvV" id="0jg-q0-UI0"/>

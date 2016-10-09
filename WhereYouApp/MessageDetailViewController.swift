@@ -23,7 +23,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
     let tabBarView = UIView()
 
     
-    @IBOutlet weak var reportButton: UIBarButtonItem!
+    @IBOutlet weak var callButton: UIBarButtonItem!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var timeDueLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
@@ -94,7 +94,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         super.viewWillDisappear(animated)
     }
     
-    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         guard let user = UserController.sharedController.loggedInUser,
@@ -117,11 +116,29 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             timeDueLabel.text = "Sent by a Deleted Contact"
             return
         }
-        
         updateWith(message)
-
     }
     
+    
+    @IBAction func callButtonTapped(sender: AnyObject) {
+        guard let phoneNumber = usersContact?.phoneNumber else {
+                return
+        }
+        guard let callURL = NSURL(string: "tel://\(phoneNumber)") else {
+            return
+        }
+        let alert = UIAlertController(title: "Would you like to call \(usersContact?.name ?? phoneNumber)?", message: nil, preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let callAction = UIAlertAction(title: "Call", style: .Default) { (_) in
+            UIApplication.sharedApplication().openURL(callURL)
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(callAction)
+        dispatch_async(dispatch_get_main_queue(), {
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
+
+    }
     
     // Updates View with Message Details
     func updateWith(message: Message) {
