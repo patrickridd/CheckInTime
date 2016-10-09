@@ -17,15 +17,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var tapPhotoButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var blurView: UIVisualEffectView!
+    @IBOutlet weak var darkBackground: UIView!
+    @IBOutlet weak var checkedInTimeImage: UIImageView!
     
     let imagePicker = UIImagePickerController()
     
     let toolbarView = UIView(frame: CGRectMake(0, 0, 10, 40))
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-
+        
         numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
@@ -79,7 +82,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     
     /* When user taps "Already have an account?" it calls findUsersCloudKitAccountAndRetore to check if the iCloud acct has CheckInTime acct
-    */
+     */
     @IBAction func findAccountButtonTapped(sender: AnyObject) {
         findUsersCloudKitAccountAndRetore { (hasAccount) in
             if !hasAccount {
@@ -116,7 +119,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
-
+    
     /// Checks if the iCloud User has already made an account.
     func findUsersCloudKitAccountAndRetore(completion: (hasAccount: Bool) ->Void) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -195,11 +198,18 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     /// Raises the number textField above the keyboard.
     func keyboardWillShowNotification(notification: NSNotification) {
         if let userInfoDictionary = notification.userInfo, keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            blurView.hidden = false
+            darkBackground.hidden = false
+            if numberTextField.text?.characters.count == 0 {
+                checkedInTimeImage.image = UIImage(named: "notCheckedInPinkLogin")
+            } else if numberTextField.text?.characters.count >= 12{
+                checkedInTimeImage.image = UIImage(named: "checkedInBiggerSize")
+                
+            }
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
                 self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-120
                 self.imageView.layoutIfNeeded()
-                
             })
         }
     }
@@ -207,11 +217,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     /// Lowers the number textField before the keyboard is hidden.
     func keyboardWillHide(notification: NSNotification) {
         UIView.animateWithDuration(0.8) {
-            
-            self.numberFieldButtomConstraint.constant = 15
+            self.darkBackground.hidden = true
+            self.blurView.hidden = true
+            self.numberFieldButtomConstraint.constant = 10
             self.imageView.layoutIfNeeded()
         }
     }
+    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
@@ -226,7 +238,16 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     /// Formats the input from the User
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if numberTextField.text?.characters.count >= 12 {
+            checkedInTimeImage.image = UIImage(named: "checkedInBiggerSize")
+        } else if numberTextField.text?.characters.count < 0 {
+            checkedInTimeImage.image = UIImage(named: "notCheckedInPinkLogin")
+        } else {
+            checkedInTimeImage.image = UIImage(named: "checkedInPendingLogin")
+        }
+        
         if (textField == numberTextField) {
+            
             let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
             let components = newString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
             let decimalString = components.joinWithSeparator("") as NSString
@@ -309,11 +330,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     /// Sets up the titleView with the logo
     func setupView() {
+        darkBackground.hidden = true
+        blurView.hidden = true
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
         let image = UIImage(named: "CheckInTimeTitleWhiteSmall")
         let imageViewImage = UIImageView(image: image)
         toolbarView.backgroundColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 0.7)
-      
+        
         numberTextField.inputAccessoryView = toolbarView
         customToolbarView()
         
@@ -327,7 +350,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     func customToolbarView() {
         let doneButton = UIButton()
-       
+        
         toolbarView.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -335,6 +358,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         doneButton.setTitle("Done", forState: .Normal)
         doneButton.setTitleColor(.whiteColor(), forState: .Normal)
         doneButton.addTarget(self, action: #selector(doneButtonTapped), forControlEvents: .TouchUpInside)
+        toolbarView.addSubview(doneButton)
         
         doneButton.centerXAnchor.constraintEqualToAnchor(toolbarView.trailingAnchor, constant: -30).active = true
         doneButton.centerYAnchor.constraintEqualToAnchor(toolbarView.centerYAnchor).active = true
@@ -348,7 +372,6 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             textField.resignFirstResponder()
         }
     }
-
     
     func setupImage() {
         let radius = imageView.frame.size.width/2
@@ -379,13 +402,13 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         let alert = UIAlertController(title: "Not Signed Into iCloud Account", message:"To create an account you need to be signed into your cloudkit account. Please sign in and realaunch app", preferredStyle: .Alert)
         let dismissAction = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
-//        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
-//            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
-//            if let url = settingsUrl {
-//                UIApplication.sharedApplication().openURL(url)
-//            }
-//        }
-//        alert.addAction(settingsAction)
+        //        let settingsAction = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
+        //            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
+        //            if let url = settingsUrl {
+        //                UIApplication.sharedApplication().openURL(url)
+        //            }
+        //        }
+        //        alert.addAction(settingsAction)
         alert.addAction(dismissAction)
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)

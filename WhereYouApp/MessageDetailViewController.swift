@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 import CloudKit
 
-class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate {
+class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, UITextViewDelegate, MKMapViewDelegate {
     
     var message: Message?
     var loggedInUser: User?
@@ -47,20 +47,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             let region = MKCoordinateRegion(center: coordinate, span: span)
             
             mapView.setRegion(region, animated: true)
-            
-            let myAnnotation = MKPointAnnotation()
-            let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay((loggedInUser?.phoneNumber)!)
-            myAnnotation.title = loggedInUser?.name ?? formatedPhoneNumber
-            
-            if let text = messageTextView.text where text != self.defaultMessage {
-                myAnnotation.subtitle = text
-            } else if let loggedInName = loggedInUser?.name ?? loggedInUser?.phoneNumber {
-                myAnnotation.subtitle = "Where \(loggedInName) is"
-            }
-            myAnnotation.coordinate = coordinate
-            mapView.addAnnotation(myAnnotation)
             mapView.showsUserLocation = true
-            
         }
     }
     
@@ -81,6 +68,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
         self.geocoder = CLGeocoder()
         messageTextView.delegate = self
+        mapView.delegate = self
         setupView()
         setupTabBar()
         locationManager = CLLocationManager()
@@ -218,7 +206,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         }
         
         // Create the coordinate through the latitude and longitude
-        mapView.showsUserLocation = true
         let latitudeDegrees = CLLocationDegrees(Double(latitude))
         let longitudeDegrees = CLLocationDegrees(Double(longitude))
         let location = CLLocation(latitude: latitudeDegrees, longitude: longitudeDegrees)
@@ -250,6 +237,49 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         
     }
     
+    /// Sets annotation Image to Flag Pole.
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !annotation.isKindOfClass(MKUserLocation) else {
+            return nil
+        }
+        
+        let annotationIdentifier = "AnnotationIdentifier"
+        
+        var annotationView: MKAnnotationView?
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(annotationIdentifier) {
+            annotationView = dequeuedAnnotationView
+            annotationView?.annotation = annotation
+        }
+        else {
+            let av = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            av.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
+            annotationView = av
+        }
+        if let annotationView = annotationView {
+            annotationView.canShowCallout = true
+            annotationView.image = UIImage(named: "checkedInMapView")
+        }
+        return annotationView
+    }
+    
+    
+    /// Call out sends User to Maps for directions.
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            
+            if let annotation = view.annotation {
+                let latitude = annotation.coordinate.latitude
+                let longitude = annotation.coordinate.longitude
+                
+                let coordinate = CLLocationCoordinate2DMake(latitude,longitude)
+                let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate, addressDictionary:nil))
+                mapItem.name = annotation.title ?? usersContact?.name ?? usersContact?.phoneNumber
+                mapItem.openInMapsWithLaunchOptions([MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving])
+            }
+        }
+    }
+
+    
     // Updates VC to show the receiver fields to fill out and their current location.
     func updateWithAToBeFilledRequestMessage(message: Message) {
         
@@ -275,6 +305,7 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         checkCoreLocationPermission()
+
         
     }
     
@@ -327,7 +358,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
             return
         }
         // Get current location
-        
         guard let location = location else {
             print("Couldn't get Current Location")
             return
@@ -338,8 +368,20 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
 
         message.latitude = latitude
         message.longitude = longitude
-        
+        let coordinate = CLLocationCoordinate2DMake(latitude,longitude)
 
+        let myAnnotation = MKPointAnnotation()
+        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay((loggedInUser.phoneNumber))
+        myAnnotation.title = loggedInUser.name ?? formatedPhoneNumber
+        myAnnotation.coordinate = coordinate
+
+        if let text = messageTextView.text where text != self.defaultMessage {
+            myAnnotation.subtitle = text
+        } else  {
+            myAnnotation.subtitle = "Where \(loggedInUser.name ?? loggedInUser.phoneNumber) is"
+        }
+        mapView.addAnnotation(myAnnotation)
+        mapView.showsUserLocation = false
         // If user doesn't put text in the text view then input a default message.
         if messageTextView.text != defaultMessage {
             message.text = messageTextView.text
@@ -408,7 +450,6 @@ class MessageDetailViewController: UIViewController, CLLocationManagerDelegate, 
         self.messageLabel.text = ""
         self.messageLabel.hidden = false
         
-        let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(loggedInUser.phoneNumber)
 
         // Put message text in label to show user what they sent.
         if let text = message.text {
