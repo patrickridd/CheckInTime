@@ -20,11 +20,12 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     let imagePicker = UIImagePickerController()
     
-    
+    let toolbarView = UIView(frame: CGRectMake(0, 0, 10, 40))
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-      //  setupImage()
+
         numberTextField.delegate = self
         CloudKitManager.cloudKitController.checkIfUserIsLoggedIn { (signedIn) in
             if !signedIn {
@@ -311,7 +312,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         UINavigationBar.appearance().barTintColor = UIColor ( red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 )
         let image = UIImage(named: "CheckInTimeTitleWhiteSmall")
         let imageViewImage = UIImageView(image: image)
-        
+        toolbarView.backgroundColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 0.7)
+      
+        numberTextField.inputAccessoryView = toolbarView
+        customToolbarView()
         
         self.navigationItem.titleView = imageViewImage
         UINavigationBar.appearance().barTintColor = UIColor ( red: 0.2078, green: 0.7294, blue: 0.7373, alpha: 1.0 )
@@ -321,6 +325,30 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
     }
     
+    func customToolbarView() {
+        let doneButton = UIButton()
+       
+        toolbarView.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        doneButton.backgroundColor = .clearColor()
+        doneButton.setTitle("Done", forState: .Normal)
+        doneButton.setTitleColor(.whiteColor(), forState: .Normal)
+        doneButton.addTarget(self, action: #selector(doneButtonTapped), forControlEvents: .TouchUpInside)
+        
+        doneButton.centerXAnchor.constraintEqualToAnchor(toolbarView.trailingAnchor, constant: -30).active = true
+        doneButton.centerYAnchor.constraintEqualToAnchor(toolbarView.centerYAnchor).active = true
+        doneButton.widthAnchor.constraintEqualToConstant(50)
+        doneButton.heightAnchor.constraintEqualToConstant(20).active = true
+    }
+    
+    func doneButtonTapped(sender: UIButton!) {
+        print("Done Button Tapped")
+        [numberTextField].forEach { (textField) in
+            textField.resignFirstResponder()
+        }
+    }
+
     
     func setupImage() {
         let radius = imageView.frame.size.width/2

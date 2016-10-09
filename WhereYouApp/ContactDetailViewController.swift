@@ -17,7 +17,9 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     var contact: User?
     var fetchedResultsController: NSFetchedResultsController!
     let moc = Stack.sharedStack.managedObjectContext
-    
+    let toolbarView = UIView(frame: CGRectMake(0, 0, 10, 40))
+    let doneButton = UIButton()
+
     
     let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -47,7 +49,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if contact.hasAppAccount == false {
             self.presentNoUserAccount(contact)
         }
-        
+
         setupFetchController(contact)
         setupView()
         setupImage()
@@ -58,13 +60,36 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         nc.addObserver(self, selector: #selector(self.updatedMessage(_:)), name: UpdatedMessages, object: nil)
     }
     
+    func customToolbarView() {
+        toolbarView.backgroundColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 0.7)
+
+        toolbarView.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        doneButton.backgroundColor = .clearColor()
+        doneButton.setTitle("Done", forState: .Normal)
+        doneButton.setTitleColor(.whiteColor(), forState: .Normal)
+        doneButton.addTarget(self, action: #selector(doneButtonTapped), forControlEvents: .TouchUpInside)
+        toolbarView.addSubview(doneButton)
+
+        doneButton.centerXAnchor.constraintEqualToAnchor(toolbarView.trailingAnchor, constant: -30).active = true
+        doneButton.centerYAnchor.constraintEqualToAnchor(toolbarView.centerYAnchor).active = true
+        doneButton.widthAnchor.constraintEqualToConstant(50)
+        doneButton.heightAnchor.constraintEqualToConstant(20).active = true
+    }
     
+    func doneButtonTapped(sender: UIButton!) {
+        print("Done Button Tapped")
+        [dateTextField].forEach { (textField) in
+            textField.resignFirstResponder()
+        }
+    }
+
     func updatedMessage(notification: NSNotification){
         self.tableView.reloadData()
     }
     
     func updateWith(contact: User) {
-        
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
         
         self.contactImage.image = contact.photo
@@ -274,6 +299,11 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func setupView() {
+        
+        dateTextField.inputAccessoryView = toolbarView
+        dateTextField.keyboardAppearance = .Default
+        dueDatePicker.backgroundColor = UIColor.darkGrayColor()
+        customToolbarView()
         nameTextField.hidden = true
         nameLabel.layer.masksToBounds = true
         nameLabel.layer.cornerRadius = 5
