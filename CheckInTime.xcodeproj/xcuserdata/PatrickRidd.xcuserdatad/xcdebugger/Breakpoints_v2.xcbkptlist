@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/MessageController.swift"
-            timestampString = "497764080.231849"
+            timestampString = "497846016.092136"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "MessageController"
             landmarkType = "3">
          </BreakpointContent>
@@ -36,12 +36,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WhereYouApp/MessageController.swift"
-            timestampString = "497764080.231849"
+            timestampString = "497846016.092136"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "scheduleLocalNotificationForResponseCheckIn(_:)"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
+            landmarkName = "scheduleLocalNotificationForResponseCheckIn(message:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

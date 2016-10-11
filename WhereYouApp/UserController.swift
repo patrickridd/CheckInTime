@@ -110,14 +110,13 @@ class UserController {
                     }
                     print("You are subscribed to received messages")
                 }
-                MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
+           // MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
                 completion(hasAccount: true, hasConnection: true)
             })
         }
     }
     
     /// To sync the simulator with a picture
-    
     func getNewPhotosFromContacts(contacts: [User], completion: ()-> Void) {
         for contact in contacts {
             self.fetchUsersCloudKitRecord(contact, completion: { (record) in

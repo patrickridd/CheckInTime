@@ -153,8 +153,9 @@ class MessageController {
             }
         }
     }
+    
     /*
-     Fetches Messages from cloudkit that havent been saved to core data yet.
+     Fetches Messages from cloudkit that havent been saved to core data yet (for simulator).
      */
     
     func fetchUnsyncedMessagesFromCloudKitToCoreData(user: User) {
