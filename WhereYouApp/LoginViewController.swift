@@ -15,11 +15,11 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var numberTextField: UITextField!
     @IBOutlet weak var numberFieldButtomConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
-    @IBOutlet weak var tapPhotoButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var blurView: UIVisualEffectView!
     @IBOutlet weak var darkBackground: UIView!
     @IBOutlet weak var checkedInTimeImage: UIImageView!
+    @IBOutlet weak var tapToChangePhotoLabel: UILabel!
     
     let imagePicker = UIImagePickerController()
     
@@ -99,11 +99,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
-    @IBAction func screenTapped(sender: AnyObject) {
-        numberTextField.resignFirstResponder()
-    }
-    
-    @IBAction func changePhotoButtonTapped(sender: AnyObject) {
+    @IBAction func imagedTappedWithSender(sender: AnyObject) {
+        tapToChangePhotoLabel.hidden = true
         imagePicker.delegate = self
         let alert = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .ActionSheet)
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .Default) { (_) in
@@ -119,7 +116,10 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             // this is the center of the screen currently but it can be any point in the view
             self.presentViewController(alert, animated: true, completion: nil)
         })
+
     }
+    
+   
     
     func setupTextFieldNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name: UIKeyboardWillShowNotification, object: nil)

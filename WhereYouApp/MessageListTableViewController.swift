@@ -182,7 +182,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     }
     
     
-    
     // Data Source Methods
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -292,7 +291,6 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     
     // MARK: - Navigation
-    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

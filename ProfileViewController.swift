@@ -23,6 +23,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
         view.layoutIfNeeded()
+        setupTitleView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -111,6 +112,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(alert, animated: true, completion: nil)
         })
+        
+    }
+    
+    func setupTitleView(){
+        
+        if  let font = UIFont(name: "Helvetica", size: 24) {
+            let attributes =
+                [NSForegroundColorAttributeName: UIColor.whiteColor(),
+                 NSFontAttributeName: font]
+            UINavigationBar.appearance().titleTextAttributes = attributes
+            
+            self.title = NumberController.sharedController.formatPhoneForDisplay((loggedInUser?.phoneNumber)!) ?? ""
+        }
         
     }
     

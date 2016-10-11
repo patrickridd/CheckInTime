@@ -41,6 +41,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var bottomDateTextField: NSLayoutConstraint!
     @IBOutlet weak var editButtonLabel: UIButton!
     @IBOutlet weak var blurView: UIVisualEffectView!
+    @IBOutlet weak var centerViewForLabel: UIView!
+    @IBOutlet weak var centerViewForLabelBottomConstraint: NSLayoutConstraint!
     
     
     override func viewDidLoad() {
@@ -53,7 +55,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if contact.hasAppAccount == false {
             self.presentNoUserAccount(contact)
         }
-        
+        centerViewForLabel.hidden = true
         setupFetchController(contact)
         setupView()
         fetchedResultsController.delegate = self
@@ -71,7 +73,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func setupNotifications() {
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.updatedMessage(_:)), name: UpdatedMessages, object: nil)
-        nc.addObserver(self, selector: #selector(unhideBlur(_:)), name:UIKeyboardWillShowNotification, object: nil)
+        nc.addObserver(self, selector: #selector(keyboardWillShowNotification(_:)), name:UIKeyboardWillShowNotification, object: nil)
+        nc.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func customToolbarView() {
@@ -104,9 +107,28 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         self.tableView.reloadData()
     }
     
-    func unhideBlur(notification: NSNotification) {
-        blurView.hidden = false
+  
+    func keyboardWillShowNotification(notification: NSNotification) {
+        if let userInfoDictionary = notification.userInfo, let keyboardFrameValue = userInfoDictionary[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            blurView.hidden = false
+            centerViewForLabel.hidden = false
+        
+            let keyboardFrame = keyboardFrameValue.CGRectValue()
+            UIView.animateWithDuration(0.8, animations: {
+                self.centerViewForLabelBottomConstraint.constant = keyboardFrame.size.height-80
+            })
+        }
+    
     }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        UIView.animateWithDuration(0.8) {
+            self.blurView.hidden = true
+            self.centerViewForLabel.hidden = true
+        }
+    }
+
+    
     
     func updateWith(contact: User) {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
