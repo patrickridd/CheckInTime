@@ -13,13 +13,15 @@ import CloudKit
 
 class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
-    
+    let newView = UIView()
+    let setCheckInTimeLabel = UILabel()
+
     var contact: User?
     var fetchedResultsController: NSFetchedResultsController!
     let moc = Stack.sharedStack.managedObjectContext
     let toolbarView = UIView(frame: CGRectMake(0, 0, 10, 40))
     let doneButton = UIButton()
-
+    
     
     let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -38,10 +40,12 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var bottomDateTextField: NSLayoutConstraint!
     @IBOutlet weak var editButtonLabel: UIButton!
+    @IBOutlet weak var blurView: UIVisualEffectView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         nameTextField.delegate = self
         guard let contact = contact else {
             return
@@ -49,20 +53,30 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         if contact.hasAppAccount == false {
             self.presentNoUserAccount(contact)
         }
-
+        
         setupFetchController(contact)
         setupView()
-        setupImage()
         fetchedResultsController.delegate = self
         dateTextField.inputView = dueDatePicker
+        dueDatePicker.minimumDate = NSDate()
         updateWith(contact)
+        setupNotifications()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupImage()
+    }
+    
+    func setupNotifications() {
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(self.updatedMessage(_:)), name: UpdatedMessages, object: nil)
+        nc.addObserver(self, selector: #selector(unhideBlur(_:)), name:UIKeyboardWillShowNotification, object: nil)
     }
     
     func customToolbarView() {
-        toolbarView.backgroundColor = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 0.7)
-
+        toolbarView.backgroundColor = UIColor(red: 0.19, green: 0.23, blue: 0.31, alpha: 0.90)
+        
         toolbarView.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -71,7 +85,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         doneButton.setTitleColor(.whiteColor(), forState: .Normal)
         doneButton.addTarget(self, action: #selector(doneButtonTapped), forControlEvents: .TouchUpInside)
         toolbarView.addSubview(doneButton)
-
+        
         doneButton.centerXAnchor.constraintEqualToAnchor(toolbarView.trailingAnchor, constant: -30).active = true
         doneButton.centerYAnchor.constraintEqualToAnchor(toolbarView.centerYAnchor).active = true
         doneButton.widthAnchor.constraintEqualToConstant(50)
@@ -83,10 +97,15 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         [dateTextField].forEach { (textField) in
             textField.resignFirstResponder()
         }
+        blurView.hidden = true
     }
-
+    
     func updatedMessage(notification: NSNotification){
         self.tableView.reloadData()
+    }
+    
+    func unhideBlur(notification: NSNotification) {
+        blurView.hidden = false
     }
     
     func updateWith(contact: User) {
@@ -102,11 +121,11 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     func setupFetchController(contact: User) {
         let request = NSFetchRequest(entityName: "Message")
-        let descriptor = NSSortDescriptor(key: "timeDue", ascending: false)
+        let descriptor = NSSortDescriptor(key: "timeDue", ascending: true)
         let descriptorSenderID = NSSortDescriptor(key: "senderID", ascending: false)
         let sortDescriptorHasResponded = NSSortDescriptor(key: "hasResponded", ascending: true)
         
-        request.sortDescriptors = [descriptorSenderID, sortDescriptorHasResponded, descriptor]
+        request.sortDescriptors = [descriptorSenderID, descriptor, sortDescriptorHasResponded]
         let receiverPredicate = NSPredicate(format: "receiver == %@", argumentArray: [contact])
         let senderPredicate = NSPredicate(format: "sender == %@", argumentArray: [contact])
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [receiverPredicate,senderPredicate])
@@ -228,6 +247,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
         dateTextField.text = dateFormatter.stringFromDate(dueDatePicker.date)
+        blurView.hidden = true
         dateTextField.resignFirstResponder()
         if gestureRecognizer is UITapGestureRecognizer {
             let location = touch.locationInView(tableView)
@@ -299,11 +319,13 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func setupView() {
-        
+        blurView.hidden = true
         dateTextField.inputAccessoryView = toolbarView
         dateTextField.keyboardAppearance = .Default
-        dueDatePicker.backgroundColor = UIColor.darkGrayColor()
+        dueDatePicker.backgroundColor = ColorPalette.blueCheckIn
+        dueDatePicker.setValue(UIColor.whiteColor(), forKeyPath: "textColor")
         customToolbarView()
+      //  setupLabel()
         nameTextField.hidden = true
         nameLabel.layer.masksToBounds = true
         nameLabel.layer.cornerRadius = 5
@@ -325,12 +347,31 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
-    func setupImage() {
+    func setupLabel() {
         
-        //        let radius = self.contactImage.frame.size.height/2
-        //        self.contactImage.layer.masksToBounds = true
-        //        self.contactImage.layer.cornerRadius = radius
-        //        self.contactImage.clipsToBounds = true
+        newView.alpha = 1.0
+        newView.backgroundColor = .blueColor()
+        newView.translatesAutoresizingMaskIntoConstraints = false
+        newView.topAnchor.constraintEqualToAnchor(tableView.topAnchor).active = true
+        newView.bottomAnchor.constraintEqualToAnchor(toolbarView.topAnchor).active = true
+        
+        newView.rightAnchor.constraintEqualToAnchor(tableView.rightAnchor).active = true
+        newView.leftAnchor.constraintEqualToAnchor(tableView.leftAnchor).active = true
+        
+        newView.addSubview(setCheckInTimeLabel)
+        setCheckInTimeLabel.centerYAnchor.constraintEqualToAnchor(newView.centerYAnchor).active = true
+        setCheckInTimeLabel.centerXAnchor.constraintEqualToAnchor(newView.centerXAnchor).active = true
+        setCheckInTimeLabel.text = "Set CheckInTime"
+        setCheckInTimeLabel.alpha = 1.0
+    }
+    
+    func setupImage() {
+        self.contactImage.layer.masksToBounds = true
+        self.contactImage.clipsToBounds = true
+        let radius = self.contactImage.frame.size.width/2
+        self.contactImage.layer.cornerRadius = radius
+
+
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

@@ -92,6 +92,10 @@ class UserController {
             return
         }
         self.fetchContactsFromCoreData { (contacts) in
+//            self.getNewPhotosFromContacts(contacts, completion: { 
+//                
+//                
+//            })
             self.fetchUsersCloudKitRecord(loggedInUser, completion: { (record) in
                 // Subscribe to Message Changes.
                 guard let _ = record else {
@@ -106,11 +110,28 @@ class UserController {
                     }
                     print("You are subscribed to received messages")
                 }
+                MessageController.sharedController.fetchUnsyncedMessagesFromCloudKitToCoreData(loggedInUser)
                 completion(hasAccount: true, hasConnection: true)
             })
         }
     }
     
+    /// To sync the simulator with a picture
+    
+    func getNewPhotosFromContacts(contacts: [User], completion: ()-> Void) {
+        for contact in contacts {
+            self.fetchUsersCloudKitRecord(contact, completion: { (record) in
+                guard let record = record else {
+                    return
+                }
+                let updateContact = User(record: record)
+                updateContact?.name = contact.name
+                self.deleteContactsFromCoreData([contact])
+                completion()
+            })
+            
+        }
+    }
     
     
     /// Fetches all users in core data except the Logged In User

@@ -21,6 +21,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     override func viewDidLoad() {
 
         super.viewDidLoad()
+        tableView.estimatedRowHeight = 150
+
         self.automaticallyAdjustsScrollViewInsets = false
         MessageController.sharedController.fetchedResultsController.delegate = self
         UserController.sharedController.checkForCoreDataUserAccount({ (hasAccount, hasConnection) in
@@ -40,7 +42,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
        
 
     }
-    
+       
     override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
         tableView.reloadData()
@@ -124,7 +126,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     func presentLoginScreen() {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let loginVC = storyBoard.instantiateViewControllerWithIdentifier("loginScreen")
+        let loginVC = storyBoard.instantiateViewControllerWithIdentifier("IntroPageViewController")
         dispatch_async(dispatch_get_main_queue(), {
             self.presentViewController(loginVC, animated: true, completion: nil)
         })
@@ -173,7 +175,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     
     func presentProfilePage() {
         let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-        let profilePage = storyBoard.instantiateViewControllerWithIdentifier("profilePage")
+        let profilePage = storyBoard.instantiateViewControllerWithIdentifier("profilePageNav")
                 dispatch_async(dispatch_get_main_queue(), {
                     self.presentViewController(profilePage, animated: true, completion: nil)
         })
@@ -195,14 +197,18 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
         return sections[section].numberOfObjects
     }
     
+    
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCellWithIdentifier("messageCell", forIndexPath: indexPath) as? MessageTableViewCell, message = MessageController.sharedController.fetchedResultsController.objectAtIndexPath(indexPath) as? Message  else {
             return UITableViewCell()
         }
-       
+        
         cell.updateWith(message)
         return cell
     }
+    
+    
     
     // Override to support editing the table view.
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

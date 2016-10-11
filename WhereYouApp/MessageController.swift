@@ -26,11 +26,11 @@ class MessageController {
     /// Fetches all messages from CoreData.
     func setupFetchController() {
         let request = NSFetchRequest(entityName: "Message")
-        let sortDescriptor = NSSortDescriptor(key: "timeDue", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "timeDue", ascending: true)
         let sortDescriptorHasResponded = NSSortDescriptor(key: "hasResponded", ascending: true)
         let sortDescriptorSender = NSSortDescriptor(key: "senderID", ascending: false)
         
-        request.sortDescriptors = [sortDescriptorSender, sortDescriptorHasResponded,sortDescriptor]
+        request.sortDescriptors = [sortDescriptorSender, sortDescriptor,sortDescriptorHasResponded]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: moc, sectionNameKeyPath: "senderID", cacheName: nil)
         let _ = try? fetchedResultsController.performFetch()
@@ -50,10 +50,8 @@ class MessageController {
      */
     
     func createMessage(sender: User, receiver: User, timeDue: NSDate, completion: (messageSent: Bool, messageRecord: CKRecord, message: Message)->Void) {
-        
         // create new Message
         let message = Message(timeDue: timeDue, sender: sender, receiver: receiver)
-        
         // Create CKRecord and give your model the record and recordName
         // recordName can then be fetched from core data
         let messageRecord = CKRecord(recordType: Message.recordType)
@@ -125,7 +123,6 @@ class MessageController {
                 self.saveContext()
             }
         }
-        
     }
     
     /*
@@ -193,7 +190,10 @@ class MessageController {
             } else {
                 print("No new messages from cloudkit found")
             }
-            self.saveContext()
+            self.moc.performBlock({
+                self.saveContext()
+       
+            })
         }
     }
     

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2111F94A1DAC77F300E84A2C /* IntroductionPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2111F9491DAC77F300E84A2C /* IntroductionPageViewController.swift */; };
 		21188A491D88A9F600DABF57 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21188A481D88A9F600DABF57 /* Main.storyboard */; };
 		21488A461D8CFE3000434E4E /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */; };
 		21488A4B1D8DBDA100434E4E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21488A4A1D8DBDA100434E4E /* CloudKit.framework */; };
@@ -17,6 +18,7 @@
 		21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AEA87B1D736770005EF030 /* AppDelegate.swift */; };
 		21AEA8831D736770005EF030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA8821D736770005EF030 /* Assets.xcassets */; };
 		21AEA8861D736770005EF030 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21AEA8841D736770005EF030 /* LaunchScreen.storyboard */; };
+		21B6A43B1DAADFBF00D23D7F /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B6A43A1DAADFBF00D23D7F /* ColorPalette.swift */; };
 		21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */; };
 		21D476AB1D74CDE10094FCBC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */; };
 		21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */; };
@@ -34,6 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2111F9491DAC77F300E84A2C /* IntroductionPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionPageViewController.swift; path = ../IntroductionPageViewController.swift; sourceTree = "<group>"; };
 		21188A481D88A9F600DABF57 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		21488A451D8CFE3000434E4E /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "../User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		21488A491D8DBD0100434E4E /* CheckInTime.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CheckInTime.entitlements; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 		21AEA8821D736770005EF030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21AEA8851D736770005EF030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21AEA8871D736770005EF030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21B6A43A1DAADFBF00D23D7F /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		21D476A81D74CD780094FCBC /* MessageListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageListTableViewController.swift; sourceTree = "<group>"; };
 		21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = ../ProfileViewController.swift; sourceTree = "<group>"; };
 		21D476AE1D74CEF50094FCBC /* ContactsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactsTableViewController.swift; path = ../ContactsTableViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 				21D476B01D74CF230094FCBC /* ContactDetailViewController.swift */,
 				216B8AF61D7F83E700FB33CF /* ContactDetailTableViewCell.swift */,
 				21D476AA1D74CDE10094FCBC /* ProfileViewController.swift */,
+				2111F9491DAC77F300E84A2C /* IntroductionPageViewController.swift */,
 				21188A481D88A9F600DABF57 /* Main.storyboard */,
 			);
 			name = "View Controller";
@@ -143,6 +148,7 @@
 				21D476FD1D75FC580094FCBC /* User.swift */,
 				21D477011D75FC580094FCBC /* Message.swift */,
 				216B8B161D81084100FB33CF /* CustomImageView.swift */,
+				21B6A43A1DAADFBF00D23D7F /* ColorPalette.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -256,8 +262,10 @@
 				21D476B91D74D1010094FCBC /* Model.xcdatamodeld in Sources */,
 				21AEA87C1D736770005EF030 /* AppDelegate.swift in Sources */,
 				21D476AF1D74CEF50094FCBC /* ContactsTableViewController.swift in Sources */,
+				21B6A43B1DAADFBF00D23D7F /* ColorPalette.swift in Sources */,
 				21D476A91D74CD780094FCBC /* MessageListTableViewController.swift in Sources */,
 				21D476B31D74CFC70094FCBC /* MessageDetailViewController.swift in Sources */,
+				2111F94A1DAC77F300E84A2C /* IntroductionPageViewController.swift in Sources */,
 				216B8AF71D7F83E700FB33CF /* ContactDetailTableViewCell.swift in Sources */,
 				21D477031D75FC580094FCBC /* User.swift in Sources */,
 				21488A461D8CFE3000434E4E /* User+CoreDataProperties.swift in Sources */,
@@ -376,11 +384,12 @@
 				CODE_SIGN_ENTITLEMENTS = CheckInTime.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WhereYouApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.RiddDev.CheckInTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 2.3;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -391,11 +400,12 @@
 				CODE_SIGN_ENTITLEMENTS = CheckInTime.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WhereYouApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.RiddDev.CheckInTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 2.3;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

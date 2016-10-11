@@ -13,9 +13,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var loggedInUser: User?
     
     @IBOutlet weak var imageView: UIImageView!
-    
-    
-  
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,10 +23,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.loggedInUser = loggedInUser
         imageView.image = loggedInUser.photo
         view.layoutIfNeeded()
-        setupImage()
-
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupImage()
+        
+    }
     
     @IBAction func imageTapped(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
@@ -57,7 +58,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
     }
     
-    @IBAction func saveButtonTapped(sender: AnyObject) {
+    @IBAction func saveButtonTappedWithSender(sender: AnyObject) {
         loadingAlert("Updating Profile...")
         
         guard let newImage = imageView.image,
@@ -87,7 +88,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
     
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
+    @IBAction func cancelButtonTappedWithSender(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     

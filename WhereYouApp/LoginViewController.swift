@@ -41,6 +41,12 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
         numberTextField.delegate = self
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupImage()
+        
+    }
+    
     /// When User taps the Submit button it checks if the number entered was formatted correctly and then saves a User record.
     @IBAction func submitButtonTapped(sender: AnyObject) {
         guard let image = self.imageView.image else { return }
@@ -208,7 +214,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             }
             let keyboardFrame = keyboardFrameValue.CGRectValue()
             UIView.animateWithDuration(0.8, animations: {
-                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-120
+                self.numberFieldButtomConstraint.constant = keyboardFrame.size.height-160
                 self.imageView.layoutIfNeeded()
             })
         }

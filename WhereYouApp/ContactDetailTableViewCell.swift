@@ -82,9 +82,9 @@ class ContactDetailTableViewCell: UITableViewCell {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
         if userContact.name == userContact.phoneNumber {
-        hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to Check In"
+        hasRespondedLabel.text = "Waiting for \(formatedPhoneNumber) to Check-In"
         } else {
-            hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber) to Check In"
+            hasRespondedLabel.text = "Waiting for \(userContact.name ?? formatedPhoneNumber) to Check-In"
         }
         
         timeSentLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
@@ -93,7 +93,7 @@ class ContactDetailTableViewCell: UITableViewCell {
         // If time is due now
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
             newMessageIcon.image = UIImage(named: "notCheckedInPink")
-            hasRespondedLabel.text = "Time for \(userContact.name ?? formatedPhoneNumber) to CheckIn..."
+            hasRespondedLabel.text = "Time for \(userContact.name ?? formatedPhoneNumber) to Check-In..."
             hasRespondedLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
             shouldRespondByLabel.textColor = UIColor ( red: 0.1882, green: 0.2275, blue: 0.3137, alpha: 1.0 )
         
@@ -119,7 +119,7 @@ class ContactDetailTableViewCell: UITableViewCell {
         
         if message.timeDue.timeIntervalSince1970 < NSDate().timeIntervalSince1970 {
             newMessageIcon.image = UIImage(named: "notCheckedInPink")
-            hasRespondedLabel.text = "Time for you to CheckIn with \(userContact.name ?? formatedPhoneNumber)"
+            hasRespondedLabel.text = "Time for you to Check-In with \(userContact.name ?? formatedPhoneNumber)"
             timeSentLabel.textColor = UIColor ( red: 1.0, green: 0.5294, blue: 0.5686, alpha: 1.0 )
         } else {
             newMessageIcon.image = UIImage(named: "checkedInPending")
@@ -127,7 +127,7 @@ class ContactDetailTableViewCell: UITableViewCell {
         }
         
         timeSentLabel.text = ""
-        shouldRespondByLabel.text = "Check In Time: \(dateFormatter.stringFromDate(message.timeDue))"
+        shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
     }
     
     // Cell tells User that user's contact responded to WhereYouApp request
@@ -140,17 +140,17 @@ class ContactDetailTableViewCell: UITableViewCell {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
         if userContact.name == userContact.phoneNumber {
-            hasRespondedLabel.text = "\(formatedPhoneNumber) Check In!"
+            hasRespondedLabel.text = "\(formatedPhoneNumber) Checked-In!"
 
         } else {
-            hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) Check In!"
+            hasRespondedLabel.text = "\(userContact.name ?? formatedPhoneNumber) Checked-In!"
         }
         
         shouldRespondByLabel.text = "CheckInTime: \(dateFormatter.stringFromDate(message.timeDue))"
         guard let timeResponded = message.timeResponded else {
             return
         }
-        timeSentLabel.text = "Checked In \(dateFormatter.stringFromDate(timeResponded))"
+        timeSentLabel.text = "Checked-In \(dateFormatter.stringFromDate(timeResponded))"
         newMessageIcon.image = UIImage(named: "checkedIn")
     }
     
@@ -165,12 +165,12 @@ class ContactDetailTableViewCell: UITableViewCell {
         let formatedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(userContact.phoneNumber)
 
         if userContact.name == userContact.phoneNumber {
-            hasRespondedLabel.text = "You Checked In with \(formatedPhoneNumber)!"
+            hasRespondedLabel.text = "You Checked-In with \(formatedPhoneNumber)!"
         } else {
-            hasRespondedLabel.text = "You Checked In with \(userContact.name ?? formatedPhoneNumber)!"
+            hasRespondedLabel.text = "You Checked-In with \(userContact.name ?? formatedPhoneNumber)!"
         }
         newMessageIcon.image = UIImage(named: "checkedIn")
-        timeSentLabel.text = "You Checked In \(dateFormatter.stringFromDate(timeResponded))"
+        timeSentLabel.text = "You Checked-In \(dateFormatter.stringFromDate(timeResponded))"
         shouldRespondByLabel.text = ""
         newMessageIcon.image = UIImage(named: "checkedIn")
     }
