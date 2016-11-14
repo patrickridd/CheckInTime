@@ -236,8 +236,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             print("Couldn't Get Image from imagePicker 'info'")
             return
         }
-        
-        imageView.image = image
+        let fixedImage = UserController.sharedController.fixUsersImageOrientation(image)
+        imageView.image = fixedImage
         setupImage()
         dismissViewControllerAnimated(true, completion: nil)
     }

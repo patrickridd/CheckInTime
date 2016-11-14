@@ -30,16 +30,13 @@ class MessageTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        layoutSubviews()
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
     
- 
     
     /// Updates View with Message Details
     func updateWith(message: Message) {
@@ -66,7 +63,7 @@ class MessageTableViewCell: UITableViewCell {
             self.contactName.text = userContact.name ?? formatedPhoneNumber
         }
         self.profileImage.image = userContact.photo
-        self.layoutIfNeeded()
+        layoutIfNeeded()
         setupImage()
         // Sender is looking at message that has not been responded to
         if message.timeResponded == nil && message.sender?.phoneNumber == loggedInUser.phoneNumber {

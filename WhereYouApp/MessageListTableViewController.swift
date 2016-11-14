@@ -21,6 +21,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     override func viewDidLoad() {
 
         super.viewDidLoad()
+        
         tableView.estimatedRowHeight = 150
 
         self.automaticallyAdjustsScrollViewInsets = false
@@ -42,7 +43,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
        
 
     }
-       
+    
     override func viewWillAppear(animated: Bool) {
             super.viewWillAppear(animated)
         tableView.reloadData()
@@ -153,7 +154,8 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
     func setupRightButton() {
       
         if let user = UserController.sharedController.loggedInUser {
-        rightProfileButtonImage.setBackgroundImage(user.photo, forState: .Normal)
+        let fixedUserImage = UserController.sharedController.fixUsersImageOrientation(user.photo)
+        rightProfileButtonImage.setBackgroundImage(fixedUserImage, forState: .Normal)
         } else {
             let image = UIImage(named: "profile")
             rightProfileButtonImage.setBackgroundImage(image, forState: .Normal)
@@ -179,6 +181,7 @@ class MessageListTableViewController: UIViewController, UITableViewDataSource, U
                 dispatch_async(dispatch_get_main_queue(), {
                     self.presentViewController(profilePage, animated: true, completion: nil)
         })
+        
     }
     
     

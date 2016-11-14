@@ -541,7 +541,86 @@ class UserController {
         }
     }
     
-    
+    func fixUsersImageOrientation(image: UIImage) -> UIImage {
+        
+        if image.imageOrientation == UIImageOrientation.Up {
+            return image
+        }
+        
+        var transform = CGAffineTransformIdentity
+        
+        switch image.imageOrientation {
+        case .Down, .DownMirrored:
+            transform = CGAffineTransformTranslate(transform, image.size.width, image.size.height)
+            transform = CGAffineTransformRotate(transform, CGFloat(M_PI));
+            
+        case .Left, .LeftMirrored:
+            transform = CGAffineTransformTranslate(transform, image.size.width, 0);
+            transform = CGAffineTransformRotate(transform, CGFloat(M_PI_2));
+            
+        case .Right, .RightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, image.size.height);
+            transform = CGAffineTransformRotate(transform, CGFloat(-M_PI_2));
+            
+        case .Up, .UpMirrored:
+            break
+        }
+        
+        
+        switch image.imageOrientation {
+            
+        case .UpMirrored, .DownMirrored:
+            transform = CGAffineTransformTranslate(transform, image.size.width, 0)
+            transform = CGAffineTransformScale(transform, -1, 1)
+            
+        case .LeftMirrored, .RightMirrored:
+            transform = CGAffineTransformTranslate(transform, image.size.height, 0)
+            transform = CGAffineTransformScale(transform, -1, 1);
+            
+        default:
+            break;
+        }
+        
+        
+        
+        // Now we draw the underlying CGImage into a new context, applying the transform
+        // calculated above.
+        let ctx = CGBitmapContextCreate(
+            nil,
+            Int(image.size.width),
+            Int(image.size.height),
+            CGImageGetBitsPerComponent(image.CGImage!),
+            0,
+            CGImageGetColorSpace(image.CGImage!)!,
+            
+            UInt32(CGImageGetBitmapInfo(image.CGImage!).rawValue)
+        )
+        
+        CGContextConcatCTM(ctx!, transform);
+        
+        switch image.imageOrientation {
+            
+        case .Left, .LeftMirrored, .Right, .RightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx!, CGRectMake(0, 0, image.size.height,image.size.width), image.CGImage!);
+            
+        default:
+            CGContextDrawImage(ctx!, CGRectMake(0, 0, image.size.width,image.size.height), image.CGImage!);
+            break;
+        }
+        
+        // And now we just create a new UIImage from the drawing context
+        let cgimg = CGBitmapContextCreateImage(ctx!)
+        
+        let img = UIImage(CGImage: cgimg!)
+        
+        //CGContextRelease(ctx);
+        //CGImageRelease(cgimg);
+        
+        return img;
+        
+    }
+
     
     /// Deletes contacs from CoreData.
     func deleteContactsFromCoreData(users: [User]) {

@@ -60,19 +60,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func saveButtonTappedWithSender(sender: AnyObject) {
-        loadingAlert("Updating Profile...")
         
         guard let newImage = imageView.image,
             let loggedInUser = loggedInUser,
             let newImageData = UIImagePNGRepresentation(newImage),
             let loggedInUserRecord = loggedInUser.cloudKitRecord  else {
-                self.dismissViewControllerAnimated(true, completion: nil)
                 return
         }
         loggedInUser.imageData = newImageData
         loggedInUserRecord[User.imageKey] = loggedInUser.imageAsset
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         CloudKitManager.cloudKitController.modifyRecords([loggedInUserRecord], perRecordCompletion: { (record, error) in
-            
+        
         }) { (records, error) in
             if let error = error {
                 print("Error saving new profile settings. Error: \(error.localizedDescription)")
@@ -80,13 +79,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 print("Successfully saved profile changes to CloudKit")
                 UserController.sharedController.saveContext()
             }
-            dispatch_async(dispatch_get_main_queue(), {
-                self.dismissViewControllerAnimated(true, completion: { 
-                    
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                })
-            })
         }
+        dispatch_async(dispatch_get_main_queue(), {
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+
     }
     
     @IBAction func cancelButtonTappedWithSender(sender: AnyObject) {
@@ -117,7 +115,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func setupTitleView(){
         
-        if  let font = UIFont(name: "Helvetica", size: 24) {
+        if  let font = UIFont(name: "Helvetica", size: 20) {
             let attributes =
                 [NSForegroundColorAttributeName: UIColor.whiteColor(),
                  NSFontAttributeName: font]
@@ -169,12 +167,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             return
         }
         
-        imageView.image = image
+        let fixedImage = UserController.sharedController.fixUsersImageOrientation(image)
+        imageView.image = fixedImage
         setupImage()
         
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
     
     
 }

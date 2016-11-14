@@ -385,10 +385,9 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
             
             let messageVC = MFMessageComposeViewController()
             if MFMessageComposeViewController.canSendText() == true {
-                messageVC.body = "I'd like you to download CheckInTime so you can check in with me."
+                messageVC.body = "I'd like you to download CheckInTime so you can Check-In with me: https://itunes.apple.com/us/app/checkintime/id1155922711?mt=8"
                 messageVC.recipients = [newContact.phoneNumber]
                 messageVC.messageComposeDelegate = self
-                //  messageVC.messageComposeDelegate = self
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
                 messageVC.navigationBar.translucent = false
                 self.presentViewController(messageVC, animated: true, completion: {
@@ -407,6 +406,8 @@ class ContactsTableViewController: UITableViewController, CNContactPickerDelegat
         })
         
     }
+    
+    
     
     
     /// Tells the User that the Contact they selected has the App account.

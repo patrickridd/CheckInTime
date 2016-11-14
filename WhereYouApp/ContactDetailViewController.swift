@@ -11,7 +11,7 @@ import CoreData
 import MessageUI
 import CloudKit
 
-class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
+class ContactDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate {
     
     let newView = UIView()
     let setCheckInTimeLabel = UILabel()
@@ -133,7 +133,10 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     func updateWith(contact: User) {
         let formattedPhoneNumber = NumberController.sharedController.formatPhoneForDisplay(contact.phoneNumber)
         
-        self.contactImage.image = contact.photo
+        let fixedImageOrientation = UserController.sharedController.fixUsersImageOrientation(contact.photo)
+        
+        self.contactImage.image = fixedImageOrientation
+        
         if contact.name == contact.phoneNumber {
             self.nameLabel.text = formattedPhoneNumber
         } else {
@@ -201,9 +204,8 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
             
             let messageVC = MFMessageComposeViewController()
             if MFMessageComposeViewController.canSendText() == true {
-                messageVC.body = "I'd like you to download CheckInTime so you can Check In with me"
+                messageVC.body = "I'd like you to download CheckInTime so you can Check-In with me: https://itunes.apple.com/us/app/checkintime/id1155922711?mt=8"
                 messageVC.recipients = [newContact.phoneNumber]
-                //  messageVC.messageComposeDelegate = self
                 messageVC.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
                 messageVC.navigationBar.translucent = false
                 self.presentViewController(messageVC, animated: true, completion: {
@@ -221,6 +223,14 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
     
+    /// Dismisses the Messages app and comes back to CheckInTime
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.becomeFirstResponder()
+    }
+    
+
     @IBAction func reportButtonTapped(sender: AnyObject) {
         let alert = UIAlertController(title: "Are you sure you want to report this user for abusive content or behavior?", message: nil, preferredStyle: .ActionSheet)
         let noAction = UIAlertAction(title: "No", style: .Cancel, handler: nil)
@@ -280,7 +290,7 @@ class ContactDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     @IBAction func SendCheckInTimeWithSender(sender: AnyObject) {
         guard let sender = UserController.sharedController.loggedInUser,
-            receiver = contact else {
+            let receiver = contact else {
                 return
         }
         if receiver.hasAppAccount == 0 {
